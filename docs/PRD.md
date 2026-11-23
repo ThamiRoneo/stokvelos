@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.3 |
+| Version | v0.4 |
 | Status | Draft |
 
 ### Change log
 
 | Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.4 | 2026-11-23 | 4.5, Document details | Human-confirmed Stitch design answers: notification "New member joined" target corrected from S5 to S4 (C10); all answers recorded in `docs/designs/STITCH_PROMPTS.md` "Resolved design decisions" | None |
 | v0.3 | 2026-11-23 | 4.1, 8.1, Document details | Corrected feature-to-story mapping: US13 (resolve a dispute) belongs to F5, not F6; F6 now traces to §4.5 Notifications; added F6 to the S7/S9/S13 feature lists | None |
 | v0.2 | 2026-11-23 | 2.5, 4.1, 4.5, 6.1, 14, Document details | Aligned format to the Indlela PRD standard; corrected feature-to-screen mapping (F1–F7) against implementation plan §7.3/§13; clarified US2 landing state; mapped open questions to implementation plan §18 | None |
 | v0.1 | 2026-11-23 | All | First draft | None |
@@ -145,7 +146,7 @@ Oct 27, 2026 · @Melsoft
 |---|---|---|---|---|
 | Payout due within 3 days | Organizer + recipient member | In-app | "Payout due for [Member] on [Date]." | S9 |
 | Contribution overdue (cycle closed, member unpaid) | Organizer + member | In-app | "[Member] has not contributed for [Period]." | S7 |
-| New member joined | Organizer | In-app | "[Name] joined [Stokvel]." | S5 |
+| New member joined | Organizer | In-app | "[Name] joined [Stokvel]." | S4 |
 | Dispute raised | Organizer | In-app | "New dispute raised in [Stokvel]." | S13 |
 | Dispute resolved | Raising member | In-app | "Your dispute in [Stokvel] was resolved." | S13 |
 

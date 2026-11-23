@@ -1,6 +1,6 @@
 # Google Stitch prompts — StokvelOS
 
-Source: `docs/PRD.md` §8.1, §8.2, §8.3, §9 (and §2.3, §4.5, §5, §6.2, §10 for PRD-defined sample content only). Nothing outside the PRD is introduced. Paste each fenced block into Stitch as a separate prompt.
+Source: `docs/PRD.md` §8.1, §8.2, §8.3, §9 (and §2.3, §4.5, §5, §6.2, §10 for PRD-defined sample content only), plus the human-confirmed decisions in "Resolved design decisions" below (2026-11-23), which override any earlier unanswered item. Nothing else is introduced. Paste each fenced block into Stitch as a separate prompt, then apply the resolved decisions to the relevant screens.
 Stitch project: https://stitch.google.com/projects/9928979343368528728
 
 ---
@@ -454,19 +454,30 @@ STATES:
 
 ---
 
-## Questions (missing or unclear in the PRD — not guessed above)
+## Resolved design decisions (human-confirmed 2026-11-23)
 
-1. What are the exact field labels and layout for the **Stokvel card**, **stat card**, and **member row** (§8.3 names them but gives no fields/content)?
-2. What exact **sample contribution amounts, period labels** (e.g. week/month identifiers), and **payout dates** should appear in S8/S9 tables and M1/M2? PRD only defines limits (R0.01–R1,000,000; ≤R10,000,000) and placeholders `[Member]`, `[Period]`, `[Date]`.
-3. What are the exact **stokvel names** for the sample cards in S4/S6? PRD §2.3 gives member counts (15, 28, 20) and locations (Soweto, Tembisa) but no names.
-4. What is the **privacy checkbox label/link** on S2? §8.1 lists a "privacy checkbox" but §8.1 has no privacy-policy screen.
-5. What is the exact **"forgot password" label and destination** on S3? §8.1 says "forgot password link" but no screen is listed.
-6. What are the exact **validation-error messages** for S5 and S12 forms and for M2's payout amount? PRD only says "Validation errors inline".
-7. What is the **delete-group confirmation** text/button on S12? No modal is listed for it (M4 is delete account only).
-8. What is the exact **confirmation text and button labels** for M4 Delete Account? PRD gives the effect, not the copy.
-9. What exact **audit action labels** and **before/after formatting** should the S11 feed show? PRD lists fields (actor, action, before/after, created_at) but no sample values.
-10. What is the exact **rotation-order control** on S5/S9/S12 (drag handles, numbering, etc.)? PRD says "set rotation order / order members" but specifies no control.
-11. What is the exact **success banner text** for S2 ("Created → S3 banner" — message not specified)?
-12. Where exactly should the §4.5 notification banners appear (assigned to S7/S9/S13 above based on their "Opens" target) — is that placement correct?
-13. Which specific **icons** should be used for the "Icon + message + CTA" empty states (§8.3) and the Bottom nav tabs? PRD specifies style/size but not glyphs.
-14. Should S13's **export** offer both PDF and CSV as two separate actions, or one "Export" action with a format choice? PRD says "export CSV/PDF" and "PDF/CSV download".
+These answers were supplied by the human and are now part of the design source for the prompts above. Where a value below differs from an earlier unanswered prompt, the value below wins.
+
+| # | Decision | Plan ref | Screens affected |
+|---|---|---|---|
+| 1 | **Stokvel card:** name, member count, location, `R[amount]/[week/month]`. **Stat card:** label + large value (Balance, Next payout, Recent activity, quick actions). **Member row:** initials, name, role badge, join date, Remove action for organizer. | — (new) | S4, S6, S7, S10 |
+| 2 | Amounts R250 weekly / R500 monthly; periods `2026-W47`, `2026-W48`, `Nov 2026`; payout dates `2026-12-05`, `2026-12-12`. | C14 | S8, S9, M1, M2 |
+| 3 | Stokvel names: "Soweto Savers" (15), "Soweto Uplift" (28), "Tembisa Together" (20). | C16 | S4, S6 |
+| 4 | Checkbox label: "I accept the Privacy Policy". **Link target still needs a URL from the human before S2 is final — do not invent one.** | — (new; link target Open) | S2 |
+| 5 | "Forgot password?" → inline reset form on S3 (no new screen ID). Message: "If an account exists, a reset link has been sent." | C5 | S3 |
+| 6 | Name: "Enter a stokvel name." Amount: "Amount must be between R0.01 and R1,000,000." / "R0.01 and R10,000,000." for payouts. Frequency: "Choose weekly or monthly." Period: "Choose a period." Duplicate: "A contribution for [Member] for [Period] already exists. Edit instead?" | — (new) | S5, S12, M2 |
+| 7 | Inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." Buttons: Cancel / Delete stokvel. | C4 | S12 |
+| 8 | "Delete your account? Your profile will be removed and audit entries anonymised. This cannot be undone." Buttons: Cancel / Delete account. | — (new) | M4 |
+| 9 | Labels: "Contribution recorded/updated/deleted", "Payout scheduled/marked paid/cancelled", "Member added/removed", "Stokvel updated", "Dispute raised/resolved". Before/after: `field: old → new`, newest first. | C8 | S11 |
+| 10 | Numbered rows with ↑/↓ buttons (keyboard accessible), optional drag handle; default = join order. | C7 | S5, S9, S12 |
+| 11 | Success banner: "Account created." | C9 | S2 |
+| 12 | Banner targets: payout due → S9; overdue → S7; new member joined → **S4** (corrected from S5); dispute raised → S13; dispute resolved → S13. PRD §4.5 updated to S4. | C10 | S4 (new banner), S5 (no banner), S7, S9, S13 (confirmed) |
+| 13 | Lucide outlines — nav: Home, ReceiptText, CalendarDays, ScrollText, User. Empty states: Inbox, Users, CalendarPlus, Receipt, ShieldCheck. | C11 | Style guide; S4, S7, S8, S9, S10, S11, S13 |
+| 14 | One "Export" action → format choice PDF / CSV. | C6 | S13 |
+
+### Stitch screens to regenerate
+
+- **New or changed content:** S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, M1, M2, M4.
+- **Style guide:** Lucide outline glyph set for the bottom nav and empty states.
+- **Unchanged:** S1, M3, M5, M6, M7. Banner targets on S7/S9/S13 are confirmed as already drawn; only S4 gains a new banner.
+- **Still Open:** the Privacy Policy URL for S2 (decision 4).
