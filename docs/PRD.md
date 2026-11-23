@@ -63,7 +63,7 @@ Oct 27, 2026 · @Melsoft
 | Situation | Runs 2 stokvels (15 + 28 members) in Soweto; teacher by day | Member of a 20-person burial stokvel in Tembisa; works in retail |
 | Device/connectivity | Android, prepaid data, WhatsApp | Android, prepaid data, WhatsApp |
 | Tech comfort | Medium | Low–Medium |
-| Language(s) | English, isiZulu | English, isiZulu |
+| Language(s) | English, isiZulu, Setswana, Sesotho | English, isiZulu, Setswana, Sesotho |
 | Goal | Stop disputes, save admin time, keep members | Know what he has paid and when his payout is due |
 | Frustrations today | Notebook lost once; members argue about who paid; chasing late payers | Never sure of his balance; feels treasurer has too much power |
 | How app helps | Shared ledger + audit trail; automated reminders | Member statement + payout schedule; can raise a dispute |
