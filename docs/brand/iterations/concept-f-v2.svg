@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="StokvelOS S-ledger monogram">
+  <title>StokvelOS S-ledger monogram</title>
+  <path d="M 188 60 C 188 32 68 32 68 88 C 68 128 188 128 188 168 C 188 224 68 224 68 196" fill="none" stroke="#000" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="128" cy="128" r="18" fill="#000"/>
+</svg>
