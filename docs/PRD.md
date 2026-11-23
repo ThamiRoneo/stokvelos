@@ -379,6 +379,10 @@ Font family: Inter, system-ui fallback.
 - Size: 24px default, 20px compact.
 - Color: Text primary default; Primary for active.
 
+**9.5 Logo**
+
+The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger lines with one highlighted payout column and a subtle inward cycle arc. It is a one-colour, reversed-safe combination mark that works at 16px. The full kit and exports are in `docs/brand/kit/` (symbol, small, reversed, colour, wordmark, horizontal and stacked lockups), with guidelines at `docs/brand/kit/BRAND_GUIDELINES.md` and palette at `docs/brand/kit/palette.md`. The mark uses the PRD primary (#1B5E20) and secondary (#F9A825) tokens from §9.1. The wordmark text must be outlined to paths before final delivery.
+
 ## 10. Data model
 
 | Entity | Fields | Relations | Notes |
@@ -467,6 +471,7 @@ Font family: Inter, system-ui fallback.
 ## 16. Appendix
 
 Original business idea: [BUSINESS.md](../BUSINESS.md)  
-Prior project (portfolio, separate repo — not this one): Indlela — transport affordability for job seekers (https://github.com/ThamiRoneo/indlela-mvp).
+Prior project (portfolio, separate repo — not this one): Indlela — transport affordability for job seekers (https://github.com/ThamiRoneo/indlela-mvp).  
+Logo kit: docs/brand/kit/ (R2-B Refined ledger). Brand guidelines: docs/brand/kit/BRAND_GUIDELINES.md.  
 
 Related: [[Home]]
