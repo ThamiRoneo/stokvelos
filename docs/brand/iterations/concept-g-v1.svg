@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="StokvelOS S-ledger refined">
+  <title>StokvelOS S-ledger refined</title>
+  <!-- bold S letterform -->
+  <path d="M 200 56 C 200 24 56 24 56 84 C 56 128 200 128 200 172 C 200 232 56 232 56 200" fill="none" stroke="#000" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- ledger ruling lines -->
+  <g stroke="#000" stroke-width="10" stroke-linecap="round" fill="none">
+    <line x1="32" y1="84" x2="224" y2="84"/>
+    <line x1="32" y1="128" x2="224" y2="128"/>
+    <line x1="32" y1="172" x2="224" y2="172"/>
+  </g>
+  <!-- highlighted payout column in right loop -->
+  <rect x="186" y="74" width="22" height="48" rx="4" fill="#000"/>
+  <!-- subtle cycle arc -->
+  <path d="M 224 84 A 40 40 0 0 0 224 172" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+</svg>

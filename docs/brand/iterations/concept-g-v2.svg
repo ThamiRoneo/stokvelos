@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="StokvelOS S-ledger refined">
+  <title>StokvelOS S-ledger refined</title>
+  <defs>
+    <mask id="holes" maskUnits="userSpaceOnUse">
+      <rect width="256" height="256" fill="white"/>
+      <line x1="36" y1="84" x2="220" y2="84" stroke="black" stroke-width="16" stroke-linecap="round"/>
+      <line x1="36" y1="128" x2="220" y2="128" stroke="black" stroke-width="16" stroke-linecap="round"/>
+      <line x1="36" y1="172" x2="220" y2="172" stroke="black" stroke-width="16" stroke-linecap="round"/>
+      <rect x="168" y="64" width="26" height="128" rx="4" fill="black"/>
+      <path d="M 220 84 A 38 38 0 0 0 220 172" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <path d="M 200 56 C 200 24 56 24 56 84 C 56 128 200 128 200 172 C 200 232 56 232 56 200" fill="none" stroke="#000" stroke-width="52" stroke-linecap="round" stroke-linejoin="round" mask="url(#holes)"/>
+</svg>
