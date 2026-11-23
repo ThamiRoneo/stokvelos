@@ -9,9 +9,9 @@
 | App name | StokvelOS |
 | Built from PRD version | v0.6 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.6 |
+| Plan version | v1.7 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
-| Status | Ready to build — Phase 1 complete; start Phase 2 |
+| Status | Phase 2 unblocked — all §18 clarifications closed; awaiting hosted Supabase credentials and the human's "Start Phase 2" |
 | Last updated | 23 Nov 2026 |
 
 ---
@@ -394,7 +394,7 @@ S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17; appl
 | stokvel_id | uuid | No | — | foreign key → `stokvels.id` on delete cascade | — |
 | member_id | uuid | No | — | foreign key → `stokvel_members.id` | — |
 | amount | numeric(12,2) | No | — | > 0 and ≤ 1,000,000 (BR4) | ZAR |
-| period_label | text | No | — | length 1–50 | Exact label values: Open (§18 C14) |
+| period_label | text | No | — | length 1–50 | `2026-W47`, `2026-W48`, `Nov 2026` (§18 C14 closed) |
 | note | text | Yes | — | length ≤ 500 | — |
 | recorded_by | uuid | No | — | foreign key → `profiles.id` | Organizer only (BR2) |
 | recorded_at | timestamptz | No | now() | — | — |
@@ -436,7 +436,7 @@ S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17; appl
 | id | uuid | No | gen_random_uuid() | primary key | — |
 | stokvel_id | uuid | No | — | foreign key → `stokvels.id` on delete cascade | — |
 | actor_id | uuid | No | — | foreign key → `profiles.id` | Anonymised on account deletion (PRD 12) |
-| action | text | No | — | — | Exact action labels: Open (§18 C8) |
+| action | text | No | — | — | "Contribution recorded/updated/deleted", "Payout scheduled/marked paid/cancelled", "Member added/removed", "Stokvel updated", "Dispute raised/resolved" (§18 C8 closed) |
 | entity_type | text | No | — | — | e.g. 'contribution', 'payout' |
 | entity_id | uuid | No | — | — | — |
 | before | jsonb | Yes | — | — | — |
@@ -504,8 +504,9 @@ S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17; appl
 ### 8.7 Seed data and test accounts
 
 - **Test accounts:** `nomsa@example.test` (organizer, Nomsa Dlamini, 42, Soweto) and `sipho@example.test` (member, Sipho Nkosi, 30, Tembisa). Password for both from `SEED_TEST_PASSWORD`.
-- **Seed stokvels:** two groups for Nomsa (15 members and 28 members) and one burial stokvel in Tembisa (20 members), per PRD 2.3. Exact group names: Open (§18 C16).
-- **Seed minimum for tests:** 1 organizer + 2 active members in one stokvel, 1 contribution in the current period, 1 scheduled payout, 1 resolved dispute, 5 audit_log rows. Full roster counts are cosmetic; populate with generated rows. Exact period labels and payout dates: Open (§18 C14).
+- **Seed stokvels (§18 C3/C16 closed):** "Soweto Savers" — Nomsa Dlamini, 15 members; "Soweto Uplift" — Nomsa Dlamini, 28 members; "Tembisa Together" — burial stokvel in Tembisa, 20 members (PRD 2.3).
+- **Seed roster (§18 C3 closed):** generated test data only — `savers01…15@example.test`, `uplift01…28@example.test`, `tembisa01…20@example.test`; no real names, emails or personal data. Counts are cosmetic; functional minimum for tests: 1 organizer + 2 active members in one stokvel, 1 contribution in the current period, 1 scheduled payout, 1 resolved dispute and 5 `audit_log` rows.
+- **Seed period labels and payout dates (§18 C14 closed):** R250 weekly / R500 monthly; labels `2026-W47`, `2026-W48`, `Nov 2026`; payout dates `2026-12-05`, `2026-12-12`.
 - **Never** use real personal data or real passwords in seed data.
 
 ---
@@ -732,7 +733,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M5, M7 · Operations OP1–OP4, OP6–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19–SEC21 · Google OAuth (§18 C17) · Legal route /privacy.
 
-**Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C3 — if it is still Open, stop and ask. C2, C4, C5, C9, C11, C15, C16 and C17 are closed.
+**Starts when:** Phase 1 is complete and the human says "Start Phase 2". All §18 clarifications are closed; no Open gate remains.
 
 **Standalone content already landed:** the in-app `/privacy` page (`src/app/privacy/page.tsx`) and its component test were delivered ahead of Phase 2 to close the S2 privacy-link decision (Stitch decision 4). It has no Supabase dependency and does not start Phase 2 work. Phase 2 must still wire the S2 privacy checkbox to link to `/privacy`.
 
@@ -814,7 +815,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F3 · Stories US7, US8 · Screens S7, S8 · Modal M1 · Operations OP16, OP17 · Rules BR2, BR4, BR8, BR9 · Permissions SEC11–SEC12.
 
-**Starts when:** Phase 2 is complete and the human says "Start Phase 3". Check §18 C14 — if Open, stop and ask.
+**Starts when:** Phase 2 is complete and the human says "Start Phase 3". §18 C14 is closed; proceed.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -860,7 +861,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F4 · Stories US9, US10 · Screens S9 · Modals M2, M6 · Operations OP18, OP19, OP24 · Rules BR2, BR5, BR7, BR11 · Permissions SEC13–SEC14.
 
-**Starts when:** Phase 3 is complete and the human says "Start Phase 4". Check §18 C7, C10 — if Open, stop and ask.
+**Starts when:** Phase 3 is complete and the human says "Start Phase 4". All §18 items gating Phase 4 are closed (C7, C10); proceed.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -901,7 +902,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F5 · Stories US11, US12, US13 · Screen S11 · Modal M3 · Operations OP20–OP22, OP24 · Rules BR3, BR8, BR9, BR10 · Permissions SEC15–SEC18.
 
-**Starts when:** Phase 4 is complete and the human says "Start Phase 5". Check §18 C8, C10 — if Open, stop and ask.
+**Starts when:** Phase 4 is complete and the human says "Start Phase 5". All §18 items gating Phase 5 are closed (C8, C10); proceed.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -1120,6 +1121,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Human answered all 14 Stitch prompt questions; answers recorded in STITCH_PROMPTS.md; 10 §18 clarifications closed; PRD §4.5 S5 → S4 | Cross-doc refs verified | — |
 | 2026-11-23 | — | Human supplied the nine remaining privacy-policy inputs; in-app `/privacy` POPIA policy page and component test created; S2 link target closed in STITCH_PROMPTS.md | typecheck, lint, 4 tests, build pass; /privacy prerendered | — |
 | 2026-11-23 | — | Human closed the five remaining plan clarifications: C2 `is_admin` flag; C12 English-only i18n-ready; C13 Workbox read-only cache; C15 service-role local-only; C17 OAuth added to Phase 2 with client-side export. PRD v0.6 / plan v1.6; S2/S3 Stitch prompts updated | Cross-doc ID and ref checks pass | — |
+| 2026-11-23 | — | Human chose generated `example.test` rosters for C3; C16 group names/counts and C14 labels/dates recorded in §8.7; stale "Open" references and all phase-gate wording cleared; plan v1.7 | No §18 clarification remains Open | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1135,7 +1137,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | --- | --- | --- | --- | --- |
 | C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | None (resolved) | Closed — https://stitch.google.com/projects/9928979343368528728 |
 | C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? | 3.4, 8.1, 9 SEC21 | None (closed) | Closed — `is_admin` boolean on `profiles`, set only in Supabase; no moderation screen in v1. SEC2 blocks self-assignment; T-SEC-21a/21b |
-| C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.7 | Phase 2 | Open — minimum seed set defined; names in C16 |
+| C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.1, 8.7, 13 Phase 2 | None (closed) | Closed — C16 names/counts (Soweto Savers 15, Soweto Uplift 28, Tembisa Together 20); generated `example.test` members only, no real personal data; C14 labels/dates. All §18 clarifications now closed |
 | C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Closed — inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." / Cancel / Delete stokvel (Stitch Q7) |
 | C5 | Exact forgot-password label, destination screen and message copy (PRD 8.1 says "forgot password link", no screen listed). | 5, 10 OP4 | Phase 2 | Closed — "Forgot password?" → inline reset form on S3; "If an account exists, a reset link has been sent." (Stitch Q5) |
 | C6 | Should S13 export be one "Export" action with a format choice, or separate PDF and CSV actions? | 10 OP23, 13 Phase 6 | Phase 6 | Closed — one "Export" action with PDF / CSV format choice (Stitch Q14) |
@@ -1159,7 +1161,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
-| v1.6 | 2026-11-23 | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
+| v1.7 | 2026-11-23 | 0, 8.1, 8.7, 13 Phases 2–5, 17, 18 C3, 19 | Closed C3 with generated `example.test` rosters, C16 group names/counts and C14 period labels/payout dates; replaced stale "Open" references for C8/C14/C16 and cleared all phase-gate wording; no §18 item remains Open. | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
 | v1.5 | 2026-11-23 | 0, 13 Phase 2, 17, 19 | Added the standalone in-app `/privacy` POPIA policy page and its test to close Stitch decision 4; Phase 2 now notes the S2 link wiring still to do; PRD bumped to v0.5. |
 | v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |
 | v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |
