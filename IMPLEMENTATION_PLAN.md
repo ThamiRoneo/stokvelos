@@ -7,9 +7,9 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.2 |
+| Built from PRD version | v0.3 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.2 |
+| Plan version | v1.3 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Ready to build — Phase 1 complete; start Phase 2 |
 | Last updated | 23 Nov 2026 |
@@ -573,7 +573,7 @@ All operations live in `src/lib/api/`. Each returns either data or one of the ex
 | OP21 | Resolve dispute | Organizer | dispute_id, resolution note | status = resolved, resolved_by, resolved_at | BR10 | "Only the organizer can do this." | Table update + trigger | T-US13-1 |
 | OP22 | View audit log | Member of stokvel | stokvel_id | Chronological feed (actor, action, before/after, timestamp) | BR8, BR9, SEC18 | "Couldn't load. Try again." | Select | T-US11-1 |
 | OP23 | Export ledger | Organizer | stokvel_id, format (PDF/CSV) | File download | G4 | "Couldn't export. Try again." | Client-side generation | T-US14-1 |
-| OP24 | Get in-app notifications | Recipient per PRD 4.5 | — | Notification list with exact text | PRD §4.5 | "Couldn't load. Try again." | Select from notifications | T-US13-2 |
+| OP24 | Get in-app notifications | Recipient per PRD 4.5 | — | Notification list with exact text | PRD §4.5 | "Couldn't load. Try again." | Select from notifications | T-NOTIF-1 |
 | OP25 | Cache group data / staleness | Logged in | group id | Cached data + staleness banner | BR12; >24h stale | "No cached data. Connect to the internet to load." / "Showing cached data from [time]. May be out of date." | Service worker/IndexedDB (§18 C11) | T-US15-1 |
 
 ---
@@ -683,11 +683,11 @@ The same ID may be used at two levels when both prove the same criterion.
 | Phase | Milestone | Name | Features | Screens | Main tests |
 | --- | --- | --- | --- | --- | --- |
 | 1 | M1 | Foundation | — | S1 | T-SETUP-1–4, T-C-1–11, T-S1-1 |
-| 2 | M2 | Groups, RLS & auth | F1, F2 | S2, S3, S4, S5, S6, S10, S12, M4, M5, M7 | T-US1–6, T-BR1, BR6, BR13, T-SEC-1–10, 19–20 |
+| 2 | M2 | Groups, RLS & auth | F1, F2 | S2, S3, S4, S5, S6, S10, S12, M5, M7 | T-US1–6, T-BR1, BR6, BR13, T-SEC-1–10, 19–20 |
 | 3 | M3 | Contributions | F3 | S7, S8, M1 | T-US7, US8, T-BR4, BR9, T-SEC-11–12 |
 | 4 | M4 | Payouts | F4 | S9, M2, M6 | T-US9, US10, T-BR5, BR7, BR11, T-SEC-13–14 |
 | 5 | M5 | Audit & disputes | F5 | S11, M3 | T-US11–13, T-BR3, BR8, BR10, T-SEC-15–18 |
-| 6 | M6 | Polish | F6, F7, F8 | S13, M4 | T-US13–15, T-BR12, T-NFR-1–7 |
+| 6 | M6 | Polish | F6, F7, F8 | S13, M4 | T-US14, US15, T-NOTIF-1, T-BR12, T-NFR-1–7 |
 | 7 | M7 | Test & deploy | All | All | Full suite on clean install, T-E2E, T-REL |
 
 ---
@@ -727,7 +727,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Goal:** A person can sign up, log in, create a stokvel, invite members, join via link, manage members and edit group settings; every permission rule is enforced in the database and tested.
 
-**Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M4, M5, M7 · Operations OP1–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19, SEC20.
+**Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M5, M7 · Operations OP1–OP4, OP6–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19, SEC20.
 
 **Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C2, C3, C4, C5, C9, C11, C15, C16 — if any is still Open, stop and ask.
 
@@ -752,7 +752,6 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-S6-1 | Component | `JoinViaInvite.test.tsx` | Expired/used messages; "Couldn't join. Try again." |
 | T-S10-1 | Component | `Members.test.tsx` | Member rows + role badges + join dates; "No members yet. Invite someone." |
 | T-S12-1 | Component | `StokvelSettings.test.tsx` | Form saves; "Saved."; validation errors |
-| T-M4-1 | Component | `DeleteAccount.test.tsx` | Confirm modal; profile removed, audit retained anonymised |
 | T-M5-1 | Component | `InviteMember.test.tsx` | Link + WhatsApp + copy; success toast |
 | T-M7-1 | Component + Integration | `RemoveMember.test.tsx`, `stokvel.int.test.ts` | BR7 block message; organizer removes member |
 | T-SEC-1–10a/b | Database + Integration | `040_rls.test.sql`, `stokvel.int.test.ts` | Allow and deny for SEC1–SEC10 |
@@ -771,7 +770,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Step 3: Frontend (Green)**
 
-- [ ] Build S2, S3, S4, S5, S6, S10, S12 and modals M4, M5, M7 to match Stitch designs (§7.3).
+- [ ] Build S2, S3, S4, S5, S6, S10, S12 and modals M5, M7 to match Stitch designs (§7.3).
 - [ ] Auth guard in `src/app/(app)/layout.tsx` (§11).
 - [ ] Bottom nav shown/hidden per §11; all states per §7.3.
 - [ ] Design tokens wired into Tailwind/CSS variables (§7.1).
@@ -866,7 +865,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-S9-1 | Component | `Payouts.test.tsx` | Rotation + upcoming + history; "No payouts scheduled yet."; status badges; all states |
 | T-M2-1 | Component | `SchedulePayout.test.tsx` | Form member/amount/date/note; success toast |
 | T-M6-1 | Component | `MarkPayoutPaid.test.tsx` | Confirm + paid_at + note; success toast |
-| T-US13-2 | Component | `Notifications.test.tsx` | "Payout due for [Member] on [Date]." shown to organizer + recipient |
+| T-NOTIF-1 | Component | `Notifications.test.tsx` | "Payout due for [Member] on [Date]." shown to organizer + recipient |
 | T-SEC-13a / 13b | Database + Integration | `040_rls.test.sql`, `payout.int.test.ts` | Read allow member, deny non-member |
 | T-SEC-14a / 14b | Database + Integration | same | Write allow organizer, deny member |
 
@@ -928,7 +927,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Goal:** In-app reminders, PDF/CSV export, offline cache with staleness, accessibility and low-data behaviour are complete.
 
-**Covers:** F6, F7, F8 · Stories US13–US15 · Screen S13 · Modal M4 · Operations OP23–OP25 · Rule BR12 · PRD 8.4, 12, 14.
+**Covers:** F6, F7, F8 · Stories US14, US15 + PRD §4.5 notifications · Screen S13 · Modal M4 · Operations OP5, OP23–OP25 · Rule BR12 · PRD 4.5, 8.4, 12, 14.
 
 **Starts when:** Phase 5 is complete and the human says "Start Phase 6". Check §18 C6, C11, C12 — if Open, stop and ask.
 
@@ -936,7 +935,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 | Test ID | Level | File | What it checks |
 | --- | --- | --- | --- |
-| T-US13-2 | Component | `Notifications.test.tsx` | All five PRD 4.5 messages render exactly |
+| T-NOTIF-1 | Component | `Notifications.test.tsx` | All five PRD 4.5 messages render exactly |
 | T-US14-1 | Component + Integration | `Export.test.tsx`, `export.int.test.ts` | PDF and CSV download of contributions + payouts |
 | T-US15-1 | Component + Integration | `Offline.test.tsx`, `cache.int.test.ts` | First load caches group data; offline shows cached; staleness banner |
 | T-BR12-1 | Unit + Component | `staleness.test.ts`, `Offline.test.tsx` | Cache >24h marked stale with "Showing cached data from [time]. May be out of date." |
@@ -1018,11 +1017,11 @@ The same ID may be used at two levels when both prove the same criterion.
 | F3 / US7–8 | Contributions ledger | 10 OP16–17, 13 Phase 3 | 3 | T-US7–8 |
 | F4 / US9–10 | Payouts | 10 OP18–19, 13 Phase 4 | 4 | T-US9–10 |
 | F5 / US11–13 | Audit & disputes | 8.5, 10 OP20–22, 13 Phase 5 | 5 | T-US11–13 |
-| F6 / US13 | Reminders | 10 OP24, 13 Phase 6 | 6 | T-US13-2 |
+| F6 / PRD 4.5 | Reminders | 4.5, 10 OP24, 13 Phase 6 | 6 | T-NOTIF-1 |
 | F7 / US14 | Export | 10 OP23, 13 Phase 6 | 6 | T-US14-1 |
 | F8 / US15 | Offline | 10 OP25, 13 Phase 6 | 6 | T-US15-1 |
 | BR1 | 2–200 members | 8.5, 9 SEC7 | 2 | T-BR1-1 |
-| BR2 | Organizer-only writes | 9 SEC5, 7, 8, 10, 12, 14, 17 | 2–5 | T-SEC-…b |
+| BR2 | Organizer-only writes | 9 SEC5, 7, 8, 10, 12, 14, 17 | 2–5 | T-SEC-5b, 7b, 8b, 10b, 12b, 14b, 17b |
 | BR3 | Dispute in own group | 9 SEC16 | 5 | T-BR3-1 |
 | BR4 | Contribution ≤R1m | 8.1, 8.5, 10 OP16 | 3 | T-BR4-1 |
 | BR5 | Payout ≤R10m | 8.1, 8.5, 10 OP18 | 4 | T-BR5-1 |
@@ -1034,7 +1033,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | BR11 | Rotation order | 8.1, 10 OP15 | 2, 4 | T-US9-1, T-BR11-1 |
 | BR12 | 24h staleness | 10 OP25 | 6 | T-BR12-1 |
 | BR13 | Multiple stokvels | 8.1, 9 SEC3 | 2 | T-BR13-1 |
-| PRD 4.5 | Notifications | 10 OP24 | 4–6 | T-US13-2 |
+| PRD 4.5 | Notifications | 10 OP24 | 4–6 | T-NOTIF-1 |
 | PRD 5 | Accounts & sign-in | 6, 10 OP1–6, 13 Phase 2 | 2 | T-AUTH-1, T-US1–3 |
 | PRD 6.2 | Edge cases | 10 OP11, 16, 18, 25; 13 phases | 2–6 | T-EDGE-1–2 |
 | PRD 7 | Flows & nav | 11 | 2–7 | T-NAV-1–5 |
@@ -1043,7 +1042,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | PRD 9 | Design values & logo | 7.1 | All | T-C-1–11 |
 | PRD 10 | Data model & RLS | 8, 9 | 2 | T-DB-1, T-DB-6 |
 | PRD 11 | Integrations | 4.1, 6, 10 OP13, 23 | 2, 6 | T-M5-1, T-US14-1 |
-| PRD 12 | Privacy & security | 6, 9, 10 OP5 | 2, 7 | T-M4-1, T-SEC-20b |
+| PRD 12 | Privacy & security | 6, 9, 10 OP5 | 6, 7 | T-M4-1, T-SEC-20b |
 | PRD 13 | Milestones | 13.0 | All | — |
 | PRD 14 | Acceptance & open questions | 12.5, 15, §18 | 7 | T-E2E, T-REL |
 | PRD 16 | Appendix / logo kit | 0, 7.1 | — | — |
@@ -1067,7 +1066,7 @@ The same ID may be used at two levels when both prove the same criterion.
 - [ ] Audit log read-only; tamper attempt blocked in DB (T-BR8-1, T-EDGE-2).
 - [ ] Raise dispute works; only group members can raise (T-US12-1, T-BR3-1).
 - [ ] Resolve dispute works; only organizer can resolve (T-US13-1, T-BR10-1).
-- [ ] All five in-app notifications show exact PRD 4.5 text (T-US13-2).
+- [ ] All five in-app notifications show exact PRD 4.5 text (T-NOTIF-1).
 - [ ] PDF/CSV export of contributions + payouts works (T-US14-1).
 - [ ] Offline shows cached data; >24h cache shows staleness banner (T-US15-1, T-BR12-1).
 - [ ] All screens S1–S13 and modals M1–M7 implement every state in §7.3.
@@ -1104,6 +1103,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Plan rewritten to standard 19-section template | Merged | PR #22 |
 | 2026-11-23 | — | PRD aligned to Indlela format (v0.2); feature-to-screen mapping corrected; incorrect §18 cross-refs fixed | ID-level gap check passed | — |
 | 2026-11-23 | — | Stitch project link added to docs; 15:30 check-in submission written | Links verified | — |
+| 2026-11-23 | — | Cross-document re-audit: US13 remapped to F5; F6 traces to PRD §4.5; notification test renamed T-NOTIF-1; M4/OP5/T-M4-1 moved out of Phase 2 into Phase 6; BR2 test refs made explicit | ID, ref and phase checks pass | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1143,6 +1143,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |
 | v1.2 | 2026-11-23 | 0, 17, 18 C1, 19 | Closed clarification C1 with the actual Stitch project URL, added the link to plan details, and recorded the link/check-in update in the progress log. |
 | v1.1 | 2026-11-23 | 3.3, 13 Phase 2, 17, 18 C10, 19 | Gap closure after PRD v0.2 format alignment: removed wrong §18 C13 reference for the v2 payment-gateway decision, corrected the Phase 2 blocking-clarification list (C7 belongs to Phase 4; added C3, C9, C15), recorded the actual PRD §4.5 banner targets in C10, and updated progress/change logs. |
 | v1.0 | 2026-11-23 | All | Rewritten from the 136-line milestone summary at `docs/IMPLEMENTATION_PLAN.md` into the standard 19-section implementation-plan template used by Indlela. All PRD-derived content preserved and expanded into plan details, agent rules, scope, stack, folders, secrets, design system, full data model, SEC1–SEC21, OP1–OP25, navigation, testing strategy, seven detailed TDD phases, traceability, checklists, progress log, clarifications and change log. Moved to repository root. |
