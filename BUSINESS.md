@@ -1,6 +1,6 @@
 # BUSINESS.md — StokvelOS
 
-**Author:** Thami Sithole · **GitHub:** ThamiRoneo (https://github.com/ThamiRoneo/stokvelos) · **Date:** 2026-11-23 · **Status:** Draft v0.1
+**Author:** Thami Sithole · **GitHub:** ThamiSithole (https://github.com/ThamiSithole/stokvelos) · **Date:** 2026-11-23 · **Status:** Draft v0.1
 
 ## 1. The problem
 
@@ -58,7 +58,7 @@ StokvelOS is a mobile-friendly web app (PWA) that gives a stokvel a shared, tamp
 
 **Why we win:** transparency/audit trail visible to all members, low-data PWA (no install), WhatsApp share links for invites, vernacular-friendly UI, treasurer-first onboarding, and a free tier that converts via trust.
 
-## 8. Why us (Thami Sithole / ThamiRoneo)
+## 8. Why us (Thami Sithole / ThamiSithole)
 
 - Built Indlela (transport-affordability app for job seekers) — same target users, same low-data constraints, same Supabase/Next.js stack.
 - Understands the township/informal-economy context first-hand.

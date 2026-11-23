@@ -11,7 +11,7 @@ Oct 27, 2026 · @Melsoft
 | Course code and cohort | AISD - SNPL2026 |
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
-| GitHub repository | https://github.com/ThamiRoneo/stokvelos |
+| GitHub repository | https://github.com/ThamiSithole/stokvelos |
 | Version | v0.1 |
 | Status | Draft |
 

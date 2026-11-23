@@ -9,10 +9,10 @@ Format per course check-ins (all times SAST). Post the relevant block in the cha
 ```
 Name: Thami Sithole
 Business / app name: StokvelOS
-Done since last check-in: Public repo created (https://github.com/ThamiRoneo/stokvelos); BUSINESS.md written; docs/PRD.md (v0.1, 16 sections) written; git history started with small commits.
+Done since last check-in: Public repo created (https://github.com/ThamiSithole/stokvelos); BUSINESS.md written; docs/PRD.md (v0.1, 16 sections) written; git history started with small commits.
 Next: Stitch designs into docs/designs/; README pitch with live/Stitch links and test logins; IMPLEMENTATION_PLAN.md.
 Blockers: None.
-Repo link: https://github.com/ThamiRoneo/stokvelos
+Repo link: https://github.com/ThamiSithole/stokvelos
 ```
 
 Status vs. 10:00 gate: Repo created ✅ · BUSINESS.md ✅ · PRD ✅ · Stitch designs ⏳ (in progress) · README pitch ⏳ (in progress)
@@ -27,7 +27,7 @@ Business / app name: StokvelOS
 Done since last check-in: Stitch designs exported to docs/designs/; README pitch + links; IMPLEMENTATION_PLAN.md merged; Issues created for M1–M7; frontend scaffolding (Next.js + Tailwind/shadcn) started via PRs.
 Next: Backend: Supabase project, schema + RLS migrations, auth + roles.
 Blockers: None.
-Repo link: https://github.com/ThamiRoneo/stokvelos
+Repo link: https://github.com/ThamiSithole/stokvelos
 ```
 
 Status vs. 15:30 gate: Implementation plan merged ⏳ · Issues created ⏳ · Frontend started via PRs ⏳
@@ -42,7 +42,7 @@ Business / app name: StokvelOS
 Done since last check-in: Supabase project live; schema + RLS migrations applied; auth + organizer/member roles; CI (lint, typecheck, tests, build) running on PRs.
 Next: Deploy to live link; first Must features (groups, contributions) working; portfolio repo created + first version deployed.
 Blockers: None.
-Repo link: https://github.com/ThamiRoneo/stokvelos
+Repo link: https://github.com/ThamiSithole/stokvelos
 ```
 
 Status vs. 10:00 gate: Hosted DB ✅/⏳ · Migrations ✅/⏳ · Log-in & roles ✅/⏳ · CI running ✅/⏳
@@ -57,7 +57,7 @@ Business / app name: StokvelOS
 Done since last check-in: Deployed to live link with log-in, database and first Must features (groups + contributions) working; portfolio repo created and first version deployed.
 Next: Remaining Must features (payouts, audit/disputes); tests; README completion; portfolio content.
 Blockers: None.
-Repo link: https://github.com/ThamiRoneo/stokvelos
+Repo link: https://github.com/ThamiSithole/stokvelos
 Capstone live link: <to be added>
 Portfolio repo: <to be added>
 Portfolio live link: <to be added>
@@ -75,7 +75,7 @@ Business / app name: StokvelOS
 Done since last check-in: All Must features (F1–F5) working on live link; tests passing; README nearly complete; portfolio content (capstone + Indlela + best builds) added.
 Next: Final polish, Loom recording, final submission at 15:30.
 Blockers: None.
-Repo link: https://github.com/ThamiRoneo/stokvelos
+Repo link: https://github.com/ThamiSithole/stokvelos
 ```
 
 Status vs. 10:00 gate: All Must features on live link ✅/⏳ · Tests passing ✅/⏳ · README almost complete ✅/⏳ · Portfolio content added ✅/⏳
@@ -88,7 +88,7 @@ Status vs. 10:00 gate: All Must features on live link ✅/⏳ · Tests passing �
 Name: Thami Sithole
 Business / app name: StokvelOS
 One-line pitch: StokvelOS is the transparent ledger and payout scheduler for stokvels, so members always know where their money is.
-Capstone repo: https://github.com/ThamiRoneo/stokvelos
+Capstone repo: https://github.com/ThamiSithole/stokvelos
 Capstone live link: <to be added>
 Loom link: <to be added>
 Portfolio live link: <to be added>
