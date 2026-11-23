@@ -5,7 +5,7 @@ StokvelOS gives stokvels a shared, tamper-evident ledger and payout scheduler, s
 ## Links
 
 - **Live app:** _placeholder (Vercel deploy pending)_
-- **Stitch designs:** _placeholder (exports to be added in `docs/designs/`)_
+- **Stitch designs:** https://stitch.google.com/projects/9928979343368528728 (exported assets to be added in `docs/designs/`)
 - **Test logins:** _placeholder_
 - **Screenshots:** _placeholder_
 
@@ -44,7 +44,7 @@ npm run build
 ## Known issues
 
 - Supabase project not yet created; env vars empty.
-- Stitch design exports not yet added.
+- Stitch design exports not yet added (project link above).
 - Vercel deploy pending.
 
 ## Docs

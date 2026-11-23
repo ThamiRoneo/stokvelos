@@ -8,8 +8,8 @@
 | --- | --- |
 | App name | StokvelOS |
 | Built from PRD version | v0.2 |
-| Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: Open (§18 C1) |
-| Plan version | v1.0 |
+| Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
+| Plan version | v1.2 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Ready to build — Phase 1 complete; start Phase 2 |
 | Last updated | 23 Nov 2026 |
@@ -1103,6 +1103,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | PRD ↔ plan gap closure, persona languages, logo concept, Stitch prompts | PRs merged | PR #18, #19, #20, #21 |
 | 2026-11-23 | — | Plan rewritten to standard 19-section template | Merged | PR #22 |
 | 2026-11-23 | — | PRD aligned to Indlela format (v0.2); feature-to-screen mapping corrected; incorrect §18 cross-refs fixed | ID-level gap check passed | — |
+| 2026-11-23 | — | Stitch project link added to docs; 15:30 check-in submission written | Links verified | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1116,7 +1117,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 | ID | Question | Section | Blocking | Status |
 | --- | --- | --- | --- | --- |
-| C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | Phase 1 (already built from prompts) | Open — non-blocking; prompts file used as design source |
+| C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | None (resolved) | Closed — https://stitch.google.com/projects/9928979343368528728 |
 | C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? PRD 2.4 names the role but gives no data model. | 3.4, 9 SEC21 | Phase 7 | Open |
 | C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.7 | Phase 2 | Open — minimum seed set defined; names in C16 |
 | C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Open |
@@ -1142,6 +1143,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.2 | 2026-11-23 | 0, 17, 18 C1, 19 | Closed clarification C1 with the actual Stitch project URL, added the link to plan details, and recorded the link/check-in update in the progress log. |
 | v1.1 | 2026-11-23 | 3.3, 13 Phase 2, 17, 18 C10, 19 | Gap closure after PRD v0.2 format alignment: removed wrong §18 C13 reference for the v2 payment-gateway decision, corrected the Phase 2 blocking-clarification list (C7 belongs to Phase 4; added C3, C9, C15), recorded the actual PRD §4.5 banner targets in C10, and updated progress/change logs. |
 | v1.0 | 2026-11-23 | All | Rewritten from the 136-line milestone summary at `docs/IMPLEMENTATION_PLAN.md` into the standard 19-section implementation-plan template used by Indlela. All PRD-derived content preserved and expanded into plan details, agent rules, scope, stack, folders, secrets, design system, full data model, SEC1–SEC21, OP1–OP25, navigation, testing strategy, seven detailed TDD phases, traceability, checklists, progress log, clarifications and change log. Moved to repository root. |
 

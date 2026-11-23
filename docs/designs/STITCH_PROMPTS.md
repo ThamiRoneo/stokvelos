@@ -1,6 +1,7 @@
 # Google Stitch prompts — StokvelOS
 
 Source: `docs/PRD.md` §8.1, §8.2, §8.3, §9 (and §2.3, §4.5, §5, §6.2, §10 for PRD-defined sample content only). Nothing outside the PRD is introduced. Paste each fenced block into Stitch as a separate prompt.
+Stitch project: https://stitch.google.com/projects/9928979343368528728
 
 ---
 
