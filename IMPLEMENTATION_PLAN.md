@@ -7,9 +7,9 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.5 |
+| Built from PRD version | v0.6 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.5 |
+| Plan version | v1.6 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Ready to build — Phase 1 complete; start Phase 2 |
 | Last updated | 23 Nov 2026 |
@@ -94,8 +94,8 @@ MVP = F1–F5. F6–F8 are polish.
 - Push notifications at scale (in-app notifications + WhatsApp share links only in v1).
 - Native mobile apps / iOS app (PRD 3.2, 4.3).
 - Full payment gateway, stokvel association white-label, multi-group dashboards (PRD 4.3).
-- Vernacular UI languages in v1 (PRD 14 recommends English v1, i18n-ready — §18 C12).
-- Platform Admin moderation UI until its data model is clarified (§18 C2).
+- Vernacular UI languages in v1 — English only with an i18n-ready string structure; all 12 South African official languages are a future feature (§18 C12 closed).
+- Platform Admin moderation UI — no admin screen in v1; the role is an `is_admin` boolean on `profiles` (§18 C2 closed).
 
 ### 3.4 Key terms (use these names in code)
 
@@ -109,7 +109,7 @@ MVP = F1–F5. F6–F8 are polish.
 | Cycle | `period_label` on contributions | One full rotation where every member receives one payout |
 | Audit log | `AuditLog`, table `audit_log` | Immutable record of every change (who, what, when, before/after) |
 | Dispute | `Dispute`, table `disputes` | Member-raised question about a contribution or payout |
-| Platform Admin | Open — storage mechanism not specified (§18 C2) | Moderate, aggregate stats, suspend abusive accounts |
+| Platform Admin | `is_admin` boolean on `profiles` (§18 C2 closed) | Moderate, aggregate stats, suspend abusive accounts |
 
 ---
 
@@ -128,13 +128,14 @@ MVP = F1–F5. F6–F8 are polish.
 | Database migrations | Supabase CLI + SQL migrations | Latest CLI | Tables, RLS, triggers, seed |
 | Database tests | pgTAP via `supabase test db` | Supabase CLI | Constraints, triggers, RLS (§9) |
 | Integration tests | Vitest + supabase-js against local Supabase | ^2.1.8 | Operations (§10) |
+| Offline cache | Workbox service worker | latest stable (confirm version at install) | Read-only cache + staleness banner (§18 C13) |
 | Unit and component tests | Vitest + Testing Library + jsdom | ^2.1.8 / ^16.1.0 / ^25 | Rules, components, screen states |
 | End-to-end tests | Playwright | ^1.49.1 | User flows (§12.2) |
 | Lint and type check | ESLint 8 + `tsc --noEmit` | ^8.57.0 / ^5 | Code quality |
 | Hosting | Vercel | — | Production PWA |
 | Runtime | Node.js | 20 LTS (as in CI) | Running tools |
 
-Install new Supabase packages via npm; no other library may be added without asking (§2 rule 13).
+Install new Supabase packages via npm. Workbox is explicitly approved by the human for the read-only offline cache (§18 C13 closed); no other library may be added without asking (§2 rule 13).
 
 ### 4.2 Prerequisites on the computer
 
@@ -230,8 +231,8 @@ stokvelos/
 | --- | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Hosted: Project Settings → API. Local: `http://127.0.0.1:54321` | Public | App, tests |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Publishable (anon) key | Same | Public. Safe only because every table has RLS (§9). | App, tests |
-| `SUPABASE_SERVICE_ROLE_KEY` | Admin (service-role) key | Same | **Secret** | Server-side migration/test scripts only. Never in client code. |
-| `SEED_TEST_PASSWORD` | Password for all seed test accounts | You choose | **Secret** | Seed script, integration tests, Playwright |
+| `SUPABASE_SERVICE_ROLE_KEY` | Admin (service-role) key | Same | **Secret** | Local server-side seed/integration scripts only, via `.env.local`; never in client code, CI or committed test files (§18 C15 closed). |
+| `SEED_TEST_PASSWORD` | Password for all seed test accounts | You choose | **Secret** | Local seed script, integration tests, Playwright (§18 C15 closed) |
 
 `.env.example`:
 
@@ -245,7 +246,7 @@ SEED_TEST_PASSWORD=
 Rules:
 
 - Real values go in `.env.local`, which matches `.env*` in `.gitignore` and is never committed.
-- Only variables starting with `NEXT_PUBLIC_` may be imported in `src/app/`, `src/components/` or `src/lib/supabase/client.ts`. A test fails if `SUPABASE_SERVICE_ROLE_KEY` appears in client code (SEC19).
+- Only variables starting with `NEXT_PUBLIC_` may be imported in `src/app/`, `src/components/` or `src/lib/supabase/client.ts`. A test fails if `SUPABASE_SERVICE_ROLE_KEY` appears in client code (SEC20). The key is never supplied to GitHub Actions; CI runs secret-free unit/component checks only (§18 C15 closed).
 - If a new variable is needed, add it here and to `.env.example` first.
 
 ---
@@ -326,6 +327,7 @@ Accessibility tokens (PRD 8.4): WCAG AA contrast, ≥44×44px targets, labels on
 | M7 | Remove Member | `src/components/modals/RemoveMember.tsx` | Stitch M7 | Organizer (from S10) | — | Normal, Loading, Error, Offline, Success | 2 |
 
 Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, labels, messages and sample content are in those prompts (generated from PRD §8.1/§8.2/§9). Do not invent wording.
+S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17; apply the updated Stitch S2/S3 prompts. S13 export is client-side — no Storage bucket.
 
 ---
 
@@ -342,6 +344,7 @@ Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, lab
 | phone | text | Yes | — | — | PRD: phone |
 | avatar_url | text | Yes | — | — | PRD: avatar_url |
 | created_at | timestamptz | No | now() | — | — |
+| is_admin | boolean | No | false | — | Platform Admin flag (§18 C2); never self-settable (SEC2) |
 
 **Table: `stokvels`**: a stokvel group (PRD 10).
 
@@ -440,7 +443,7 @@ Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, lab
 | after | jsonb | Yes | — | — | — |
 | created_at | timestamptz | No | now() | — | Chronological feed (S11) |
 
-**Not in PRD, do not create:** a Platform Admin table or moderation UI (§18 C2).
+**Not in v1:** a Platform Admin table or moderation UI (§18 C2 closed — the role is an `is_admin` boolean on `profiles`).
 
 ### 8.2 Relationships and delete behaviour
 
@@ -449,7 +452,7 @@ Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, lab
 - One stokvel_member has many contributions and payouts; removing a member with an unpaid payout in the current cycle is blocked (BR7).
 - One contribution, payout or dispute creates exactly one audit_log row via trigger (BR9).
 - A user may belong to multiple stokvels (BR13).
-- Deleting an account removes `profiles`; audit_log rows are retained with `actor_id` anonymised (PRD 12, §18 C2 for admin deletion path).
+- Deleting an account removes `profiles`; audit_log rows are retained with `actor_id` anonymised (PRD 12). There is no admin deletion path in v1 — self-delete only (§18 C2).
 
 ### 8.3 Status changes
 
@@ -512,7 +515,7 @@ Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, lab
 | ID | Table / resource | Action | Who is allowed | Rule | Enforced by | Tests (allow / deny) |
 | --- | --- | --- | --- | --- | --- | --- |
 | SEC1 | profiles | read own row | Owner | `id = auth.uid()` | RLS select | T-SEC-1a / 1b |
-| SEC2 | profiles | update own row | Owner | Cannot change `id` or `created_at` | RLS + column privileges | T-SEC-2a / 2b |
+| SEC2 | profiles | update own row | Owner | Cannot change `id`, `created_at` or `is_admin` | RLS + column privileges | T-SEC-2a / 2b |
 | SEC3 | stokvels | read | Members of that stokvel | Exists in `stokvel_members` with status active | RLS select using helper `is_member()` | T-SEC-3a / 3b |
 | SEC4 | stokvels | insert | Any logged-in user | Creator becomes organizer | RLS insert + trigger inserts organizer row | T-SEC-4a / 4b |
 | SEC5 | stokvels | update / delete | Organizer only | BR2 | RLS using `is_organizer()` | T-SEC-5a / 5b |
@@ -530,8 +533,8 @@ Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, lab
 | SEC17 | disputes | resolve (update) | Organizer of that stokvel | BR10 | RLS update | T-SEC-17a / 17b |
 | SEC18 | audit_log | read | Members of that stokvel | BR8, BR9 | RLS select; no write policy | T-SEC-18b (deny only) |
 | SEC19 | join RPC | call | Any logged-in user with valid token | BR6 | Function code, `security definer`, `set search_path = ''` | T-SEC-19a / 19b |
-| SEC20 | secrets | use | Server-side scripts/tests only | `NEXT_PUBLIC_` only in client | Test scans client source for service-role key | T-SEC-20b (deny only) |
-| SEC21 | Platform Admin | moderate / aggregate stats | DB-set role | No read of member financial data beyond aggregates; no impersonation | Open (§18 C2) — do not build until answered | T-SEC-21 (deferred) |
+| SEC20 | secrets | use | Local server-side seed/integration scripts via env only; never client, CI or committed test files | `NEXT_PUBLIC_` only in client | Test scans client and CI config for service-role key | T-SEC-20b (deny only) |
+| SEC21 | Platform Admin | moderate / aggregate stats | `profiles.is_admin = true`, DB-set only, no screen | No read of member financial data beyond aggregates; no impersonation | RLS helper `is_admin()` + SEC2 deny | T-SEC-21a / 21b |
 
 **Always-on security checks** (tested in Phase 7):
 
@@ -550,15 +553,15 @@ All operations live in `src/lib/api/`. Each returns either data or one of the ex
 
 | ID | Operation | Who can call it | Input | Output | Rules | Errors (exact message) | Built as | Tests |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| OP1 | Sign up | Anyone logged out | email, password, age checkbox, privacy checkbox | Account created; logged in | PRD §5; 18+; ≥8 chars + 1 number | "This email already has an account." | Supabase Auth `signUp` | T-US1-1 |
-| OP2 | Log in | Anyone logged out | email, password | Session | PRD §5 | "Invalid credentials." / "Please verify email." | Auth `signInWithPassword` | T-US2-1 |
+| OP1 | Sign up | Anyone logged out | email, password, age checkbox, privacy checkbox **or** Google OAuth account (age + privacy consent still required) | Account created; logged in | PRD §5; 18+; ≥8 chars + 1 number for password sign-up | "This email already has an account." | Supabase Auth `signUp` / `signInWithOAuth('google')` | T-US1-1, T-AUTH-2 |
+| OP2 | Log in | Anyone logged out | email, password **or** Google OAuth | Session | PRD §5 | "Invalid credentials." / "Please verify email." | Auth `signInWithPassword` / `signInWithOAuth('google')` | T-US2-1, T-AUTH-2 |
 | OP3 | Log out | Logged in | — | Session cleared → S1 | PRD §5 | — | Auth `signOut` | T-US3-1 |
-| OP4 | Request password reset | Anyone | email | Same message regardless of account | Never reveals account existence | Exact copy: Open (§18 C5) | Auth `resetPasswordForEmail` | T-AUTH-1 |
+| OP4 | Request password reset | Anyone | email | Same message regardless of account | Never reveals account existence | "If an account exists, a reset link has been sent." (§18 C5 closed) | Auth `resetPasswordForEmail` | T-AUTH-1 |
 | OP5 | Delete account | Logged in (self) | — | Profile removed; audit_log anonymised | PRD §5, §12 | "Couldn't save." | Server action + DB function | T-M4-1 |
 | OP6 | Update profile | Logged in (self) | full_name, phone | Profile saved | SEC2 | "Couldn't save." | Table update | T-S13-1 |
 | OP7 | Create stokvel | Logged in | name, description, contribution_amount, frequency, rotation default | Stokvel created; creator = organizer | BR1, BR4, BR11 | Validation errors inline | Table insert + trigger | T-US4-1 |
 | OP8 | Update stokvel settings | Organizer | name, amount, frequency, rotation | Saved | BR2, BR11 | Validation errors inline | Table update | T-S12-1 |
-| OP9 | Delete group | Organizer | stokvel_id | Group deleted | BR2 | Confirmation copy: Open (§18 C4) | Table delete (cascade) | T-S12-2 |
+| OP9 | Delete group | Organizer | stokvel_id | Group deleted | BR2 | Inline confirm: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." (§18 C4 closed) | Table delete (cascade) | T-S12-2 |
 | OP10 | Create invitation | Organizer | stokvel_id, invited_email?, reusable | Link, expiry 7 days | BR6 | Validation errors inline | Table insert | T-US5-1 |
 | OP11 | Join via invite | Logged in | token | Membership created → S7 | BR1, BR6, BR13 | "This invite has expired. Ask the organizer for a new link." / "This invite has already been used." / "Couldn't join. Try again." | RPC `join_invite` | T-US6-1 |
 | OP12 | List members | Member of stokvel | stokvel_id | Member rows with role + join dates | SEC6 | "Couldn't load. Try again." | Select | T-S10-1 |
@@ -574,7 +577,7 @@ All operations live in `src/lib/api/`. Each returns either data or one of the ex
 | OP22 | View audit log | Member of stokvel | stokvel_id | Chronological feed (actor, action, before/after, timestamp) | BR8, BR9, SEC18 | "Couldn't load. Try again." | Select | T-US11-1 |
 | OP23 | Export ledger | Organizer | stokvel_id, format (PDF/CSV) | File download | G4 | "Couldn't export. Try again." | Client-side generation | T-US14-1 |
 | OP24 | Get in-app notifications | Recipient per PRD 4.5 | — | Notification list with exact text | PRD §4.5 | "Couldn't load. Try again." | Select from notifications | T-NOTIF-1 |
-| OP25 | Cache group data / staleness | Logged in | group id | Cached data + staleness banner | BR12; >24h stale | "No cached data. Connect to the internet to load." / "Showing cached data from [time]. May be out of date." | Service worker/IndexedDB (§18 C11) | T-US15-1 |
+| OP25 | Cache group data / staleness | Logged in | group id | Cached data + staleness banner | BR12; >24h stale | "No cached data. Connect to the internet to load." / "Showing cached data from [time]. May be out of date." | Workbox service worker, read-only cache (§18 C13 closed) | T-US15-1 |
 
 ---
 
@@ -727,9 +730,9 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Goal:** A person can sign up, log in, create a stokvel, invite members, join via link, manage members and edit group settings; every permission rule is enforced in the database and tested.
 
-**Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M5, M7 · Operations OP1–OP4, OP6–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19, SEC20.
+**Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M5, M7 · Operations OP1–OP4, OP6–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19–SEC21 · Google OAuth (§18 C17) · Legal route /privacy.
 
-**Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C2, C3, C4, C5, C9, C11, C15, C16 — if any is still Open, stop and ask.
+**Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C3 — if it is still Open, stop and ask. C2, C4, C5, C9, C11, C15, C16 and C17 are closed.
 
 **Standalone content already landed:** the in-app `/privacy` page (`src/app/privacy/page.tsx`) and its component test were delivered ahead of Phase 2 to close the S2 privacy-link decision (Stitch decision 4). It has no Supabase dependency and does not start Phase 2 work. Phase 2 must still wire the S2 privacy checkbox to link to `/privacy`.
 
@@ -738,6 +741,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | Test ID | Level | File | What it checks |
 | --- | --- | --- | --- |
 | T-AUTH-1 | Unit | `src/lib/__tests__/password.test.ts` | "abcdefg1" passes; "abcdefgh" and "abc1" fail |
+| T-AUTH-2 | Component + Integration | `SignUp.test.tsx`, `LogIn.test.tsx`, `auth.int.test.ts` | Google OAuth sign-up and log-in reach S4; age and privacy consent still enforced |
 | T-US1-1 | Component + Integration | `SignUp.test.tsx`, `auth.int.test.ts` | Valid form + both checkboxes → account created → S4 |
 | T-US2-1 | Component + Integration | `LogIn.test.tsx`, `auth.int.test.ts` | Correct credentials → S4 (empty or list) |
 | T-US3-1 | Integration | `auth.int.test.ts` | Log out clears session → S1 |
@@ -758,21 +762,25 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-M7-1 | Component + Integration | `RemoveMember.test.tsx`, `stokvel.int.test.ts` | BR7 block message; organizer removes member |
 | T-SEC-1–10a/b | Database + Integration | `040_rls.test.sql`, `stokvel.int.test.ts` | Allow and deny for SEC1–SEC10 |
 | T-SEC-19a / 19b | Integration | `invite.int.test.ts` | Join RPC allow valid token; deny invalid/expired |
-| T-SEC-20b | Unit | `src/lib/__tests__/secrets.test.ts` | Service-role key absent from client code |
+| T-SEC-20b | Unit | `src/lib/__tests__/secrets.test.ts` | Service-role key absent from client code and CI config |
+| T-SEC-21a / 21b | Database + Integration | `040_rls.test.sql`, `admin.int.test.ts` | `is_admin` allows aggregate stats; denies member financial reads and impersonation; user cannot self-set `is_admin` |
 | T-DB-1 | Database | `supabase/tests/010_tables.test.sql` | Every table/column in 8.1 exists with right type |
 
 **Step 2: Backend (Green)**
 
 - [ ] Migrations `0001`–`0006` created and applied with `npx supabase db reset`.
 - [ ] Auth configured: email + password, 18+ gate, password rules, forgot password, 30-day session.
+- [ ] Google OAuth provider configured in Supabase Auth; callback URLs set; `signInWithOAuth('google')` wired (§18 C17).
 - [ ] OP1–OP15 implemented in `src/lib/api/`; exact messages in `src/lib/messages.ts`.
 - [ ] RLS enabled on every table; all policies in Section 9 enforced.
 - [ ] `handle_new_user`, `check_stokvel_size`, `check_invite_valid`, `block_member_remove` and audit triggers installed.
 - [ ] `npm run check` and `npm run test:integration` scripts added (§4.3).
+- [ ] Service-role key available only via local `.env.local` to seed/integration scripts; absent from client and CI (§18 C15).
 
 **Step 3: Frontend (Green)**
 
 - [ ] Build S2, S3, S4, S5, S6, S10, S12 and modals M5, M7 to match Stitch designs (§7.3).
+- [ ] S2/S3 "Continue with Google" buttons match the updated Stitch prompts (§18 C17).
 - [ ] Auth guard in `src/app/(app)/layout.tsx` (§11).
 - [ ] Bottom nav shown/hidden per §11; all states per §7.3.
 - [ ] Design tokens wired into Tailwind/CSS variables (§7.1).
@@ -931,7 +939,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F6, F7, F8 · Stories US14, US15 + PRD §4.5 notifications · Screen S13 · Modal M4 · Operations OP5, OP23–OP25 · Rule BR12 · PRD 4.5, 8.4, 12, 14.
 
-**Starts when:** Phase 5 is complete and the human says "Start Phase 6". Check §18 C6, C11, C12 — if Open, stop and ask.
+**Starts when:** Phase 5 is complete and the human says "Start Phase 6". All §18 items gating Phase 6 are closed (C6, C11, C12, C13, C17); proceed.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -949,7 +957,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Step 2: Backend (Green)** — OP23–OP25 implemented; notification rows for all five triggers; no new server library without asking.
 
-**Step 3: Frontend (Green)** — Build S13 and M4 to match Stitch designs; offline cache strategy from §18 C11 decision; export UI from §18 C6 decision.
+**Step 3: Frontend (Green)** — Build S13 and M4 to match Stitch designs; Workbox read-only offline cache from §18 C13 decision; export UI from §18 C6 decision. Export stays client-side — no Supabase Storage bucket (§18 C17 closed).
 
 **Step 4: Refactor and full check** — `npm run check` passes with Phases 1–5.
 
@@ -1008,13 +1016,13 @@ The same ID may be used at two levels when both prove the same criterion.
 | PRD 1.2 | One-line pitch | 3.1, S1 | 1 | T-S1-1 |
 | PRD 1.7 / 15 | Key terms | 3.4 | All | — |
 | PRD 2.4 | Member / Organizer roles | 3.4, 8.1, 9 | 2 | T-SEC-5, 7, 8, 12, 14, 17 |
-| PRD 2.4 | Platform Admin | 9 SEC21, §18 C2 | Deferred | — |
+| PRD 2.4 | Platform Admin | 3.4, 8.1, 9 SEC21, §18 C2 | 7 | T-SEC-2b, T-SEC-21a/b |
 | PRD 3.1 | G1 disputes ≤10% | 3.2, Phase 5 | 5 | T-US12, US13 |
 | PRD 3.1 | G2 on-time payouts ≥90% | 3.2, Phase 4 | 4 | T-US10 |
 | PRD 3.1 | G3 retention ≥85% | 3.2, Phase 2 | 2 | T-US1–3 |
 | PRD 3.1 | G4 time saved ≥60% | 3.2, Phase 6 | 6 | T-US14 |
 | PRD 3.1 | G5 ≥20 active stokvels | 3.2, Phase 7 | 7 | T-REL-2 |
-| F1 / US1–3 | Accounts & roles | 10 OP1–6, 13 Phase 2 | 2 | T-US1–3, T-AUTH-1 |
+| F1 / US1–3 | Accounts & roles | 10 OP1–6, 13 Phase 2 | 2 | T-US1–3, T-AUTH-1, T-AUTH-2 |
 | F2 / US4–6 | Stokvel groups | 8.1, 10 OP7–15, 13 Phase 2 | 2 | T-US4–6 |
 | F3 / US7–8 | Contributions ledger | 10 OP16–17, 13 Phase 3 | 3 | T-US7–8 |
 | F4 / US9–10 | Payouts | 10 OP18–19, 13 Phase 4 | 4 | T-US9–10 |
@@ -1035,8 +1043,9 @@ The same ID may be used at two levels when both prove the same criterion.
 | BR11 | Rotation order | 8.1, 10 OP15 | 2, 4 | T-US9-1, T-BR11-1 |
 | BR12 | 24h staleness | 10 OP25 | 6 | T-BR12-1 |
 | BR13 | Multiple stokvels | 8.1, 9 SEC3 | 2 | T-BR13-1 |
+| PRD 2.4 | Roles & Platform Admin | 3.4, 8.1, 9 SEC2/SEC21 | 2, 7 | T-SEC-2b, T-SEC-21a/b |
 | PRD 4.5 | Notifications | 10 OP24 | 4–6 | T-NOTIF-1 |
-| PRD 5 | Accounts & sign-in | 6, 10 OP1–6, 13 Phase 2 | 2 | T-AUTH-1, T-US1–3 |
+| PRD 5 | Accounts & sign-in | 6, 10 OP1–6, 13 Phase 2 | 2 | T-AUTH-1, T-AUTH-2, T-US1–3 |
 | PRD 6.2 | Edge cases | 10 OP11, 16, 18, 25; 13 phases | 2–6 | T-EDGE-1–2 |
 | PRD 7 | Flows & nav | 11 | 2–7 | T-NAV-1–5 |
 | PRD 8.1–8.3 | Screens, states, components | 7.1–7.3 | All | T-C-1–11, T-S…, T-M… |
@@ -1056,6 +1065,8 @@ The same ID may be used at two levels when both prove the same criterion.
 - [ ] Sign up works; 18+ gate and password rules enforced (T-US1-1, T-AUTH-1).
 - [ ] Log in works; wrong credentials and unverified email show exact messages (T-US2-1, T-S3-1).
 - [ ] Log out clears session and redirects to S1 (T-US3-1).
+- [ ] Google OAuth sign-up and log-in work; age and privacy consent still enforced (T-AUTH-2).
+- [ ] Platform Admin flag is DB-only and cannot be self-assigned (T-SEC-2b, T-SEC-21a/b).
 - [ ] Organizer and Member roles are enforced in RLS, not only in UI (T-SEC-…b).
 - [ ] Create stokvel works; creator becomes organizer (T-US4-1).
 - [ ] Invite link generated; WhatsApp share and copy work; expires after 7 days or on use (T-US5-1, T-BR6-1).
@@ -1070,7 +1081,7 @@ The same ID may be used at two levels when both prove the same criterion.
 - [ ] Resolve dispute works; only organizer can resolve (T-US13-1, T-BR10-1).
 - [ ] All five in-app notifications show exact PRD 4.5 text (T-NOTIF-1).
 - [ ] PDF/CSV export of contributions + payouts works (T-US14-1).
-- [ ] Offline shows cached data; >24h cache shows staleness banner (T-US15-1, T-BR12-1).
+- [ ] Workbox read-only cache shows cached data offline; >24h cache shows staleness banner; no offline writes (T-US15-1, T-BR12-1).
 - [ ] All screens S1–S13 and modals M1–M7 implement every state in §7.3.
 - [ ] Design tokens match PRD §9; screens match Stitch designs.
 - [ ] Responsive: Android Chrome first, desktop supported (T-NFR-3).
@@ -1108,6 +1119,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Cross-document re-audit: US13 remapped to F5; F6 traces to PRD §4.5; notification test renamed T-NOTIF-1; M4/OP5/T-M4-1 moved out of Phase 2 into Phase 6; BR2 test refs made explicit | ID, ref and phase checks pass | — |
 | 2026-11-23 | — | Human answered all 14 Stitch prompt questions; answers recorded in STITCH_PROMPTS.md; 10 §18 clarifications closed; PRD §4.5 S5 → S4 | Cross-doc refs verified | — |
 | 2026-11-23 | — | Human supplied the nine remaining privacy-policy inputs; in-app `/privacy` POPIA policy page and component test created; S2 link target closed in STITCH_PROMPTS.md | typecheck, lint, 4 tests, build pass; /privacy prerendered | — |
+| 2026-11-23 | — | Human closed the five remaining plan clarifications: C2 `is_admin` flag; C12 English-only i18n-ready; C13 Workbox read-only cache; C15 service-role local-only; C17 OAuth added to Phase 2 with client-side export. PRD v0.6 / plan v1.6; S2/S3 Stitch prompts updated | Cross-doc ID and ref checks pass | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1122,7 +1134,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | ID | Question | Section | Blocking | Status |
 | --- | --- | --- | --- | --- |
 | C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | None (resolved) | Closed — https://stitch.google.com/projects/9928979343368528728 |
-| C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? PRD 2.4 names the role but gives no data model. | 3.4, 9 SEC21 | Phase 7 | Open |
+| C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? | 3.4, 8.1, 9 SEC21 | None (closed) | Closed — `is_admin` boolean on `profiles`, set only in Supabase; no moderation screen in v1. SEC2 blocks self-assignment; T-SEC-21a/21b |
 | C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.7 | Phase 2 | Open — minimum seed set defined; names in C16 |
 | C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Closed — inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." / Cancel / Delete stokvel (Stitch Q7) |
 | C5 | Exact forgot-password label, destination screen and message copy (PRD 8.1 says "forgot password link", no screen listed). | 5, 10 OP4 | Phase 2 | Closed — "Forgot password?" → inline reset form on S3; "If an account exists, a reset link has been sent." (Stitch Q5) |
@@ -1132,12 +1144,12 @@ The same ID may be used at two levels when both prove the same criterion.
 | C9 | Exact success banner text after S2 sign-up ("Created → S3 banner" — message not specified). | 8.2, 13 Phase 2 | Phase 2 | Closed — "Account created." (Stitch Q11) |
 | C10 | Where exactly the PRD §4.5 banners should appear. Their current "Opens" targets are S9, S7, S5, S13, S13 — confirm or correct S5 before building. | 7.3, 13 Phases 4–5 | Phase 4 | Closed — payout due S9, overdue S7, new member joined S4 (corrected from S5), disputes S13/S13; PRD §4.5 updated (Stitch Q12) |
 | C11 | Which Lucide glyphs to use for bottom nav tabs and empty-state icons (style/size specified, glyphs not). | 7.1, 7.2 | Phase 2 | Closed — Lucide outlines: Home, ReceiptText, CalendarDays, ScrollText, User; empty states Inbox, Users, CalendarPlus, Receipt, ShieldCheck (Stitch Q13) |
-| C12 | Vernacular languages in v1? PRD 2.3 lists English, isiZulu, Setswana, Sesotho for personas; PRD 14 recommends English v1, i18n-ready. | 3.3 | Phase 6 | Open |
-| C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 10 OP25, 13 Phase 6 | Phase 6 | Open |
+| C12 | Vernacular languages in v1? | 3.3, 4.1 | None (closed) | Closed — English only in v1 with an i18n-ready string structure; all 12 South African official languages are a future feature with a separate i18n budget. No new dependency; no Stitch regeneration |
+| C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 4.1, 10 OP25, 13 Phase 6 | None (closed) | Closed — Workbox service worker, read-only cache with staleness banner, no offline writes. Human approval for the library is recorded in §4.1; wrong C11 refs fixed in OP25 and Phase 6 |
 | C14 | Exact sample contribution amounts, period labels and payout dates for S8/S9 tables, M1/M2 and seed data. | 8.1, 8.7 | Phase 3 | Closed — R250 weekly / R500 monthly; 2026-W47, 2026-W48, Nov 2026; payout dates 2026-12-05, 2026-12-12 (Stitch Q2) |
-| C15 | May the service-role key be used in integration/seed scripts, or should those use an admin RPC? | 6, 9 SEC20 | Phase 2 | Open — plan assumes server-side scripts only |
+| C15 | May the service-role key be used in integration/seed scripts, or should those use an admin RPC? | 6, 9 SEC20, 13 Phase 2 | None (closed) | Closed — local server-side seed/integration scripts only via `.env.local`; never client, CI or committed test files. CI stays secret-free; `SEED_TEST_PASSWORD` added to `.env.example` |
 | C16 | Exact stokvel names for the sample cards in S4/S6 (PRD gives member counts and locations only). | 8.7 | Phase 2 | Closed — "Soweto Savers" (15), "Soweto Uplift" (28), "Tembisa Together" (20) (Stitch Q3) |
-| C17 | Are Google OAuth and Supabase Storage for exports needed in v1? PRD marks both optional. | 3.3, 4.1 | Phase 6 | Open — assume not in v1 |
+| C17 | Are Google OAuth and Supabase Storage for exports needed in v1? | 4.1, 6, 7.3, 10 OP1–2, 13 Phases 2/6 | None (closed) | Closed — Google OAuth YES, built in Phase 2 (S2/S3 gain "Continue with Google"; age + privacy consent still apply). Supabase Storage NO — client-side export retained per PRD 11 and OP23 |
 
 If a clarification marked **Blocking** is still Open when you reach that phase, stop and ask the human. Do not guess.
 
@@ -1147,6 +1159,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.6 | 2026-11-23 | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
 | v1.5 | 2026-11-23 | 0, 13 Phase 2, 17, 19 | Added the standalone in-app `/privacy` POPIA policy page and its test to close Stitch decision 4; Phase 2 now notes the S2 link wiring still to do; PRD bumped to v0.5. |
 | v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |
 | v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |

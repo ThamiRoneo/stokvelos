@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.5 |
+| Version | v0.6 |
 | Status | Draft |
 
 ### Change log
 
 | Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.6 | 2026-11-23 | 2.4, 2.5, 5, 8.1, 11, 14, Document details | Closed all five plan-only clarifications: Platform Admin is an `is_admin` boolean with no v1 screen (C2); English-only i18n-ready with all 12 SA official languages as a future feature (C12); Workbox read-only offline cache (C13); service-role key local-scripts-only (C15); Google OAuth included in v1 Phase 2 while Storage stays client-side (C17) | S2, S3 (Google button) |
 | v0.5 | 2026-11-23 | 8.1, 12, Document details | Added the resolved S2 privacy-link target: in-app `/privacy` POPIA policy page; §12 now records the policy location and indefinite anonymised audit retention | None |
 | v0.4 | 2026-11-23 | 4.5, Document details | Human-confirmed Stitch design answers: notification "New member joined" target corrected from S5 to S4 (C10); all answers recorded in `docs/designs/STITCH_PROMPTS.md` "Resolved design decisions" | None |
 | v0.3 | 2026-11-23 | 4.1, 8.1, Document details | Corrected feature-to-story mapping: US13 (resolve a dispute) belongs to F5, not F6; F6 now traces to §4.5 Notifications; added F6 to the S7/S9/S13 feature lists | None |
@@ -79,9 +80,9 @@ Oct 27, 2026 · @Melsoft
 |---|---|---|---|
 | Member | Accepts an invite link | View own + group ledger, contribution history, payout schedule, raise a dispute | Create/edit stokvel, record contributions, schedule/mark payouts, resolve disputes, remove members |
 | Organizer (Treasurer) | Creates a stokvel (becomes organizer); or promoted by an organizer | Everything a Member can, plus: create/edit stokvel settings, invite/remove members, record contributions, schedule & mark payouts, resolve disputes | Access other stokvels' data; platform-wide admin |
-| Platform Admin | Set via database (Supabase) | Moderate, view aggregate stats, suspend abusive accounts | Read member financial data beyond aggregates; impersonate users |
+| Platform Admin | `is_admin` boolean on `profiles`, set only in Supabase (§18 C2) | Moderate, view aggregate stats, suspend abusive accounts | Read member financial data beyond aggregates; impersonate users |
 
-**2.5 Platform Admin:** Platform Admin work is done directly in the database (Supabase) in v1; there are no admin screens in the app. How the role is stored is Open (implementation plan §18 C2); do not build a moderation UI until that is answered.
+**2.5 Platform Admin:** Platform Admin work is done directly in the database (Supabase) in v1; there are no admin screens in the app. The role is an `is_admin` boolean on `profiles`, set only by a database administrator (implementation plan §18 C2 closed). Do not build a moderation UI.
 
 ## 3. Goals, success metrics and non-goals
 
@@ -155,7 +156,7 @@ Oct 27, 2026 · @Melsoft
 
 | Decision | Answer |
 |---|---|
-| Sign-up methods | Email + password (Supabase Auth); Google OAuth (optional) |
+| Sign-up methods | Email + password (Supabase Auth) and Google OAuth — both in v1; OAuth is built in Phase 2 (§18 C17). Age and privacy consent apply to both. |
 | Who may sign up | Anyone 18+ with an email address |
 | Minimum age | 18 with confirmation checkbox |
 | Password rules | At least 8 characters, including at least 1 number |
@@ -266,8 +267,8 @@ flowchart TD
 | ID | Screen name | Purpose | Primary action | Features | Notes |
 |---|---|---|---|---|---|
 | S1 | Welcome | Entry point | Sign up or Log in | F1 | Logo + pitch + 2 buttons; low-data |
-| S2 | Sign Up | Create account | Register | F1 | Email, password, age checkbox, privacy checkbox linking to `/privacy` |
-| S3 | Log In | Authenticate | Log in | F1 | Email, password, forgot password link |
+| S2 | Sign Up | Create account | Register (email or Google) | F1 | Email, password, age checkbox, privacy checkbox linking to `/privacy`, "Continue with Google" button |
+| S3 | Log In | Authenticate | Log in (email or Google) | F1 | Email, password, forgot password link, "Continue with Google" button |
 | S4 | My Stokvels | List of user's stokvels | Open / Create | F1,F2 | Empty state with Create + Join CTAs |
 | S5 | Create Stokvel | Create a new group | Create | F2 | Name, description, amount, frequency, rotation default |
 | S6 | Join via Invite | Accept invite | Join | F2 | Shows stokvel preview + Join button |
@@ -416,7 +417,7 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 |---|---|---|---|---|
 | Supabase Auth | Authentication | SDK | Keys | Yes |
 | Supabase Postgres + RLS | Data storage & permission rules | SDK/REST | Keys + RLS | Yes |
-| Supabase Storage | Export files (PDF/CSV) | SDK | Keys + RLS | Optional (v1: client-side export) |
+| Supabase Storage | Not used in v1 (§18 C17 closed) | — | — | No — export is generated client-side |
 | PayFast / Yoco | Transaction fees on payouts (v2) | REST | Keys | No (v2) |
 | WhatsApp share | Invite sharing | Deep link (wa.me) | None | Yes |
 
@@ -457,10 +458,11 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 **Open questions:** (tracked in Section 18 of the implementation plan)
 
 - Payment gateway for transaction fees (v2) — PayFast vs Yoco. Deferred with payment-gateway payouts (implementation plan §3.3); no v1 decision needed.
-- Offline cache strategy (service worker) — Workbox vs manual. Open — implementation plan §18 C13.
-- Vernacular language support (isiZulu/Setswana) in v1? Open — implementation plan §18 C12. Recommendation: English v1, i18n-ready.
-- Where the five §4.5 notification banners appear. Open — implementation plan §18 C10.
-- How the Platform Admin role is stored and whether a moderation screen exists in v1. Open — implementation plan §18 C2.
+- Offline cache strategy — Closed (C13): Workbox service worker with a read-only cache and staleness banner; no offline writes.
+- Vernacular languages — Closed (C12): English only in v1 with an i18n-ready string structure. All 12 South African official languages are a future feature, subject to a separate i18n budget.
+- Where the five §4.5 notification banners appear — Closed (C10): S9, S7, S4, S13, S13.
+- How the Platform Admin role is stored — Closed (C2): an `is_admin` boolean on `profiles`; no moderation screen in v1.
+- Google OAuth — Closed (C17): included in v1, built in Phase 2 alongside email + password. Supabase Storage is not used; export stays client-side.
 
 Full clarification register: implementation plan §18 (C1–C17). Do not guess answers to Open items.
 
