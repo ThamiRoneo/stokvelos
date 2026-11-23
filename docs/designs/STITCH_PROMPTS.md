@@ -63,12 +63,13 @@ STATES:
 ```
 Apply the StokvelOS style guide from the style-guide prompt exactly. Mobile-first responsive web app.
 
-LAYOUT: Top app bar (title "Sign Up", back). Centred form card on Surface #ffffff: TextInput Email, TextInput Password, age confirmation checkbox, privacy checkbox, primary Button "Register". Body text minimum 14px; inputs labelled.
+LAYOUT: Top app bar (title "Sign Up", back). Centred form card on Surface #ffffff: TextInput Email, TextInput Password, age confirmation checkbox, privacy checkbox, primary Button "Register", divider, secondary Button "Continue with Google". Body text minimum 14px; inputs labelled.
 
 LABELS & SAMPLE CONTENT:
 - Email (TextInput), Password (TextInput).
 - Age confirmation checkbox (18+).
 - Privacy checkbox: "I accept the Privacy Policy" — links to the in-app `/privacy` page.
+- Google OAuth button: "Continue with Google" (PRD §5; v1, built in Phase 2), below an "or" divider.
 - Password rule hint (exact, PRD §5): "At least 8 characters, including at least 1 number".
 - Button: "Register".
 
@@ -86,11 +87,12 @@ STATES:
 ```
 Apply the StokvelOS style guide from the style-guide prompt exactly. Mobile-first responsive web app.
 
-LAYOUT: Top app bar (title "Log In", back). Centred form card: TextInput Email, TextInput Password, "forgot password link", primary Button "Log in". Inputs labelled.
+LAYOUT: Top app bar (title "Log In", back). Centred form card: TextInput Email, TextInput Password, "forgot password link", primary Button "Log in", divider, secondary Button "Continue with Google". Inputs labelled.
 
 LABELS & SAMPLE CONTENT:
 - Email (TextInput), Password (TextInput).
 - "forgot password link" (exact PRD §8.1 label).
+- Google OAuth button: "Continue with Google" (PRD §5; v1, built in Phase 2), below an "or" divider.
 - Button: "Log in".
 
 STATES:
@@ -474,6 +476,7 @@ These answers were supplied by the human and are now part of the design source f
 | 12 | Banner targets: payout due → S9; overdue → S7; new member joined → **S4** (corrected from S5); dispute raised → S13; dispute resolved → S13. PRD §4.5 updated to S4. | C10 | S4 (new banner), S5 (no banner), S7, S9, S13 (confirmed) |
 | 13 | Lucide outlines — nav: Home, ReceiptText, CalendarDays, ScrollText, User. Empty states: Inbox, Users, CalendarPlus, Receipt, ShieldCheck. | C11 | Style guide; S4, S7, S8, S9, S10, S11, S13 |
 | 14 | One "Export" action → format choice PDF / CSV. | C6 | S13 |
+| 15 | Google OAuth buttons on S2 and S3: "Continue with Google" below an "or" divider (C17). Email + password stays the primary form; age and privacy consent still apply. Export remains client-side, so S13 is visually unchanged. | C17 | S2, S3 |
 
 ### Stitch screens to regenerate
 
@@ -481,3 +484,4 @@ These answers were supplied by the human and are now part of the design source f
 - **Style guide:** Lucide outline glyph set for the bottom nav and empty states.
 - **Unchanged:** S1, M3, M5, M6, M7. Banner targets on S7/S9/S13 are confirmed as already drawn; only S4 gains a new banner.
 - **Legal-content route:** `/privacy` is implemented in code (`src/app/privacy/page.tsx`) and linked from S2. It is not a numbered S-screen and needs no Stitch prompt.
+- **Phase 2 auth decision:** S2 and S3 gain a "Continue with Google" button (decision 15). S13 export stays client-side — no Storage UI change.
