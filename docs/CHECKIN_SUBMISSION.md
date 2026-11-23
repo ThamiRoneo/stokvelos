@@ -1,91 +1,124 @@
-# Final Capstone Check-in (1/4) — StokvelOS
+# Capstone Check-ins — StokvelOS
 
-**Student:** Thami Sithole · **GitHub:** ThamiRoneo
-**Business:** StokvelOS — transparent ledger & payout scheduler for stokvels
-**Repo:** https://github.com/ThamiRoneo/stokvelos · **Status:** v0.1 draft (BUSINESS.md + PRD.md written; scaffolding next)
+Format per course check-ins (all times SAST). Post the relevant block in the channel at each check-in.
 
-## Problem
+---
 
-Stokvels move an estimated **R50bn+ per year** for millions of low- and middle-income South African households, but they run on WhatsApp groups and memory: treasurers track contributions in notebooks or Excel, payouts are scheduled by hand, and there is no shared, tamper-evident record. Disputes over who paid, how much, and who is next in the rotation are frequent and erode trust; a single missed or late payout can collapse a group and cost members savings earmarked for school fees, groceries or funeral costs.
+## Mon 23 Nov • 10:00 (repo + BUSINESS.md/README pitch + PRD + Stitch designs)
 
-- **Who has it:** stokvel treasurers/organizers (1 per group) and their 10–50 members.
-- **How often:** every contribution cycle (weekly/monthly) and every payout.
-- **Cost today:** lost savings from collapsed groups, hours of manual admin per treasurer, damaged relationships, member churn.
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+Done since last check-in: Public repo created (https://github.com/ThamiRoneo/stokvelos); BUSINESS.md written; docs/PRD.md (v0.1, 16 sections) written; git history started with small commits.
+Next: Stitch designs into docs/designs/; README pitch with live/Stitch links and test logins; IMPLEMENTATION_PLAN.md.
+Blockers: None.
+Repo link: https://github.com/ThamiRoneo/stokvelos
+```
 
-## Customer
+Status vs. 10:00 gate: Repo created ✅ · BUSINESS.md ✅ · PRD ✅ · Stitch designs ⏳ (in progress) · README pitch ⏳ (in progress)
 
-- **Primary payer (B2C SaaS):** stokvel treasurer/organizer managing 1–5 groups (10–50 members each). Pain: admin burden, disputes, no audit trail, churn.
-- **End user (free tier):** members wanting transparency on their own contributions and next payout.
-- **Future B2B:** stokvel associations (e.g. NASASA), burial societies and funeral parlours offering a trusted savings tool to their customers.
+---
 
-## Solution
+## Mon 23 Nov • 15:30 (implementation plan merged, Issues created, frontend started via PRs)
 
-StokvelOS is a **mobile-first, low-data web app (PWA)** that gives a stokvel a shared, tamper-evident ledger: create a group, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail — so every member can see where their money is, anytime, on low data.
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+Done since last check-in: Stitch designs exported to docs/designs/; README pitch + links; IMPLEMENTATION_PLAN.md merged; Issues created for M1–M7; frontend scaffolding (Next.js + Tailwind/shadcn) started via PRs.
+Next: Backend: Supabase project, schema + RLS migrations, auth + roles.
+Blockers: None.
+Repo link: https://github.com/ThamiRoneo/stokvelos
+```
 
-> One sentence: StokvelOS is the transparent ledger and payout scheduler for stokvels, so members always know where their money is.
+Status vs. 15:30 gate: Implementation plan merged ⏳ · Issues created ⏳ · Frontend started via PRs ⏳
 
-No custody of funds in v1 — record-keeping and trust tool, not a bank (regulatory positioning).
+---
 
-## Impact
+## Tue 24 Nov • 10:00 (backend started: hosted DB, migrations, log-in & roles, CI running)
 
-- Fewer disputes and collapsed groups; higher member retention; more savings kept in stokvels vs. cash.
-- **On-time payout rate ≥ 90%**
-- **Dispute rate down ≥ 50%**
-- **Member retention ≥ 85% over 6 months**
-- **Treasurer admin time down ≥ 60%**
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+Done since last check-in: Supabase project live; schema + RLS migrations applied; auth + organizer/member roles; CI (lint, typecheck, tests, build) running on PRs.
+Next: Deploy to live link; first Must features (groups, contributions) working; portfolio repo created + first version deployed.
+Blockers: None.
+Repo link: https://github.com/ThamiRoneo/stokvelos
+```
 
-## Money (business model)
+Status vs. 10:00 gate: Hosted DB ✅/⏳ · Migrations ✅/⏳ · Log-in & roles ✅/⏳ · CI running ✅/⏳
 
-| Tier | Price | Includes |
-|---|---|---|
-| Free | R0 | Up to 10 members, basic contribution + payout ledger, member view |
-| Premium | R59–R149 / month per stokvel | Unlimited members, WhatsApp/SMS reminders, payout scheduling, PDF audit reports, dispute log, export |
-| Transaction fee | 1% (capped) on payouts via PayFast/Yoco | Optional, only when payouts run through the app (v2) |
-| B2B (future) | Per-seat / white-label licensing | Stokvel associations, burial societies, funeral parlours |
+---
 
-Unit economics (target): Premium ARPU ≈ R99/mo; CAC via community channels ≈ R30–R60; payback < 1 month; high gross margin on Supabase/Vercel.
+## Tue 24 Nov • 15:30 (deployed live link + first Must features; portfolio repo created + deployed)
 
-## Go-to-market (first 100 customers)
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+Done since last check-in: Deployed to live link with log-in, database and first Must features (groups + contributions) working; portfolio repo created and first version deployed.
+Next: Remaining Must features (payouts, audit/disputes); tests; README completion; portfolio content.
+Blockers: None.
+Repo link: https://github.com/ThamiRoneo/stokvelos
+Capstone live link: <to be added>
+Portfolio repo: <to be added>
+Portfolio live link: <to be added>
+```
 
-1. Direct outreach to treasurers in personal network + township WhatsApp groups.
-2. Partnerships with stokvel associations (NASASA) and burial societies/funeral parlours.
-3. Church groups and community organisations (high trust, high stokvel density).
-4. Community radio mentions + spaza shop notice boards.
-5. Referral loop: 1 free month for inviting another stokvel.
+Status vs. 15:30 gate: Live link ✅/⏳ · First Must features ✅/⏳ · Portfolio repo + deployed ✅/⏳
 
-Channel hypothesis: treasurer-led word of mouth — one treasurer brings 1 group (10–50 members), so 100 customers ≈ 2–10 treasurers convinced.
+---
 
-## Competition
+## Wed 25 Nov • 10:00 (all Must features on live link, tests passing, README almost complete, portfolio content added)
 
-| Competitor | Strength | Weakness |
-|---|---|---|
-| WhatsApp + notebook/Excel | Free, familiar, ubiquitous | No audit trail, manual, error-prone, disputes unresolved |
-| Stokfella and similar apps | First-mover, SA-focused | Weak UX, low trust, low adoption, heavy install friction |
-| Bank stokvel products | Trust, regulation | Rigid, fees, not group-controlled, poor UX |
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+Done since last check-in: All Must features (F1–F5) working on live link; tests passing; README nearly complete; portfolio content (capstone + Indlela + best builds) added.
+Next: Final polish, Loom recording, final submission at 15:30.
+Blockers: None.
+Repo link: https://github.com/ThamiRoneo/stokvelos
+```
 
-**Why we win:** transparency/audit trail visible to all members, low-data PWA (no install), WhatsApp share links for invites, vernacular-friendly UI, treasurer-first onboarding, and a free tier that converts via trust.
+Status vs. 10:00 gate: All Must features on live link ✅/⏳ · Tests passing ✅/⏳ · README almost complete ✅/⏳ · Portfolio content added ✅/⏳
 
-## App must features (day one)
+---
 
-1. **F1 Accounts & roles** — sign up/login, organizer vs member (RLS-enforced on backend).
-2. **F2 Stokvel groups** — create group, invite via link/WhatsApp, join, member list.
-3. **F3 Contributions ledger** — record who paid what/when, balances, member statement.
-4. **F4 Payout schedule & tracking** — rotation order, due dates, mark paid, reminders.
-5. **F5 Audit & dispute log** — immutable change log, who did what, resolve disputes.
+## Wed 25 Nov • 15:30 — FINAL SUBMISSION
 
-MVP = F1–F5. F6–F8 (reminders, export, offline) are polish if time.
+```
+Name: Thami Sithole
+Business / app name: StokvelOS
+One-line pitch: StokvelOS is the transparent ledger and payout scheduler for stokvels, so members always know where their money is.
+Capstone repo: https://github.com/ThamiRoneo/stokvelos
+Capstone live link: <to be added>
+Loom link: <to be added>
+Portfolio live link: <to be added>
+Portfolio repo: <to be added>
+```
 
-## Stack & delivery
+Work after 15:30 Wednesday won't be counted.
 
-Next.js + Supabase (Postgres + RLS) + Tailwind/shadcn + Vercel; TDD + CI (lint, typecheck, tests, build on every PR). Prior portfolio project: Indlela (transport-affordability app for job seekers) — same target users, low-data constraints, same stack.
+---
+
+## Detailed submission (reference — problem / customer / solution / impact / money / GTM / competition / must features)
+
+See `BUSINESS.md` and `docs/PRD.md`. Summary:
+
+- **Problem:** Stokvels move ~R50bn+/yr but run on WhatsApp/notebooks; disputes over contributions/payouts collapse groups.
+- **Customer:** Treasurer/organizer (payer) + members (free); future B2B to stokvel associations/burial societies.
+- **Solution:** Shared, tamper-evident ledger + payout scheduler (web PWA, low data); no custody of funds in v1.
+- **Impact:** On-time payouts ≥ 90%; disputes down ≥ 50%; retention ≥ 85%; treasurer admin time down ≥ 60%.
+- **Money:** Freemium (≤10 members free) → Premium R59–R149/mo per stokvel + optional 1% transaction fee (v2) + B2B licensing.
+- **GTM first 100:** WhatsApp groups, NASASA/association partnerships, church groups, community radio, spaza boards, referral loop.
+- **Competition:** WhatsApp+Excel, Stokfella (weak UX), bank stokvel products. Win on transparency/audit trail, low-data PWA, WhatsApp invites, vernacular UI.
+- **Must features:** F1 Accounts & roles; F2 Stokvel groups; F3 Contributions ledger; F4 Payout schedule & tracking; F5 Audit & dispute log.
+- **Roles:** Organizer (Treasurer), Member, Platform Admin.
+- **Stack:** Next.js + Supabase (Postgres + RLS) + Tailwind/shadcn + Vercel; TDD + CI.
+- **Prior portfolio project:** Indlela (transport-affordability app) — same target users, low-data constraints, same stack.
 
 ## Test logins (placeholder)
 
-Test accounts will be added once scaffolding + auth (M1) is complete. Expected roles for QA:
+To be added once auth (M1) is complete:
 
-- Organizer (Treasurer): `organizer@test.stokvelos.app` / `<password>`
+- Organizer: `organizer@test.stokvelos.app` / `<password>`
 - Member: `member@test.stokvelos.app` / `<password>`
 - Platform Admin: `admin@test.stokvelos.app` / `<password>`
-
-Credentials to be recorded in the repo's `.env.example` / seed script (never committed as real secrets) and updated here before final submission.<|end|><|start|>asset<|channel|>final<|message|>Now let me print it.<|end|><|start|><|start|>assistant to=shell<|channel|>analysis <|constrain|>xml<|message|><rfl:parameter name="command">
-cat /home/kayron1/Work/stokvelos/docs/CHECKIN_SUBMISSION.md
