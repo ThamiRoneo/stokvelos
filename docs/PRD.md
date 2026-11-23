@@ -466,7 +466,7 @@ Font family: Inter, system-ui fallback.
 
 ## 16. Appendix
 
-Original business idea: [BUSINESS.md](./BUSINESS.md)  
-Prior project (portfolio): Indlela — transport affordability for job seekers (https://github.com/ThamiRoneo/indlela-app).
+Original business idea: [BUSINESS.md](../BUSINESS.md)  
+Prior project (portfolio, separate repo — not this one): Indlela — transport affordability for job seekers (https://github.com/ThamiRoneo/indlela-mvp).
 
 Related: [[Home]]

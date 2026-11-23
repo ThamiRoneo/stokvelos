@@ -1,6 +1,6 @@
 # BUSINESS.md — StokvelOS
 
-**Author:** Thami Sithole · **GitHub:** ThamiRoneo · **Date:** 2026-11-23 · **Status:** Draft v0.1
+**Author:** Thami Sithole · **GitHub:** ThamiRoneo (https://github.com/ThamiRoneo/stokvelos) · **Date:** 2026-11-23 · **Status:** Draft v0.1
 
 ## 1. The problem
 
