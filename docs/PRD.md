@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.1 |
+| Version | v0.2 |
 | Status | Draft |
 
 ### Change log
 
-| Version | Date | Section(s) changed | What changed | Regenerated? |
+| Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.2 | 2026-11-23 | 2.5, 4.1, 4.5, 6.1, 14, Document details | Aligned format to the Indlela PRD standard; corrected feature-to-screen mapping (F1–F7) against implementation plan §7.3/§13; clarified US2 landing state; mapped open questions to implementation plan §18 | None |
 | v0.1 | 2026-11-23 | All | First draft | None |
 
 ## 1. Product overview
@@ -77,6 +78,8 @@ Oct 27, 2026 · @Melsoft
 | Organizer (Treasurer) | Creates a stokvel (becomes organizer); or promoted by an organizer | Everything a Member can, plus: create/edit stokvel settings, invite/remove members, record contributions, schedule & mark payouts, resolve disputes | Access other stokvels' data; platform-wide admin |
 | Platform Admin | Set via database (Supabase) | Moderate, view aggregate stats, suspend abusive accounts | Read member financial data beyond aggregates; impersonate users |
 
+**2.5 Platform Admin:** Platform Admin work is done directly in the database (Supabase) in v1; there are no admin screens in the app. How the role is stored is Open (implementation plan §18 C2); do not build a moderation UI until that is answered.
+
 ## 3. Goals, success metrics and non-goals
 
 **3.1 Goals**
@@ -104,13 +107,13 @@ Oct 27, 2026 · @Melsoft
 
 | ID | Feature name | What the user can do | Priority | Goal | Stories | Screens |
 |---|---|---|---|---|---|---|
-| F1 | Accounts & roles | Sign up, log in, log out, set profile | Must | G3,G5 | US1,US2,US3 | S1,S2,S3,S11 |
-| F2 | Stokvel groups | Create group, edit settings, invite via link/WhatsApp, join, view member list, remove member | Must | G5 | US4,US5,US6 | S4,S5,S6,S12 |
-| F3 | Contributions ledger | Record contribution, view group ledger, view member statement, balances per cycle | Must | G1,G2,G4 | US7,US8 | S7,S8 |
-| F4 | Payout schedule & tracking | Set rotation order, schedule payouts, mark paid, view upcoming payouts, reminders | Must | G2,G4 | US9,US10 | S9,S10 |
-| F5 | Audit & dispute log | View immutable change log, raise dispute, resolve dispute (organizer) | Must | G1,G3 | US11,US12 | S13,S14 |
-| F6 | Reminders & notifications | In-app reminders for upcoming payouts/late contributions | Should | G2,G4 | US13 | S9,S11 |
-| F7 | Export & reports | Export group ledger to PDF/CSV | Should | G4 | US14 | S7 |
+| F1 | Accounts & roles | Sign up, log in, log out, set profile | Must | G3,G5 | US1,US2,US3 | S1,S2,S3,S13 |
+| F2 | Stokvel groups | Create group, edit settings, invite via link/WhatsApp, join, view member list, remove member | Must | G5 | US4,US5,US6 | S4,S5,S6,S10,S12,M5,M7 |
+| F3 | Contributions ledger | Record contribution, view group ledger, view member statement, balances per cycle | Must | G1,G2,G4 | US7,US8 | S7,S8,M1 |
+| F4 | Payout schedule & tracking | Set rotation order, schedule payouts, mark paid, view upcoming payouts, reminders | Must | G2,G4 | US9,US10 | S9,M2,M6 |
+| F5 | Audit & dispute log | View immutable change log, raise dispute, resolve dispute (organizer) | Must | G1,G3 | US11,US12 | S11,M3 |
+| F6 | Reminders & notifications | In-app reminders for upcoming payouts/late contributions | Should | G2,G4 | US13 | S7,S9,S13 |
+| F7 | Export & reports | Export group ledger to PDF/CSV | Should | G4 | US14 | S7,S13 |
 | F8 | Offline & low-data | Cache group data offline, show cached when offline, staleness indicator | Should | G5 | US15 | All |
 
 **4.2 MVP definition:** The smallest version is StokvelOS with F1–F5 (accounts, groups, contributions, payouts, audit/disputes). F6–F8 are polish.
@@ -135,7 +138,7 @@ Oct 27, 2026 · @Melsoft
 | BR12 | Cached data older than 24 hours is marked stale. | F8 |
 | BR13 | A user may belong to multiple stokvels. | F1,F2 |
 
-**4.5 Notifications (in-app)**
+**4.5 Notifications**
 
 | Trigger | Who receives | Channel | Exact text | Opens |
 |---|---|---|---|---|
@@ -167,7 +170,7 @@ Oct 27, 2026 · @Melsoft
 T-US1-1: Given valid email and password (8+ chars, 1 number) and age confirmation, account created and I am logged in.
 
 **US2:** As a user, I want to log in.  
-T-US2-1: Given correct credentials, I go to S4 (My Stokvels) if I have stokvels, else S5 (Create/Join).
+T-US2-1: Given correct credentials, I go to S4 (My Stokvels). If I have no stokvels, S4 shows the empty state with Create and Join CTAs.
 
 **US3:** As a user, I want to log out.  
 T-US3-1: Session cleared; redirected to S1.
@@ -448,10 +451,15 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 - Responsive (mobile + desktop); low-data; no placeholder screens.
 - CI runs lint, typecheck, tests, build on every PR.
 
-**Open questions:**
-- Payment gateway for transaction fees (v2) — PayFast vs Yoco. (v1: none.)
-- Offline cache strategy (service worker) — confirm Workbox vs manual. (Resolve in implementation plan.)
-- Vernacular language support (isiZulu/Setswana) in v1? (Recommend: English v1, i18n-ready.)
+**Open questions:** (tracked in Section 18 of the implementation plan)
+
+- Payment gateway for transaction fees (v2) — PayFast vs Yoco. Deferred with payment-gateway payouts (implementation plan §3.3); no v1 decision needed.
+- Offline cache strategy (service worker) — Workbox vs manual. Open — implementation plan §18 C13.
+- Vernacular language support (isiZulu/Setswana) in v1? Open — implementation plan §18 C12. Recommendation: English v1, i18n-ready.
+- Where the five §4.5 notification banners appear. Open — implementation plan §18 C10.
+- How the Platform Admin role is stored and whether a moderation screen exists in v1. Open — implementation plan §18 C2.
+
+Full clarification register: implementation plan §18 (C1–C17). Do not guess answers to Open items.
 
 ## 15. Glossary
 
