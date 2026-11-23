@@ -7,9 +7,9 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.3 |
+| Built from PRD version | v0.4 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.3 |
+| Plan version | v1.4 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Ready to build — Phase 1 complete; start Phase 2 |
 | Last updated | 23 Nov 2026 |
@@ -1104,6 +1104,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | PRD aligned to Indlela format (v0.2); feature-to-screen mapping corrected; incorrect §18 cross-refs fixed | ID-level gap check passed | — |
 | 2026-11-23 | — | Stitch project link added to docs; 15:30 check-in submission written | Links verified | — |
 | 2026-11-23 | — | Cross-document re-audit: US13 remapped to F5; F6 traces to PRD §4.5; notification test renamed T-NOTIF-1; M4/OP5/T-M4-1 moved out of Phase 2 into Phase 6; BR2 test refs made explicit | ID, ref and phase checks pass | — |
+| 2026-11-23 | — | Human answered all 14 Stitch prompt questions; answers recorded in STITCH_PROMPTS.md; 10 §18 clarifications closed; PRD §4.5 S5 → S4 | Cross-doc refs verified | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1120,19 +1121,19 @@ The same ID may be used at two levels when both prove the same criterion.
 | C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | None (resolved) | Closed — https://stitch.google.com/projects/9928979343368528728 |
 | C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? PRD 2.4 names the role but gives no data model. | 3.4, 9 SEC21 | Phase 7 | Open |
 | C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.7 | Phase 2 | Open — minimum seed set defined; names in C16 |
-| C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Open |
-| C5 | Exact forgot-password label, destination screen and message copy (PRD 8.1 says "forgot password link", no screen listed). | 5, 10 OP4 | Phase 2 | Open |
-| C6 | Should S13 export be one "Export" action with a format choice, or separate PDF and CSV actions? | 10 OP23, 13 Phase 6 | Phase 6 | Open |
-| C7 | Exact rotation-order control on S5/S9/S12 (numbered list, drag handles, etc.). | 8.1/8.2, 13 Phase 4 | Phase 4 | Open |
-| C8 | Exact audit action labels and before/after formatting for the S11 feed. | 8.1, 10 OP22 | Phase 5 | Open |
-| C9 | Exact success banner text after S2 sign-up ("Created → S3 banner" — message not specified). | 8.2, 13 Phase 2 | Phase 2 | Open — non-blocking; use "Account created." only if confirmed |
-| C10 | Where exactly the PRD §4.5 banners should appear. Their current "Opens" targets are S9, S7, S5, S13, S13 — confirm or correct S5 before building. | 7.3, 13 Phases 4–5 | Phase 4 | Open |
-| C11 | Which Lucide glyphs to use for bottom nav tabs and empty-state icons (style/size specified, glyphs not). | 7.1, 7.2 | Phase 2 | Open — non-blocking; choose Lucide outlines consistent with style guide |
+| C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Closed — inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." / Cancel / Delete stokvel (Stitch Q7) |
+| C5 | Exact forgot-password label, destination screen and message copy (PRD 8.1 says "forgot password link", no screen listed). | 5, 10 OP4 | Phase 2 | Closed — "Forgot password?" → inline reset form on S3; "If an account exists, a reset link has been sent." (Stitch Q5) |
+| C6 | Should S13 export be one "Export" action with a format choice, or separate PDF and CSV actions? | 10 OP23, 13 Phase 6 | Phase 6 | Closed — one "Export" action with PDF / CSV format choice (Stitch Q14) |
+| C7 | Exact rotation-order control on S5/S9/S12 (numbered list, drag handles, etc.). | 8.1/8.2, 13 Phase 4 | Phase 4 | Closed — numbered rows with ↑/↓ buttons, optional drag handle; default join order (Stitch Q10) |
+| C8 | Exact audit action labels and before/after formatting for the S11 feed. | 8.1, 10 OP22 | Phase 5 | Closed — labels "Contribution recorded/updated/deleted" etc.; `field: old → new`, newest first (Stitch Q9) |
+| C9 | Exact success banner text after S2 sign-up ("Created → S3 banner" — message not specified). | 8.2, 13 Phase 2 | Phase 2 | Closed — "Account created." (Stitch Q11) |
+| C10 | Where exactly the PRD §4.5 banners should appear. Their current "Opens" targets are S9, S7, S5, S13, S13 — confirm or correct S5 before building. | 7.3, 13 Phases 4–5 | Phase 4 | Closed — payout due S9, overdue S7, new member joined S4 (corrected from S5), disputes S13/S13; PRD §4.5 updated (Stitch Q12) |
+| C11 | Which Lucide glyphs to use for bottom nav tabs and empty-state icons (style/size specified, glyphs not). | 7.1, 7.2 | Phase 2 | Closed — Lucide outlines: Home, ReceiptText, CalendarDays, ScrollText, User; empty states Inbox, Users, CalendarPlus, Receipt, ShieldCheck (Stitch Q13) |
 | C12 | Vernacular languages in v1? PRD 2.3 lists English, isiZulu, Setswana, Sesotho for personas; PRD 14 recommends English v1, i18n-ready. | 3.3 | Phase 6 | Open |
 | C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 10 OP25, 13 Phase 6 | Phase 6 | Open |
-| C14 | Exact sample contribution amounts, period labels and payout dates for S8/S9 tables, M1/M2 and seed data. | 8.1, 8.7 | Phase 3 | Open |
+| C14 | Exact sample contribution amounts, period labels and payout dates for S8/S9 tables, M1/M2 and seed data. | 8.1, 8.7 | Phase 3 | Closed — R250 weekly / R500 monthly; 2026-W47, 2026-W48, Nov 2026; payout dates 2026-12-05, 2026-12-12 (Stitch Q2) |
 | C15 | May the service-role key be used in integration/seed scripts, or should those use an admin RPC? | 6, 9 SEC20 | Phase 2 | Open — plan assumes server-side scripts only |
-| C16 | Exact stokvel names for the sample cards in S4/S6 (PRD gives member counts and locations only). | 8.7 | Phase 2 | Open |
+| C16 | Exact stokvel names for the sample cards in S4/S6 (PRD gives member counts and locations only). | 8.7 | Phase 2 | Closed — "Soweto Savers" (15), "Soweto Uplift" (28), "Tembisa Together" (20) (Stitch Q3) |
 | C17 | Are Google OAuth and Supabase Storage for exports needed in v1? PRD marks both optional. | 3.3, 4.1 | Phase 6 | Open — assume not in v1 |
 
 If a clarification marked **Blocking** is still Open when you reach that phase, stop and ask the human. Do not guess.
@@ -1143,6 +1144,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |
 | v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |
 | v1.2 | 2026-11-23 | 0, 17, 18 C1, 19 | Closed clarification C1 with the actual Stitch project URL, added the link to plan details, and recorded the link/check-in update in the progress log. |
 | v1.1 | 2026-11-23 | 3.3, 13 Phase 2, 17, 18 C10, 19 | Gap closure after PRD v0.2 format alignment: removed wrong §18 C13 reference for the v2 payment-gateway decision, corrected the Phase 2 blocking-clarification list (C7 belongs to Phase 4; added C3, C9, C15), recorded the actual PRD §4.5 banner targets in C10, and updated progress/change logs. |
