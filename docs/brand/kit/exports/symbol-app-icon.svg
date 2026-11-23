@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><title>StokvelOS logo</title><rect width="256" height="256" rx="57.6" fill="#1B5E20"/><g transform="translate(30.34 30.34) scale(0.763)" fill="#ffffff">
+  <title id="title">StokvelOS symbol (small size)</title>
+  <g id="symbol" fill="#ffffff">
+    <rect x="24" y="72" width="208" height="20" rx="10"/>
+    <rect x="24" y="118" width="208" height="20" rx="10"/>
+    <rect x="24" y="164" width="208" height="20" rx="10"/>
+    <rect x="164" y="60" width="32" height="136" rx="6"/>
+  </g>
+</g></svg>

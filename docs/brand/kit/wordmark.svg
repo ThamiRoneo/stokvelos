@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 256" width="760" height="256" role="img" aria-labelledby="title">
+  <title id="title">StokvelOS wordmark (live text — outline before delivery)</title>
+  <!-- NOTE: wordmark uses live <text>; convert to outlines in a vector editor before final delivery. -->
+  <text x="0" y="188" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="176" font-weight="700" fill="#000" letter-spacing="-4">StokvelOS</text>
+</svg>

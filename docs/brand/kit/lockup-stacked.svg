@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 320" width="256" height="320" role="img" aria-labelledby="title">
+  <title id="title">StokvelOS stacked lockup (live text — outline before delivery)</title>
+  <!-- NOTE: wordmark uses live <text>; convert to outlines in a vector editor before final delivery. -->
+  <g id="symbol" transform="translate(0,0)" fill="#000">
+    <rect x="24" y="24" width="208" height="16" rx="8"/>
+    <rect x="24" y="72" width="208" height="16" rx="8"/>
+    <rect x="24" y="120" width="208" height="16" rx="8"/>
+    <rect x="168" y="16" width="24" height="128" rx="4"/>
+    <path d="M 224 28 A 52 52 0 0 0 224 132 L 224 124 A 44 44 0 0 1 224 36 Z"/>
+  </g>
+  <text x="128" y="286" text-anchor="middle" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="44" font-weight="700" fill="#000" letter-spacing="-1">StokvelOS</text>
+</svg>
