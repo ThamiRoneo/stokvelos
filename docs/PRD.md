@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.4 |
+| Version | v0.5 |
 | Status | Draft |
 
 ### Change log
 
 | Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.5 | 2026-11-23 | 8.1, 12, Document details | Added the resolved S2 privacy-link target: in-app `/privacy` POPIA policy page; §12 now records the policy location and indefinite anonymised audit retention | None |
 | v0.4 | 2026-11-23 | 4.5, Document details | Human-confirmed Stitch design answers: notification "New member joined" target corrected from S5 to S4 (C10); all answers recorded in `docs/designs/STITCH_PROMPTS.md` "Resolved design decisions" | None |
 | v0.3 | 2026-11-23 | 4.1, 8.1, Document details | Corrected feature-to-story mapping: US13 (resolve a dispute) belongs to F5, not F6; F6 now traces to §4.5 Notifications; added F6 to the S7/S9/S13 feature lists | None |
 | v0.2 | 2026-11-23 | 2.5, 4.1, 4.5, 6.1, 14, Document details | Aligned format to the Indlela PRD standard; corrected feature-to-screen mapping (F1–F7) against implementation plan §7.3/§13; clarified US2 landing state; mapped open questions to implementation plan §18 | None |
@@ -265,7 +266,7 @@ flowchart TD
 | ID | Screen name | Purpose | Primary action | Features | Notes |
 |---|---|---|---|---|---|
 | S1 | Welcome | Entry point | Sign up or Log in | F1 | Logo + pitch + 2 buttons; low-data |
-| S2 | Sign Up | Create account | Register | F1 | Email, password, age checkbox, privacy checkbox |
+| S2 | Sign Up | Create account | Register | F1 | Email, password, age checkbox, privacy checkbox linking to `/privacy` |
 | S3 | Log In | Authenticate | Log in | F1 | Email, password, forgot password link |
 | S4 | My Stokvels | List of user's stokvels | Open / Create | F1,F2 | Empty state with Create + Join CTAs |
 | S5 | Create Stokvel | Create a new group | Create | F2 | Name, description, amount, frequency, rotation default |
@@ -426,7 +427,7 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 | Data collected | Name, phone, email, stokvel membership, contributions, payouts, disputes |
 | Permissions | None required in v1 (web/PWA) |
 | Security | Supabase RLS on every table, password hashing, data minimisation, audit log immutable |
-| Privacy | Age gate 18+, delete account supported (profile removed; audit log anonymised), no custody of funds |
+| Privacy | POPIA policy published in-app at `/privacy`; age gate 18+, delete account supported (profile removed; audit log retained anonymised indefinitely), no custody of funds |
 | Financial regulation | Positioned as record-keeping tool, not a bank; no money held or moved in v1 |
 
 ## 13. Build plan, milestones and MVP cut

@@ -7,9 +7,9 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.4 |
+| Built from PRD version | v0.5 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.4 |
+| Plan version | v1.5 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Ready to build — Phase 1 complete; start Phase 2 |
 | Last updated | 23 Nov 2026 |
@@ -731,6 +731,8 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C2, C3, C4, C5, C9, C11, C15, C16 — if any is still Open, stop and ask.
 
+**Standalone content already landed:** the in-app `/privacy` page (`src/app/privacy/page.tsx`) and its component test were delivered ahead of Phase 2 to close the S2 privacy-link decision (Stitch decision 4). It has no Supabase dependency and does not start Phase 2 work. Phase 2 must still wire the S2 privacy checkbox to link to `/privacy`.
+
 **Step 1: Write the failing tests first (Red)**
 
 | Test ID | Level | File | What it checks |
@@ -1105,6 +1107,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Stitch project link added to docs; 15:30 check-in submission written | Links verified | — |
 | 2026-11-23 | — | Cross-document re-audit: US13 remapped to F5; F6 traces to PRD §4.5; notification test renamed T-NOTIF-1; M4/OP5/T-M4-1 moved out of Phase 2 into Phase 6; BR2 test refs made explicit | ID, ref and phase checks pass | — |
 | 2026-11-23 | — | Human answered all 14 Stitch prompt questions; answers recorded in STITCH_PROMPTS.md; 10 §18 clarifications closed; PRD §4.5 S5 → S4 | Cross-doc refs verified | — |
+| 2026-11-23 | — | Human supplied the nine remaining privacy-policy inputs; in-app `/privacy` POPIA policy page and component test created; S2 link target closed in STITCH_PROMPTS.md | typecheck, lint, 4 tests, build pass; /privacy prerendered | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1144,6 +1147,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.5 | 2026-11-23 | 0, 13 Phase 2, 17, 19 | Added the standalone in-app `/privacy` POPIA policy page and its test to close Stitch decision 4; Phase 2 now notes the S2 link wiring still to do; PRD bumped to v0.5. |
 | v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |
 | v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |
 | v1.2 | 2026-11-23 | 0, 17, 18 C1, 19 | Closed clarification C1 with the actual Stitch project URL, added the link to plan details, and recorded the link/check-in update in the progress log. |

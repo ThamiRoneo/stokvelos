@@ -68,7 +68,7 @@ LAYOUT: Top app bar (title "Sign Up", back). Centred form card on Surface #fffff
 LABELS & SAMPLE CONTENT:
 - Email (TextInput), Password (TextInput).
 - Age confirmation checkbox (18+).
-- Privacy checkbox.
+- Privacy checkbox: "I accept the Privacy Policy" — links to the in-app `/privacy` page.
 - Password rule hint (exact, PRD §5): "At least 8 characters, including at least 1 number".
 - Button: "Register".
 
@@ -463,7 +463,7 @@ These answers were supplied by the human and are now part of the design source f
 | 1 | **Stokvel card:** name, member count, location, `R[amount]/[week/month]`. **Stat card:** label + large value (Balance, Next payout, Recent activity, quick actions). **Member row:** initials, name, role badge, join date, Remove action for organizer. | — (new) | S4, S6, S7, S10 |
 | 2 | Amounts R250 weekly / R500 monthly; periods `2026-W47`, `2026-W48`, `Nov 2026`; payout dates `2026-12-05`, `2026-12-12`. | C14 | S8, S9, M1, M2 |
 | 3 | Stokvel names: "Soweto Savers" (15), "Soweto Uplift" (28), "Tembisa Together" (20). | C16 | S4, S6 |
-| 4 | Checkbox label: "I accept the Privacy Policy". **Link target still needs a URL from the human before S2 is final — do not invent one.** | — (new; link target Open) | S2 |
+| 4 | Checkbox label: "I accept the Privacy Policy". Link target: `/privacy` — an in-app policy page (legal content, not a numbered S-screen), linked from S2. | — (new) | S2, /privacy |
 | 5 | "Forgot password?" → inline reset form on S3 (no new screen ID). Message: "If an account exists, a reset link has been sent." | C5 | S3 |
 | 6 | Name: "Enter a stokvel name." Amount: "Amount must be between R0.01 and R1,000,000." / "R0.01 and R10,000,000." for payouts. Frequency: "Choose weekly or monthly." Period: "Choose a period." Duplicate: "A contribution for [Member] for [Period] already exists. Edit instead?" | — (new) | S5, S12, M2 |
 | 7 | Inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." Buttons: Cancel / Delete stokvel. | C4 | S12 |
@@ -480,4 +480,4 @@ These answers were supplied by the human and are now part of the design source f
 - **New or changed content:** S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, M1, M2, M4.
 - **Style guide:** Lucide outline glyph set for the bottom nav and empty states.
 - **Unchanged:** S1, M3, M5, M6, M7. Banner targets on S7/S9/S13 are confirmed as already drawn; only S4 gains a new banner.
-- **Still Open:** the Privacy Policy URL for S2 (decision 4).
+- **Legal-content route:** `/privacy` is implemented in code (`src/app/privacy/page.tsx`) and linked from S2. It is not a numbered S-screen and needs no Stitch prompt.
