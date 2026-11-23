@@ -85,7 +85,7 @@ StokvelOS is a mobile-friendly web app (PWA) that gives a stokvel a shared, tamp
 ## 11. Next steps
 
 - Draft `docs/PRD.md` (user stories, acceptance criteria, screens, data model).
-- Stitch designs → `docs/designs/`.
+- Stitch designs → https://stitch.google.com/projects/9928979343368528728 (exports → `docs/designs/`).
 - `IMPLEMENTATION_PLAN.md` phased (auth → groups → contributions → payouts → audit → polish).
 - Repo scaffolding: Next.js + Supabase + RLS + CI + tests (TDD).
 

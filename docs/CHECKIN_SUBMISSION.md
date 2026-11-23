@@ -10,7 +10,7 @@ Format per course check-ins (all times SAST). Post the relevant block in the cha
 Name: Thami Sithole
 Business / app name: StokvelOS
 Done since last check-in: Public repo created (https://github.com/ThamiSithole/stokvelos); BUSINESS.md written; docs/PRD.md (v0.1, 16 sections) written; git history started with small commits.
-Next: Stitch designs into docs/designs/; README pitch with live/Stitch links and test logins; IMPLEMENTATION_PLAN.md.
+Next: Stitch designs into docs/designs/ (project: https://stitch.google.com/projects/9928979343368528728); README pitch with live/Stitch links and test logins; IMPLEMENTATION_PLAN.md.
 Blockers: None.
 Repo link: https://github.com/ThamiSithole/stokvelos
 ```
@@ -19,18 +19,18 @@ Status vs. 10:00 gate: Repo created ✅ · BUSINESS.md ✅ · PRD ✅ · Stitch 
 
 ---
 
-## Mon 23 Nov • 15:30 (implementation plan merged, Issues created, frontend started via PRs)
+## Mon 23 Nov • 15:30 (plan merged, PRD v0.2 aligned, Stitch project link)
 
 ```
 Name: Thami Sithole
 Business / app name: StokvelOS
-Done since last check-in: Stitch designs exported to docs/designs/; README pitch + links; IMPLEMENTATION_PLAN.md merged; Issues created for M1–M7; frontend scaffolding (Next.js + Tailwind/shadcn) started via PRs.
-Next: Backend: Supabase project, schema + RLS migrations, auth + roles.
-Blockers: None.
+Done since last check-in: Stitch prompts and project link landed (PR #21), and the 19-section implementation plan merged (PR #22). PRD aligned to Indlela format v0.2 with feature/screen gaps closed against the plan (PR #23); repo has BUSINESS.md, PRD, design prompts, CI and tests.
+Next: Answer remaining plan §18 clarifications, then start Phase 2 — Groups + RLS + auth; create hosted Supabase project, apply migrations/RLS and seed data; deploy to Vercel and add README live link + test logins
+Blockers: Hosted Supabase project/keys and Vercel deploy still outstanding; open §18 clarifications must be answered before Phase 2.
 Repo link: https://github.com/ThamiSithole/stokvelos
 ```
 
-Status vs. 15:30 gate: Implementation plan merged ⏳ · Issues created ⏳ · Frontend started via PRs ⏳
+Status vs. 15:30 gate: Implementation plan merged ✅ · PRD v0.2 + gap closure ✅ · Stitch project link ✅ (exports ⏳) · Issues created for M1–M7 ⏳ · Frontend scaffolding via PRs ✅ (M2 not started)
 
 ---
 
