@@ -7,7 +7,7 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.1 |
+| Built from PRD version | v0.2 |
 | Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: Open (§18 C1) |
 | Plan version | v1.0 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
@@ -90,7 +90,7 @@ MVP = F1–F5. F6–F8 are polish.
 
 - Holding or moving money; custody of funds in any form (PRD 3.2).
 - Banking, interest, lending or multi-currency/cross-border features (PRD 3.2).
-- Automated bank reconciliation and payment-gateway payouts (v2 — PayFast vs Yoco, §18 C13).
+- Automated bank reconciliation and payment-gateway payouts (v2 — PayFast vs Yoco; see PRD §14 open questions).
 - Push notifications at scale (in-app notifications + WhatsApp share links only in v1).
 - Native mobile apps / iOS app (PRD 3.2, 4.3).
 - Full payment gateway, stokvel association white-label, multi-group dashboards (PRD 4.3).
@@ -729,7 +729,7 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Covers:** F1, F2 · Stories US1–US6 · Screens S2, S3, S4, S5, S6, S10, S12 · Modals M4, M5, M7 · Operations OP1–OP15 · Rules BR1, BR2, BR6, BR13 · Permissions SEC1–SEC10, SEC19, SEC20.
 
-**Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C2, C4, C5, C7, C11, C16 — if any is still Open, stop and ask.
+**Starts when:** Phase 1 is complete and the human says "Start Phase 2". Before starting, check §18 C2, C3, C4, C5, C9, C11, C15, C16 — if any is still Open, stop and ask.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -1101,7 +1101,8 @@ The same ID may be used at two levels when both prove the same criterion.
 | --- | --- | --- | --- | --- |
 | 2026-11-23 | 1 | Next.js 15 + TS + Tailwind + shadcn config, Supabase helpers, Vitest, Playwright, CI, docs, issues | lint, typecheck, test, build pass; CI green | PR #13, PR #14 |
 | 2026-11-23 | — | PRD ↔ plan gap closure, persona languages, logo concept, Stitch prompts | PRs merged | PR #18, #19, #20, #21 |
-| 2026-11-23 | — | Plan rewritten to standard 19-section template | Pending review | — |
+| 2026-11-23 | — | Plan rewritten to standard 19-section template | Merged | PR #22 |
+| 2026-11-23 | — | PRD aligned to Indlela format (v0.2); feature-to-screen mapping corrected; incorrect §18 cross-refs fixed | ID-level gap check passed | — |
 | — | 2 | Not started | — | — |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
@@ -1124,7 +1125,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | C7 | Exact rotation-order control on S5/S9/S12 (numbered list, drag handles, etc.). | 8.1/8.2, 13 Phase 4 | Phase 4 | Open |
 | C8 | Exact audit action labels and before/after formatting for the S11 feed. | 8.1, 10 OP22 | Phase 5 | Open |
 | C9 | Exact success banner text after S2 sign-up ("Created → S3 banner" — message not specified). | 8.2, 13 Phase 2 | Phase 2 | Open — non-blocking; use "Account created." only if confirmed |
-| C10 | Where exactly the PRD 4.5 banners should appear (assigned to S7/S9/S13 by their "Opens" target). | 7.3, 13 Phases 4–5 | Phase 4 | Open |
+| C10 | Where exactly the PRD §4.5 banners should appear. Their current "Opens" targets are S9, S7, S5, S13, S13 — confirm or correct S5 before building. | 7.3, 13 Phases 4–5 | Phase 4 | Open |
 | C11 | Which Lucide glyphs to use for bottom nav tabs and empty-state icons (style/size specified, glyphs not). | 7.1, 7.2 | Phase 2 | Open — non-blocking; choose Lucide outlines consistent with style guide |
 | C12 | Vernacular languages in v1? PRD 2.3 lists English, isiZulu, Setswana, Sesotho for personas; PRD 14 recommends English v1, i18n-ready. | 3.3 | Phase 6 | Open |
 | C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 10 OP25, 13 Phase 6 | Phase 6 | Open |
@@ -1141,6 +1142,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.1 | 2026-11-23 | 3.3, 13 Phase 2, 17, 18 C10, 19 | Gap closure after PRD v0.2 format alignment: removed wrong §18 C13 reference for the v2 payment-gateway decision, corrected the Phase 2 blocking-clarification list (C7 belongs to Phase 4; added C3, C9, C15), recorded the actual PRD §4.5 banner targets in C10, and updated progress/change logs. |
 | v1.0 | 2026-11-23 | All | Rewritten from the 136-line milestone summary at `docs/IMPLEMENTATION_PLAN.md` into the standard 19-section implementation-plan template used by Indlela. All PRD-derived content preserved and expanded into plan details, agent rules, scope, stack, folders, secrets, design system, full data model, SEC1–SEC21, OP1–OP25, navigation, testing strategy, seven detailed TDD phases, traceability, checklists, progress log, clarifications and change log. Moved to repository root. |
 
 ---
