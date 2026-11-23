@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.2 |
+| Version | v0.3 |
 | Status | Draft |
 
 ### Change log
 
 | Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.3 | 2026-11-23 | 4.1, 8.1, Document details | Corrected feature-to-story mapping: US13 (resolve a dispute) belongs to F5, not F6; F6 now traces to §4.5 Notifications; added F6 to the S7/S9/S13 feature lists | None |
 | v0.2 | 2026-11-23 | 2.5, 4.1, 4.5, 6.1, 14, Document details | Aligned format to the Indlela PRD standard; corrected feature-to-screen mapping (F1–F7) against implementation plan §7.3/§13; clarified US2 landing state; mapped open questions to implementation plan §18 | None |
 | v0.1 | 2026-11-23 | All | First draft | None |
 
@@ -111,8 +112,8 @@ Oct 27, 2026 · @Melsoft
 | F2 | Stokvel groups | Create group, edit settings, invite via link/WhatsApp, join, view member list, remove member | Must | G5 | US4,US5,US6 | S4,S5,S6,S10,S12,M5,M7 |
 | F3 | Contributions ledger | Record contribution, view group ledger, view member statement, balances per cycle | Must | G1,G2,G4 | US7,US8 | S7,S8,M1 |
 | F4 | Payout schedule & tracking | Set rotation order, schedule payouts, mark paid, view upcoming payouts, reminders | Must | G2,G4 | US9,US10 | S9,M2,M6 |
-| F5 | Audit & dispute log | View immutable change log, raise dispute, resolve dispute (organizer) | Must | G1,G3 | US11,US12 | S11,M3 |
-| F6 | Reminders & notifications | In-app reminders for upcoming payouts/late contributions | Should | G2,G4 | US13 | S7,S9,S13 |
+| F5 | Audit & dispute log | View immutable change log, raise dispute, resolve dispute (organizer) | Must | G1,G3 | US11,US12,US13 | S11,M3 |
+| F6 | Reminders & notifications | In-app reminders for upcoming payouts/late contributions | Should | G2,G4 | §4.5 (Notifications) | S7,S9,S13 |
 | F7 | Export & reports | Export group ledger to PDF/CSV | Should | G4 | US14 | S7,S13 |
 | F8 | Offline & low-data | Cache group data offline, show cached when offline, staleness indicator | Should | G5 | US15 | All |
 
@@ -268,13 +269,13 @@ flowchart TD
 | S4 | My Stokvels | List of user's stokvels | Open / Create | F1,F2 | Empty state with Create + Join CTAs |
 | S5 | Create Stokvel | Create a new group | Create | F2 | Name, description, amount, frequency, rotation default |
 | S6 | Join via Invite | Accept invite | Join | F2 | Shows stokvel preview + Join button |
-| S7 | Stokvel Home | Group overview | View summary | F2,F3,F4 | Balance, next payout, recent activity, quick actions |
+| S7 | Stokvel Home | Group overview | View summary | F2,F3,F4,F6 | Balance, next payout, recent activity, quick actions |
 | S8 | Contributions Ledger | Record + view contributions | Record contribution | F3 | Table by member × period; totals; member filter |
-| S9 | Payouts | Schedule + track payouts | Schedule payout | F4 | Rotation order, upcoming, mark paid, history |
+| S9 | Payouts | Schedule + track payouts | Schedule payout | F4,F6 | Rotation order, upcoming, mark paid, history |
 | S10 | Members | Member list + roles | Invite / remove | F2 | Role badges, join dates, remove (organizer) |
 | S11 | Audit Log | Immutable change history | View / raise dispute | F5 | Chronological feed; dispute action per entry |
 | S12 | Stokvel Settings | Edit group settings | Save | F2 | Name, amount, frequency, rotation, delete group |
-| S13 | Profile/Settings | User settings | Save | F1,F7 | Name, phone, export, logout, delete account |
+| S13 | Profile/Settings | User settings | Save | F1,F6,F7 | Name, phone, export, logout, delete account |
 
 **Modals**
 
