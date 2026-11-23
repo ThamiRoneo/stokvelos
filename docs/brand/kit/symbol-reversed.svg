@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">StokvelOS symbol (reversed, thinned)</title>
+  <g id="symbol" fill="#FFFFFF">
+    <rect x="26" y="73" width="204" height="14" rx="7"/>
+    <rect x="26" y="121" width="204" height="14" rx="7"/>
+    <rect x="26" y="169" width="204" height="14" rx="7"/>
+    <rect x="170" y="66" width="20" height="124" rx="4"/>
+    <path d="M 224 78 A 50 50 0 0 0 224 178 L 224 172 A 46 46 0 0 1 224 84 Z"/>
+  </g>
+</svg>

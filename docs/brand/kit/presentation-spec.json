@@ -1,0 +1,37 @@
+{
+  "brand": "StokvelOS",
+  "tagline": "Savings circles, made clear",
+  "brief": "A digital platform for stokvels (informal savings circles): track contributions, payout turns and ledger history. Audience 25-60, mobile-first, trust and clarity over flash.",
+  "adjectives": ["clear", "trustworthy", "warm", "orderly"],
+  "criteria": "Success: distinct from blue fintech marks, recognisable at 16 px, works in one colour, feels clear and trustworthy.",
+  "industry": "finance",
+  "mockups": ["payment-card", "app-icon", "readme", "terminal", "signage", "social"],
+  "nav": ["Circles", "Ledger", "Payouts"],
+  "brand_color": "#1B5E20",
+  "tile_color": "#1B5E20",
+  "greyscale": false,
+  "final": true,
+  "designer": "Identity studio",
+  "round": 2,
+  "concepts": [
+    {
+      "name": "Refined ledger",
+      "symbol": "symbol.svg",
+      "lockup": "lockup-horizontal.svg",
+      "stacked": "lockup-stacked.svg",
+      "idea": "Three bold ruled ledger lines with one highlighted payout column and a subtle inward cycle arc.",
+      "rationale": [
+        "Literal ledger cue reads instantly to 40-60 year-olds",
+        "Highlighted column marks the current payout turn",
+        "Cycle arc hints at rotating turns without an arrow",
+        "Works at 16 px, in one colour, and reversed"
+      ]
+    }
+  ],
+  "recommendation": "Refined ledger — ownable, legible at small sizes, and grows naturally into an icon set and ledger UI.",
+  "next_steps": [
+    "Outline the wordmark in a vector editor",
+    "Run trademark and reverse-image search",
+    "Confirm font licensing for logo use"
+  ]
+}

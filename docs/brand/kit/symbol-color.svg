@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">StokvelOS symbol (full colour)</title>
+  <g id="symbol">
+    <rect x="24" y="72" width="208" height="16" rx="8" fill="#1B5E20"/>
+    <rect x="24" y="120" width="208" height="16" rx="8" fill="#1B5E20"/>
+    <rect x="24" y="168" width="208" height="16" rx="8" fill="#1B5E20"/>
+    <rect x="168" y="64" width="24" height="128" rx="4" fill="#F9A825"/>
+    <path d="M 224 76 A 52 52 0 0 0 224 180 L 224 172 A 44 44 0 0 1 224 84 Z" fill="#1B5E20"/>
+  </g>
+</svg>
