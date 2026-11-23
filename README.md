@@ -20,7 +20,7 @@ StokvelOS gives stokvels a shared, tamper-evident ledger and payout scheduler, s
 
 Mobile-first PWA. Next.js App Router with server components; Supabase via `@supabase/ssr` helpers (`src/lib/supabase`). Data access protected by Row Level Security. Audit log written only by DB triggers.
 
-See `docs/PRD.md` and `docs/IMPLEMENTATION_PLAN.md`.
+See `docs/PRD.md` and `IMPLEMENTATION_PLAN.md`.
 
 ## Run locally
 
@@ -51,5 +51,5 @@ npm run build
 
 - `BUSINESS.md`
 - `docs/PRD.md`
-- `docs/IMPLEMENTATION_PLAN.md`
+- `IMPLEMENTATION_PLAN.md`
 - `docs/CHECKIN_SUBMISSION.md`
