@@ -2,7 +2,7 @@
 
 Phased delivery. Each phase follows TDD: write failing test → implement → refactor → commit. Acceptance criteria are listed per phase.
 
-## M1 — Setup (scaffolding) — ⏳ this PR
+## M1 — Setup (scaffolding) — ✅ done (PR #14)
 - Next.js 15 App Router + TS + Tailwind + shadcn/ui
 - Supabase client helpers (`src/lib/supabase/client.ts`, `server.ts`)
 - Vitest + Playwright configs + sample tests
@@ -104,3 +104,33 @@ Phased delivery. Each phase follows TDD: write failing test → implement → re
 - Integration: Supabase RLS + triggers (audit immutability).
 - E2E (Playwright): auth, create/join, contribution, payout, dispute, audit read-only.
 - Coverage target: ≥80% on `src/lib` and `src/app` server actions.
+
+## Accounts & sign-in (PRD §5) — M2
+- Email + password via Supabase Auth; Google OAuth optional.
+- Age gate 18+ with confirmation checkbox; password ≥8 chars + 1 number.
+- Forgot password (Supabase reset flow); 30-day session (refresh token).
+- Delete account: profile removed; audit log retained anonymised (PRD §12).
+- Roles (PRD §2.4): Member, Organizer (Treasurer), **Platform Admin** (DB-set — moderate, aggregate stats, suspend abusive accounts; no read of member financial data beyond aggregates, no impersonation).
+
+## Integrations (PRD §11)
+- Supabase Auth + Postgres/RLS (all phases).
+- WhatsApp share deep link (`wa.me`) for invites — M2, modal M5.
+- PayFast/Yoco payout fees — v2 only (deferred; see Open questions).
+- Supabase Storage for exports — optional (v1 uses client-side PDF/CSV).
+
+## Additional business rules (PRD §4.4)
+- BR1: stokvel size 2–200 members — enforce on create/invite (M2).
+- BR11: payout rotation order set by organizer, defaults to join order (M4).
+- BR13: a user may belong to multiple stokvels (M1/M2 data model + nav).
+
+## Navigation map (PRD §7)
+- Bottom nav (5 tabs): Home (My Stokvels), Ledger, Payouts, Audit, Profile.
+- Top app bar with back button on detail screens; flows F1–F5 as mermaid diagram in PRD §7.
+
+## Privacy & regulatory (PRD §12)
+- Age gate 18+; delete account with anonymised audit log.
+- No custody of funds in v1 (record-keeping tool, not a bank).
+- RLS + data minimisation on every table.
+
+## PRD → Plan coverage confirmation
+All PRD sections are represented in this plan: §1 overview (scope/non-goals), §2 users/personas/roles (incl. Platform Admin), §3 goals/metrics (Metrics section), §4 features/business rules/notifications (feature→goal map, BR coverage, Notifications), §5 accounts (Accounts & sign-in), §6 stories/edge cases (Edge cases), §7 flows/nav (Navigation map), §8 screens/modals/UI states (Screens & UI states), §9 design (Design & Stitch), §10 data model + RLS (schema per phase, RLS policy table), §11 integrations (Integrations), §12 privacy/security (Privacy & regulatory), §13 build plan (M1–M7), §14 testing/open questions (Testing strategy, Open questions), §15 glossary, §16 appendix (no build tasks). No known remaining gaps.
