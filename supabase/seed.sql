@@ -1,0 +1,2 @@
+-- Local seed data is generated in Phase 2 (migration 0005_seed.sql).
+-- Intentionally empty for now.

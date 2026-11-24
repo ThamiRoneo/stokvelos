@@ -128,7 +128,7 @@ export default function PrivacyPage() {
     <main className="mx-auto w-full max-w-3xl px-5 py-10 sm:px-8 sm:py-14">
       <Link
         href="/"
-        className="inline-flex items-center gap-2 text-sm font-medium text-[#1b5e20] underline-offset-4 hover:underline dark:text-[#2e7d32]"
+        className="inline-flex items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline dark:text-primary-light"
       >
         <ArrowLeft aria-hidden="true" size={16} />
         Back to StokvelOS
@@ -137,7 +137,7 @@ export default function PrivacyPage() {
       <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-4xl">
         Privacy Policy
       </h1>
-      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 text-sm text-text-secondary dark:text-text-secondary">
         Last updated: <time dateTime="2026-11-23">{LAST_UPDATED}</time>
       </p>
 
@@ -150,13 +150,13 @@ export default function PrivacyPage() {
             {section.paragraphs.map((paragraph, index) => (
               <p
                 key={index}
-                className="mt-3 leading-7 text-neutral-800 dark:text-neutral-200"
+                className="mt-3 leading-7 text-text dark:text-text"
               >
                 {paragraph}
               </p>
             ))}
             {section.items && (
-              <ul className="mt-3 list-disc space-y-2 pl-5 leading-7 text-neutral-800 dark:text-neutral-200">
+              <ul className="mt-3 list-disc space-y-2 pl-5 leading-7 text-text dark:text-text">
                 {section.items.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
@@ -167,17 +167,17 @@ export default function PrivacyPage() {
 
         <section
           aria-labelledby="contact"
-          className="rounded-lg border border-neutral-200 p-5 dark:border-neutral-800"
+          className="rounded-lg border border-border p-5 dark:border-border"
         >
           <h2 id="contact" className="text-lg font-semibold sm:text-xl">
             12. Contact us
           </h2>
-          <p className="mt-3 leading-7 text-neutral-800 dark:text-neutral-200">
+          <p className="mt-3 leading-7 text-text dark:text-text">
             For any privacy question, data-subject request or complaint, email us
             at{" "}
             <a
               href={`mailto:${CONTACT_EMAIL}`}
-              className="text-[#1b5e20] underline underline-offset-2 dark:text-[#2e7d32]"
+              className="text-primary underline underline-offset-2 dark:text-primary-light"
             >
               {CONTACT_EMAIL}
             </a>
