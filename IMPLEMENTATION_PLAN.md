@@ -8,7 +8,7 @@
 | --- | --- |
 | App name | StokvelOS |
 | Built from PRD version | v0.6 |
-| Screen designs | `docs/designs/STITCH_PROMPTS.md` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
+| Screen designs | `docs/designs/` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
 | Plan version | v1.7 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Phase 2 unblocked — all §18 clarifications closed; awaiting hosted Supabase credentials and the human's "Start Phase 2" |
@@ -22,7 +22,7 @@ Before writing any code:
 
 1. Read this whole file from top to bottom.
 2. Read `docs/PRD.md`.
-3. Look at the screen designs listed in Section 7.3 (`docs/designs/STITCH_PROMPTS.md`).
+3. Look at the screen designs listed in Section 7.3 (`docs/designs/`).
 4. Check Section 18. If any clarification marked **Blocking** for the phase you are about to start is still **Open**, stop and ask the human. Do not start that phase.
 5. Check that the prerequisites in Section 4.2 are installed.
 6. Start **Phase 2 only**. Phase 1 (M1 scaffolding) is already complete. Follow Section 2 at all times.
