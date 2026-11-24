@@ -16,6 +16,9 @@
   --color-disabled: #bdbdbd;
   --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
+}
+
+:root {
   /* PRD §9.3 spacing + touch target */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
