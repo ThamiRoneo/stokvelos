@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import { Mail, Lock, Eye, EyeOff, BookOpen } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { TextInput } from "@/components/TextInput";
@@ -16,7 +17,7 @@ export type SignUpValues = {
   acceptedPrivacy: boolean;
 };
 
-/** S2 — Sign Up. All copy comes from PRD §5 and the Stitch prompt. */
+/** S2 — Sign Up. Matches visual design in docs/designs/S2.png exactly. */
 export function SignUp({
   onSubmit,
   onGoogle,
@@ -34,6 +35,7 @@ export function SignUp({
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [acceptedAge, setAcceptedAge] = useState(false);
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
@@ -48,9 +50,10 @@ export function SignUp({
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col">
-      <TopAppBar title="Sign Up" onBack={onBack} />
-      <main className="flex-1 p-4">
+    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col bg-[#f8fafc]">
+      <TopAppBar title="Sign Up" onBack={onBack} showUser={false} />
+
+      <main className="flex-1 px-4 py-4 sm:px-6">
         {offline && <Banner variant="alert">{MESSAGES.noConnection}</Banner>}
         {error && (
           <div className="mt-3">
@@ -58,68 +61,133 @@ export function SignUp({
           </div>
         )}
 
-        <form onSubmit={submit} className="mt-4 space-y-4 rounded-xl border border-border bg-surface p-5">
-          <TextInput
-            label="Email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextInput
-            label="Password"
-            type="password"
-            autoComplete="new-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            hint={MESSAGES.passwordRule}
-            error={password && !isValidPassword(password) ? MESSAGES.passwordRule : undefined}
-          />
-
-          <label className="flex min-h-touch items-start gap-3 text-sm">
-            <input
-              type="checkbox"
-              className="mt-1 h-5 w-5 accent-primary"
-              checked={acceptedAge}
-              onChange={(event) => setAcceptedAge(event.target.checked)}
-            />
-            <span>{MESSAGES.ageCheckbox}</span>
-          </label>
-
-          <label className="flex min-h-touch items-start gap-3 text-sm">
-            <input
-              type="checkbox"
-              className="mt-1 h-5 w-5 accent-primary"
-              checked={acceptedPrivacy}
-              onChange={(event) => setAcceptedPrivacy(event.target.checked)}
-            />
-            <span>
-              {MESSAGES.privacyPrefix}
-              <Link href={MESSAGES.privacyLink} className="text-primary underline underline-offset-2">
-                {MESSAGES.privacyLinkText}
-              </Link>
-            </span>
-          </label>
-
-          <Button type="submit" disabled={!canSubmit} loading={loading} className="w-full">
-            Register
-          </Button>
-
-          <div className="flex items-center gap-3 text-xs text-text-secondary" aria-hidden="true">
-            <span className="h-px flex-1 bg-border" />
-            or
-            <span className="h-px flex-1 bg-border" />
+        <div className="mt-2 rounded-2xl border border-gray-100 bg-white p-5 shadow-xs">
+          {/* Header Banner inside card */}
+          <div className="mb-6 flex items-start gap-3.5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#86efac]/40 text-[#1b5e20]">
+              <BookOpen size={24} className="stroke-[2.5]" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-[#1a1a1a]">Join your community ledger</h2>
+              <p className="mt-0.5 text-xs text-[#5f6368]">
+                Transparent rotational savings & group pooling
+              </p>
+            </div>
           </div>
 
-          <Button
-            variant="secondary"
-            className="w-full"
-            disabled={!consent || loading || offline}
-            onClick={() => onGoogle({ acceptedAge, acceptedPrivacy })}
-          >
-            Continue with Google
-          </Button>
-        </form>
+          <form onSubmit={submit} className="space-y-4">
+            <TextInput
+              label="Email"
+              type="email"
+              autoComplete="email"
+              placeholder="thabo@example.com"
+              leadingIcon={<Mail size={18} />}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+
+            <div>
+              <TextInput
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                placeholder="Stokvel2025"
+                leadingIcon={<Lock size={18} />}
+                trailingIcon={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="cursor-pointer text-gray-500 hover:text-gray-700"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                }
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                error={password && !isValidPassword(password) ? MESSAGES.passwordRule : undefined}
+              />
+              <p className="mt-1.5 text-xs text-[#5f6368]">
+                At least 8 characters, including at least 1 number
+              </p>
+            </div>
+
+            <div className="space-y-2.5 pt-1">
+              <label className="flex min-h-[36px] cursor-pointer items-center gap-3 text-sm text-[#1a1a1a]">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 rounded border-gray-300 accent-[#1b5e20]"
+                  checked={acceptedAge}
+                  onChange={(event) => setAcceptedAge(event.target.checked)}
+                />
+                <span className="font-medium text-xs sm:text-sm">{MESSAGES.ageCheckbox}</span>
+              </label>
+
+              <label className="flex min-h-[36px] cursor-pointer items-center gap-3 text-sm text-[#1a1a1a]">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 rounded border-gray-300 accent-[#1b5e20]"
+                  checked={acceptedPrivacy}
+                  onChange={(event) => setAcceptedPrivacy(event.target.checked)}
+                />
+                <span className="font-medium text-xs sm:text-sm">
+                  {MESSAGES.privacyPrefix}
+                  <Link
+                    href={MESSAGES.privacyLink}
+                    className="text-[#1b5e20] underline underline-offset-2"
+                  >
+                    {MESSAGES.privacyLinkText}
+                  </Link>
+                </span>
+              </label>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={!canSubmit}
+              loading={loading}
+              className="mt-2 w-full bg-[#1b5e20] hover:bg-[#2e7d32]"
+            >
+              Register
+            </Button>
+
+            <div className="relative my-4 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <span className="relative bg-white px-3 text-xs uppercase tracking-wider text-[#5f6368]">
+                or
+              </span>
+            </div>
+
+            <Button
+              variant="secondary"
+              className="w-full border border-gray-200 bg-white font-medium text-[#1a1a1a] hover:bg-gray-50"
+              disabled={!consent || loading || offline}
+              onClick={() => onGoogle({ acceptedAge, acceptedPrivacy })}
+            >
+              <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                />
+              </svg>
+              Continue with Google
+            </Button>
+          </form>
+        </div>
       </main>
     </div>
   );
