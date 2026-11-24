@@ -6,22 +6,24 @@ StokvelOS gives stokvels a shared, tamper-evident ledger and payout scheduler, s
 
 - **Live app:** https://stokvelos-mu.vercel.app
 - **Capstone repo:** https://github.com/ThamiSithole/stokvelos
+- **Issues:** https://github.com/ThamiSithole/stokvelos/issues
 - **Portfolio repo:** https://github.com/ThamiSithole/thami-sithole-portfolio
 - **Portfolio live site:** https://thami-sithole-portfolio.vercel.app
 - **Stitch designs:** https://stitch.google.com/projects/9928979343368528728 — PNG exports live in [`docs/designs/`](docs/designs/) (`M1`–`M7` flows, `S1`–`S13` screens)
-- **Screenshots:** No static capture yet — see the live app above and the design exports for the intended UI.
+- **Screenshots:** live app above; design references: [sign-up](docs/designs/S2.png) · [log-in](docs/designs/S3.png) · [my stokvels](docs/designs/S4.png) · [members](docs/designs/S10.png) · [settings](docs/designs/S12.png)
 
 ## Current status
 
 - Hosted Supabase project is live with schema, RLS and auth migrations applied.
 - Accounts/roles and groups (including invites) are live. The contributions ledger, payout scheduling and audit/disputes are tracked in [#10](https://github.com/ThamiSithole/stokvelos/issues/10), [#8](https://github.com/ThamiSithole/stokvelos/issues/8) and [#2](https://github.com/ThamiSithole/stokvelos/issues/2).
 - The demo seed migration is intentionally skipped in production; production accounts are created by signing up.
+- Smoke check (24 Nov): `/`, `/log-in`, `/sign-up` and `/privacy` returned HTTP 200; `/stokvels` redirects to log-in when signed out.
 
 ## Accounts
 
-There are no shared demo logins in production. Sign up at https://stokvelos-mu.vercel.app/sign-up with your email, confirm via the link in the confirmation email, then log in at https://stokvelos-mu.vercel.app/log-in. A new account starts with no groups, so create your first stokvel to try the organizer flows.
+There are no shared demo logins in production. Sign up at https://stokvelos-mu.vercel.app/sign-up with your email, confirm via the link in the confirmation email, then log in at https://stokvelos-mu.vercel.app/log-in. A new account starts with no groups, so create your first stokvel to try the organizer flows. Confirmation and password-reset links currently fall back to localhost ([#39](https://github.com/ThamiSithole/stokvelos/issues/39)); until that is fixed, the email link may not return you to the live app.
 
-For local development only, `supabase/migrations/0005_seed.sql` creates example personas; the password comes from `SEED_TEST_PASSWORD` in your local `.env.local`. Never use those credentials against production.
+For local development only, `supabase/migrations/0005_seed.sql` creates example personas with a fixed test password. Set `SEED_TEST_PASSWORD` in `.env.local` to that same value to run the integration tests. Never use those credentials against production.
 
 ## Tech stack
 
@@ -42,8 +44,10 @@ See [`docs/PRD.md`](docs/PRD.md) and [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_P
 ```bash
 npm ci
 cp .env.example .env.local
-# fill NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY and
-# SUPABASE_SERVICE_ROLE_KEY (server-side only); SEED_TEST_PASSWORD is local-seed only
+npx supabase start
+npx supabase db reset   # applies 0001–0006; 0005 adds local-only demo personas
+# copy the local URL and anon key from `npx supabase status` into .env.local
+# SUPABASE_SERVICE_ROLE_KEY is server-side only; SEED_TEST_PASSWORD is local-seed only
 npm run dev
 ```
 
@@ -53,12 +57,12 @@ npm run dev
 npm run lint
 npm run typecheck
 npm run test
-npm run test:integration
-npm run test:e2e
 npm run build
+npm run test:integration   # needs local Supabase + SEED_TEST_PASSWORD
+npm run test:e2e           # needs a running dev server
 ```
 
-`npm run check` additionally runs `supabase test db` (requires the Supabase CLI and a local database).
+`npm run check` runs lint, typecheck, unit tests, `supabase test db`, integration tests and build. It needs the Supabase CLI, a running local database and `SEED_TEST_PASSWORD`; CI runs only lint, typecheck, unit tests and build.
 
 ## CI and deployment
 
@@ -67,6 +71,7 @@ npm run build
 
 ## Known issues
 
+- [#11](https://github.com/ThamiSithole/stokvelos/issues/11) — E2E suite and final smoke tests still outstanding.
 - [#39](https://github.com/ThamiSithole/stokvelos/issues/39) — sign-up and password-reset email links fall back to localhost.
 - [#41](https://github.com/ThamiSithole/stokvelos/issues/41) — CI still runs on Node 20; Node 22+ is planned.
 - [#42](https://github.com/ThamiSithole/stokvelos/issues/42) — npm audit advisories need triage.
@@ -78,3 +83,4 @@ npm run build
 - [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)
 - [`docs/CHECKIN_SUBMISSION.md`](docs/CHECKIN_SUBMISSION.md)
 - [`docs/designs/`](docs/designs/)
+- Brand: [`BRAND_GUIDELINES.md`](docs/brand/kit/BRAND_GUIDELINES.md) · [`concepts.md`](docs/brand/concepts.md) · [`research.md`](docs/brand/research.md)
