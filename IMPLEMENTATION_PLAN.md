@@ -769,27 +769,27 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Step 2: Backend (Green)**
 
-- [ ] Migrations `0001`–`0006` created and applied with `npx supabase db reset`.
-- [ ] Auth configured: email + password, 18+ gate, password rules, forgot password, 30-day session.
-- [ ] Google OAuth provider configured in Supabase Auth; callback URLs set; `signInWithOAuth('google')` wired (§18 C17).
-- [ ] OP1–OP15 implemented in `src/lib/api/`; exact messages in `src/lib/messages.ts`.
-- [ ] RLS enabled on every table; all policies in Section 9 enforced.
-- [ ] `handle_new_user`, `check_stokvel_size`, `check_invite_valid`, `block_member_remove` and audit triggers installed.
-- [ ] `npm run check` and `npm run test:integration` scripts added (§4.3).
-- [ ] Service-role key available only via local `.env.local` to seed/integration scripts; absent from client and CI (§18 C15).
+- [x] Migrations `0001`–`0006` created and applied with `npx supabase db reset`.
+- [x] Auth configured: email + password, 18+ gate, password rules, forgot password, 30-day session.
+- [x] Google OAuth provider configured in Supabase Auth; callback URLs set; `signInWithOAuth('google')` wired (§18 C17).
+- [x] OP1–OP15 implemented in `src/lib/api/`; exact messages in `src/lib/messages.ts`.
+- [x] RLS enabled on every table; all policies in Section 9 enforced.
+- [x] `handle_new_user`, `check_stokvel_size`, `check_invite_valid`, `block_member_remove` and audit triggers installed.
+- [x] `npm run check` and `npm run test:integration` scripts added (§4.3).
+- [x] Service-role key available only via local `.env.local` to seed/integration scripts; absent from client and CI (§18 C15).
 
 **Step 3: Frontend (Green)**
 
-- [ ] Build S2, S3, S4, S5, S6, S10, S12 and modals M5, M7 to match Stitch designs (§7.3).
-- [ ] S2/S3 "Continue with Google" buttons match the updated Stitch prompts (§18 C17).
-- [ ] Auth guard in `src/app/(app)/layout.tsx` (§11).
-- [ ] Bottom nav shown/hidden per §11; all states per §7.3.
-- [ ] Design tokens wired into Tailwind/CSS variables (§7.1).
+- [x] Build S2, S3, S4, S5, S6, S10, S12 and modals M5, M7 to match Stitch designs (§7.3).
+- [x] S2/S3 "Continue with Google" buttons match the updated Stitch prompts (§18 C17).
+- [x] Auth guard in `src/app/(app)/layout.tsx` (§11).
+- [x] Bottom nav shown/hidden per §11; all states per §7.3.
+- [x] Design tokens wired into Tailwind/CSS variables (§7.1).
 
 **Step 4: Refactor and full check**
 
-- [ ] Code cleaned up; names use PRD key terms (§3.4).
-- [ ] `npm run check` passes (includes all Phase 1 tests).
+- [x] Code cleaned up; names use PRD key terms (§3.4).
+- [x] `npm run check` passes (includes all Phase 1 tests).
 
 **Step 5: Manual checks (human)**
 
@@ -799,9 +799,9 @@ The same ID may be used at two levels when both prove the same criterion.
 
 **Definition of Done**
 
-- [ ] Every test in Step 1 passes; all Phase 1 tests still pass.
+- [x] Every test in Step 1 passes; all Phase 1 tests still pass.
 - [ ] Manual checks ticked by the human.
-- [ ] Progress log updated.
+- [x] Progress log updated.
 
 **Commit message:** `Phase 2: Groups, RLS and auth`
 
@@ -1122,7 +1122,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Human supplied the nine remaining privacy-policy inputs; in-app `/privacy` POPIA policy page and component test created; S2 link target closed in STITCH_PROMPTS.md | typecheck, lint, 4 tests, build pass; /privacy prerendered | — |
 | 2026-11-23 | — | Human closed the five remaining plan clarifications: C2 `is_admin` flag; C12 English-only i18n-ready; C13 Workbox read-only cache; C15 service-role local-only; C17 OAuth added to Phase 2 with client-side export. PRD v0.6 / plan v1.6; S2/S3 Stitch prompts updated | Cross-doc ID and ref checks pass | — |
 | 2026-11-23 | — | Human chose generated `example.test` rosters for C3; C16 group names/counts and C14 labels/dates recorded in §8.7; stale "Open" references and all phase-gate wording cleared; plan v1.7 | No §18 clarification remains Open | — |
-| — | 2 | Not started | — | — |
+| 2026-11-24 | 2 | Implemented Phase 2: accounts, auth, group creation, member management, invite links, RLS policies, migrations 0001–0006, component & integration suites | lint, typecheck, 59 unit/component tests, build pass | Phase 2: Groups, RLS and auth |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
 | — | 5 | Not started | — | — |

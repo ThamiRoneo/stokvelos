@@ -54,16 +54,16 @@ Status vs. 10:00 gate: Hosted DB ✅/⏳ · Migrations ✅/⏳ · Log-in & roles
 ```
 Name: Thami Sithole
 Business / app name: StokvelOS
-Done since last check-in: Deployed to live link with log-in, database and first Must features (groups + contributions) working; portfolio repo created and first version deployed.
+Done since last check-in: Deployed to live link with log-in, sign-up, hosted database/RLS and first Must features (accounts/roles and groups) working; portfolio repo created and first version deployed.
 Next: Remaining Must features (payouts, audit/disputes); tests; README completion; portfolio content.
 Blockers: None.
 Repo link: https://github.com/ThamiSithole/stokvelos
-Capstone live link: <to be added>
-Portfolio repo: <to be added>
-Portfolio live link: <to be added>
+Capstone live link: https://stokvelos-mu.vercel.app
+Portfolio repo: https://github.com/ThamiSithole/thami-sithole-portfolio
+Portfolio live link: https://thami-sithole-portfolio.vercel.app
 ```
 
-Status vs. 15:30 gate: Live link ✅/⏳ · First Must features ✅/⏳ · Portfolio repo + deployed ✅/⏳
+Status vs. 15:30 gate: Live link ✅ · First Must features ✅ · Portfolio repo ✅ + deployed ✅
 
 ---
 
@@ -89,10 +89,10 @@ Name: Thami Sithole
 Business / app name: StokvelOS
 One-line pitch: StokvelOS is the transparent ledger and payout scheduler for stokvels, so members always know where their money is.
 Capstone repo: https://github.com/ThamiSithole/stokvelos
-Capstone live link: <to be added>
+Capstone live link: https://stokvelos-mu.vercel.app
 Loom link: <to be added>
-Portfolio live link: <to be added>
-Portfolio repo: <to be added>
+Portfolio live link: https://thami-sithole-portfolio.vercel.app
+Portfolio repo: https://github.com/ThamiSithole/thami-sithole-portfolio
 ```
 
 Work after 15:30 Wednesday won't be counted.
