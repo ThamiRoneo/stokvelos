@@ -14,7 +14,7 @@ Re-exported 2026-11-25 from the 20 final Stitch screens at full desktop canvas w
 | `S2.png` | Sign Up | 2560 × 2114 |
 | `S3.png` | Log In | 2560 × 2048 |
 | `S4.png` | My Stokvels | 2560 × 2048 |
-| `S5.png` | Create Stokvel | 2560 × 2048 |
+| `S5.png` | Create Stokvel | 2560 × 2782 |
 | `S6.png` | Join via Invite | 2560 × 2048 |
 | `S7.png` | Stokvel Home | 2560 × 2422 |
 | `S8.png` | Contributions Ledger | 2560 × 2578 |
