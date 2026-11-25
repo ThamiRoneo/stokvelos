@@ -2,7 +2,7 @@
 -- `authenticated` role with a JWT subject, so RLS is genuinely enforced
 -- (the postgres role would bypass it).
 begin;
-select plan(33);
+select plan(44);
 
 -- NOMSA organizer of Savers + Uplift; SIPHO member of Savers and organizer
 -- of Tembisa; THANDI a plain member of Savers only; ADMIN a Platform Admin.
@@ -259,6 +259,95 @@ select throws_like(
   $$select * from public.admin_stats()$$,
   '%Only the organizer can do this.%',
   'T-SEC-21b non-admin denied aggregate stats');
+
+-- Phase 5: SEC15–SEC18, T-BR3-1 / T-BR10-1. Savers still has Nomsa as
+-- organizer and Sipho as a plain member; Thandi was removed by SEC8a above.
+-- SEC15 — disputes: readable by members of that stokvel only.
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select ok(
+  (select count(*) > 0 from public.disputes
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  'T-SEC-15a member can read disputes');
+
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000001","role":"authenticated"}';
+select is(
+  (select count(*) from public.disputes
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  0::bigint, 'T-SEC-15b outsider cannot read disputes');
+
+-- SEC16 — disputes: any member may raise one in their own stokvel.
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select lives_ok(
+  $$insert into public.disputes (stokvel_id, raised_by, subject_type, description)
+    values ('aaaaaaaa-0000-0000-0000-000000000001',
+            '22222222-2222-2222-2222-222222222222', 'stokvel',
+            'pgTAP member dispute')$$,
+  'T-SEC-16a member can raise a dispute');
+
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000001","role":"authenticated"}';
+select throws_like(
+  $$insert into public.disputes (stokvel_id, raised_by, subject_type, description)
+    values ('aaaaaaaa-0000-0000-0000-000000000001',
+            'd0000000-0000-4000-8000-000000000001', 'stokvel',
+            'pgTAP outsider dispute')$$,
+  '%row-level security%',
+  'T-SEC-16b / BR3 outsider cannot raise a dispute');
+
+-- SEC17 — disputes: only the organizer may resolve one.
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select lives_ok(
+  $$update public.disputes
+       set status = 'resolved',
+           resolved_by = '11111111-1111-1111-1111-111111111111',
+           resolved_at = now(),
+           resolution_note = 'pgTAP resolution'
+     where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'
+       and description = 'pgTAP member dispute'$$,
+  'T-SEC-17a organizer can resolve a dispute');
+
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+with affected as (
+  update public.disputes set status = 'resolved', resolution_note = 'hacked'
+  where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'
+    and description = 'Please confirm my 2026-W47 contribution.'
+  returning id
+)
+select is(
+  (select count(*) from affected),
+  0::bigint, 'T-SEC-17b / BR10 plain member cannot resolve a dispute');
+
+-- SEC18 — audit_log: members read, outsiders do not, nobody writes.
+select ok(
+  (select count(*) > 0 from public.audit_log
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  'T-SEC-18a member can read the audit log');
+
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000001","role":"authenticated"}';
+select is(
+  (select count(*) from public.audit_log
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  0::bigint, 'T-SEC-18b outsider cannot read the audit log');
+
+select throws_like(
+  $$delete from public.audit_log
+    where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'$$,
+  '%permission denied%',
+  'T-EDGE-2 authenticated DELETE on audit_log is denied');
+
+-- T-EDGE-2 / BR8 — even a privileged session cannot tamper: block_audit_write
+-- rejects direct UPDATE and DELETE before RLS/service-role bypass is relevant.
+reset role;
+select throws_like(
+  $$update public.audit_log set action = 'tampered'
+    where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'$$,
+  '%Audit log entries are immutable.%',
+  'T-EDGE-2 privileged UPDATE on audit_log is blocked');
+
+select throws_like(
+  $$delete from public.audit_log
+    where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'$$,
+  '%Audit log entries are immutable.%',
+  'T-EDGE-2 privileged DELETE on audit_log is blocked');
 
 -- T-DB-6 — RLS enabled on every public table.
 reset role;
