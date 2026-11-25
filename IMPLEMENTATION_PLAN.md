@@ -9,7 +9,7 @@
 | App name | StokvelOS |
 | Built from PRD version | v0.7 |
 | Screen designs | `docs/designs/` (S1–S13, M1–M7; desktop-width responsive exports). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.8 |
+| Plan version | v1.9 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
 | Status | Phases 1–2 complete; v1 is a responsive, desktop-first web application (ADR-0001). Awaiting the human's "Start Phase 3". |
 | Last updated | 25 Nov 2026 |
@@ -499,12 +499,14 @@ S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17. S13 
 4. `0004_triggers.sql`: triggers in 8.5.
 5. `0005_seed.sql`: seed data in 8.7.
 6. `0006_notifications.sql`: in-app notification rows for the five triggers in §10 OP24.
+7. `0007_stokvel_delete_guards.sql`: let the BR1/BR7 member guards skip rows already cascading from a deleted stokvel (OP9).
+8. `0008_retain_audit_on_delete.sql`: keep audit history after stokvel/account deletion by anonymising FK columns instead of cascading deletes (BR8, M4).
 
 ### 8.7 Seed data and test accounts
 
-- **Test accounts:** `nomsa@example.test` (organizer, Nomsa Dlamini, 42, Soweto) and `sipho@example.test` (member, Sipho Nkosi, 30, Tembisa). Password for both from `SEED_TEST_PASSWORD`.
-- **Seed stokvels (§18 C3/C16 closed):** "Soweto Savers" — Nomsa Dlamini, 15 members; "Soweto Uplift" — Nomsa Dlamini, 28 members; "Tembisa Together" — burial stokvel in Tembisa, 20 members (PRD 2.3).
-- **Seed roster (§18 C3 closed):** generated test data only — `savers01…15@example.test`, `uplift01…28@example.test`, `tembisa01…20@example.test`; no real names, emails or personal data. Counts are cosmetic; functional minimum for tests: 1 organizer + 2 active members in one stokvel, 1 contribution in the current period, 1 scheduled payout, 1 resolved dispute and 5 `audit_log` rows.
+- **Test accounts:** five local-only `@stokvelos.app` accounts — `nomsa@stokvelos.app` (organizer, Nomsa Dlamini, 42, Soweto), `sipho@stokvelos.app` (member, Sipho Nkosi, 30, Tembisa), `thandi@stokvelos.app`, `kabelo@stokvelos.app` and `admin@stokvelos.app` (platform admin via `profiles.is_admin`). Password for all five comes from `SEED_TEST_PASSWORD`. Seeded auth users use GoTrue's nil `instance_id` and matching email identities so password login works.
+- **Seed stokvels (§18 C3/C16 closed):** "Soweto Savers" — Nomsa organizer with Sipho, Thandi and Kabelo (4 members); "Soweto Uplift" — Nomsa organizer with Kabelo (2 members); "Tembisa Together" — burial stokvel in Tembisa with Sipho organizer and Thandi (2 members). The PRD personas' 15 / 28 / 20 counts remain illustrative design sample data, not the local seed.
+- **Seed roster (§18 C3 closed):** exactly five generated test accounts (1 admin + 4 members), all `@stokvelos.app`; no real names, emails or personal data. Functional minimum for tests: 1 contribution in the current period, 1 scheduled payout, 1 resolved dispute and 5 `audit_log` rows.
 - **Seed period labels and payout dates (§18 C14 closed):** R250 weekly / R500 monthly; labels `2026-W47`, `2026-W48`, `Nov 2026`; payout dates `2026-12-05`, `2026-12-12`.
 - **Never** use real personal data or real passwords in seed data.
 
@@ -1116,9 +1118,10 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Human answered all 14 Stitch prompt questions; answers recorded in STITCH_PROMPTS.md; 10 §18 clarifications closed; PRD §4.5 S5 → S4 | Cross-doc refs verified | — |
 | 2026-11-23 | — | Human supplied the nine remaining privacy-policy inputs; in-app `/privacy` POPIA policy page and component test created; S2 link target closed in STITCH_PROMPTS.md | typecheck, lint, 4 tests, build pass; /privacy prerendered | — |
 | 2026-11-23 | — | Human closed the five remaining plan clarifications: C2 `is_admin` flag; C12 English-only i18n-ready; C13 Workbox read-only cache; C15 service-role local-only; C17 OAuth added to Phase 2 with client-side export. PRD v0.6 / plan v1.6; S2/S3 Stitch prompts updated | Cross-doc ID and ref checks pass | — |
-| 2026-11-23 | — | Human chose generated `example.test` rosters for C3; C16 group names/counts and C14 labels/dates recorded in §8.7; stale "Open" references and all phase-gate wording cleared; plan v1.7 | No §18 clarification remains Open | — |
+| 2026-11-23 | — | Human chose generated `example.test` rosters for C3 (superseded by v1.9); C16 group names/counts and C14 labels/dates recorded in §8.7; stale "Open" references and all phase-gate wording cleared; plan v1.7 | No §18 clarification remains Open | — |
 | 2026-11-24 | 2 | Implemented Phase 2: accounts, auth, group creation, member management, invite links, RLS policies, migrations 0001–0006, component & integration suites | lint, typecheck, 59 unit/component tests, build pass | Phase 2: Groups, RLS and auth |
 | 2026-11-25 | — | Web-first refactor (Phase A): PRD v0.7 / plan v1.8, ADR-0001, responsive nav shell, PWA/offline deferred, stale `STITCH_PROMPTS.md` reference replaced | Cross-document ID/string audit; docs-only | `docs/web-first-v1` (issue #48) |
+| 2026-11-25 | 2 | Fixed local seed login: GoTrue-compatible `instance_id` + empty token columns + email identities, five `@stokvelos.app` accounts (1 admin + 4 members), pgTAP admin fixture deduplicated, CI moved to Node 26. Also fixed OP7 create (no `INSERT … RETURNING` before the organizer trigger), OP9 delete (cascade guards), BR8 audit retention on delete, and corrected the BR6 single-use invite test to PRD copy | `supabase db reset` + all 16 integration tests pass under Node 26 | `fix/integration-seed-users` (issues #50, #41) |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
 | — | 5 | Not started | — | — |
@@ -1133,7 +1136,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | --- | --- | --- | --- | --- |
 | C1 | What is the Stitch project URL for the exported designs? | 0, 7.3 | None (resolved) | Closed — https://stitch.google.com/projects/9928979343368528728 |
 | C2 | How is the Platform Admin role stored (table/flag), and is a moderation screen in v1? | 3.4, 8.1, 9 SEC21 | None (closed) | Closed — `is_admin` boolean on `profiles`, set only in Supabase; no moderation screen in v1. SEC2 blocks self-assignment; T-SEC-21a/21b |
-| C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.1, 8.7, 13 Phase 2 | None (closed) | Closed — C16 names/counts (Soweto Savers 15, Soweto Uplift 28, Tembisa Together 20); generated `example.test` members only, no real personal data; C14 labels/dates. All §18 clarifications now closed |
+| C3 | Exact seed data: stokvel names, full member rosters and email addresses. | 8.1, 8.7, 13 Phase 2 | None (closed) | Closed — five local-only `@stokvelos.app` accounts (1 admin + 4 members); three stokvels with 4 / 2 / 2 members; PRD personas' 15 / 28 / 20 are design samples only; no real personal data. All §18 clarifications now closed |
 | C4 | Exact delete-group confirmation copy and button label on S12 (PRD lists "delete group" but no modal). | 10 OP9, 13 Phase 2 | Phase 2 | Closed — inline confirm on S12: "Delete [Stokvel]? All contributions, payouts and disputes will be removed. This cannot be undone." / Cancel / Delete stokvel (Stitch Q7) |
 | C5 | Exact forgot-password label, destination screen and message copy (PRD 8.1 says "forgot password link", no screen listed). | 5, 10 OP4 | Phase 2 | Closed — "Forgot password?" → inline reset form on S3; "If an account exists, a reset link has been sent." (Stitch Q5) |
 | C6 | Should S13 export be one "Export" action with a format choice, or separate PDF and CSV actions? | 10 OP23, 13 Phase 6 | Phase 6 | Closed — one "Export" action with PDF / CSV format choice (Stitch Q14) |
@@ -1157,8 +1160,9 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.9 | 2026-11-25 | 8.6, 8.7, 13 Phase 2, 17, 18 C3, 19 | Fixed local integration seed: GoTrue-compatible nil `instance_id`, empty token columns and email identities, five `@stokvelos.app` accounts (1 admin + 4 members), pgTAP admin fixture deduplicated, CI moved to Node 26. Added migrations 0007–0008 for group deletion/audit retention, fixed OP7 create RLS timing, and aligned the BR6 invite test with PRD single-use copy. PRD unchanged. |
 | v1.8 | 2026-11-25 | 0, 1, 2 rule 8, 3.1–3.3, 4.1, 7.2–7.3, 10, 11, 13 Phase 6/7, 14, 15, 16, 17, 18 C13, 19 | Web-first refactor: v1 is a responsive, desktop-first web application (sidebar ≥1024, rail 768–1023, bottom nav <768); removed Workbox/offline (F8, US15, BR12, OP25, T-US15-1, T-BR12-1), replaced the deleted `STITCH_PROMPTS.md` reference, corrected stale phase status and production-seed wording, and deferred native mobile/PWA to ADR-0001. PRD bumped to v0.7. |
-| v1.7 | 2026-11-23 | 0, 8.1, 8.7, 13 Phases 2–5, 17, 18 C3, 19 | Closed C3 with generated `example.test` rosters, C16 group names/counts and C14 period labels/payout dates; replaced stale "Open" references for C8/C14/C16 and cleared all phase-gate wording; no §18 item remains Open. | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
+| v1.7 | 2026-11-23 | 0, 8.1, 8.7, 13 Phases 2–5, 17, 18 C3, 19 | Closed C3 with generated `example.test` rosters (superseded by v1.9), C16 group names/counts and C14 period labels/payout dates; replaced stale "Open" references for C8/C14/C16 and cleared all phase-gate wording; no §18 item remains Open. | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
 | v1.5 | 2026-11-23 | 0, 13 Phase 2, 17, 19 | Added the standalone in-app `/privacy` POPIA policy page and its test to close Stitch decision 4; Phase 2 now notes the S2 link wiring still to do; PRD bumped to v0.5. |
 | v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |
 | v1.3 | 2026-11-23 | 0, 4.1, 13 Phases 2/5/6, 16, 17, 19 | Re-audit fixes: F6 no longer claims US13 (reminders now trace to PRD §4.5 and its test is T-NOTIF-1); M4, OP5 and T-M4-1 removed from Phase 2 and placed in Phase 6 to match §7.3; BR2 traceability lists explicit negative RLS tests; PRD version bumped to v0.3. |

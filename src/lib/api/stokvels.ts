@@ -54,18 +54,26 @@ export async function createStokvel(
       input.contributionAmount > 1_000_000)
     return fail(MESSAGES.amountRange);
 
-  const { data, error } = await client
+  // Do not use INSERT ... RETURNING here: the SELECT RLS policy checks
+  // membership, which the AFTER INSERT trigger has not created yet. Insert
+  // with a client-generated id, then read the row back once the trigger ran.
+  const id = crypto.randomUUID();
+  const { error } = await client.from("stokvels").insert({
+    id,
+    name: input.name.trim(),
+    description: input.description?.trim() || null,
+    contribution_amount: input.contributionAmount,
+    contribution_frequency: input.contributionFrequency,
+    created_by: userId,
+  });
+  if (error) return fail(mapError(error, MESSAGES.couldNotSave));
+
+  const { data, error: readError } = await client
     .from("stokvels")
-    .insert({
-      name: input.name.trim(),
-      description: input.description?.trim() || null,
-      contribution_amount: input.contributionAmount,
-      contribution_frequency: input.contributionFrequency,
-      created_by: userId,
-    })
     .select()
+    .eq("id", id)
     .single();
-  if (error || !data) return fail(mapError(error, MESSAGES.couldNotSave));
+  if (readError || !data) return fail(mapError(readError, MESSAGES.couldNotSave));
 
   // BR11: rotation defaults to join order.
   const { data: members } = await client

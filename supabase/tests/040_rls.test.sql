@@ -5,17 +5,8 @@ begin;
 select plan(25);
 
 -- NOMSA organizer of Savers + Uplift; SIPHO member of Savers and organizer
--- of Tembisa; SAVERS01 a plain member of Savers only; ADMIN a Platform Admin.
--- Deterministic IDs come from supabase/migrations/0005_seed.sql.
-insert into auth.users
-  (id, aud, role, email, encrypted_password, email_confirmed_at,
-   raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
-   is_sso_user, is_anonymous)
-values
-  ('e0000000-0000-4000-8000-000000000001', 'authenticated', 'authenticated',
-   'admin@example.test', 'test-hash', now(),
-   '{}'::jsonb, '{"full_name":"Platform Admin"}'::jsonb, now(), now(), false, false);
-
+-- of Tembisa; THANDI a plain member of Savers only; ADMIN a Platform Admin.
+-- All five accounts come from supabase/migrations/0005_seed.sql.
 update public.profiles p
 set is_admin = true
 where p.id = 'e0000000-0000-4000-8000-000000000001';
@@ -103,7 +94,7 @@ select is(
 select is(
   (select count(*) from public.stokvel_members
    where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
-  15::bigint, 'T-SEC-6a member can read own group roster');
+  4::bigint, 'T-SEC-6a member can read own group roster');
 
 select is(
   (select count(*) from public.stokvel_members

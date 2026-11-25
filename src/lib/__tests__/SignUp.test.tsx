@@ -10,7 +10,7 @@ function renderSignUp(props: Partial<Parameters<typeof SignUp>[0]> = {}) {
 
 function fillValidForm() {
   fireEvent.change(screen.getByLabelText("Email"), {
-    target: { value: "nomsa@example.test" },
+    target: { value: "nomsa@stokvelos.app" },
   });
   fireEvent.change(screen.getByLabelText("Password"), {
     target: { value: "abcdefg1" },
@@ -56,7 +56,7 @@ describe("T-US1-1 / T-S2-1 Sign Up (S2)", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: /I accept the Privacy Policy/ }));
     fireEvent.click(screen.getByRole("button", { name: "Register" }));
     expect(onSubmit).toHaveBeenCalledWith({
-      email: "nomsa@example.test",
+      email: "nomsa@stokvelos.app",
       password: "abcdefg1",
       acceptedAge: true,
       acceptedPrivacy: true,

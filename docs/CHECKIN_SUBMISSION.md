@@ -115,10 +115,11 @@ See `BUSINESS.md` and `docs/PRD.md`. Summary:
 - **Stack:** Next.js + Supabase (Postgres + RLS) + Tailwind/shadcn + Vercel; TDD + CI.
 - **Prior portfolio project:** Indlela (transport-affordability app) — same target users, low-data constraints, same stack.
 
-## Test logins (placeholder)
+## Test logins
 
-To be added once auth (M1) is complete:
+There are no shared logins in the hosted app; sign up at the live URL. For local development only, `supabase/migrations/0005_seed.sql` creates five `@stokvelos.app` accounts with the password from local `SEED_TEST_PASSWORD`:
 
-- Organizer: `organizer@test.stokvelos.app` / `<password>`
-- Member: `member@test.stokvelos.app` / `<password>`
-- Platform Admin: `admin@test.stokvelos.app` / `<password>`
+- Organizer: `nomsa@stokvelos.app`
+- Member: `sipho@stokvelos.app`
+- Members: `thandi@stokvelos.app`, `kabelo@stokvelos.app`
+- Platform Admin: `admin@stokvelos.app`
