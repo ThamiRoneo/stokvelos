@@ -2,7 +2,7 @@
 -- `authenticated` role with a JWT subject, so RLS is genuinely enforced
 -- (the postgres role would bypass it).
 begin;
-select plan(25);
+select plan(29);
 
 -- NOMSA organizer of Savers + Uplift; SIPHO member of Savers and organizer
 -- of Tembisa; THANDI a plain member of Savers only; ADMIN a Platform Admin.
@@ -167,6 +167,44 @@ select lives_ok(
     where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'
       and user_id = 'd0000000-0000-4000-8000-000000000001'$$,
   'T-SEC-8a organizer can remove a member');
+
+-- SEC11 — contributions: a member reads their own group's ledger.
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select ok(
+  (select count(*) > 0 from public.contributions
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  'T-SEC-11a member can read own group contributions');
+
+-- Thandi was removed from Savers by SEC8a above, so her RLS view is empty.
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000001","role":"authenticated"}';
+select is(
+  (select count(*) from public.contributions
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  0::bigint, 'T-SEC-11b non-member cannot read group contributions');
+
+-- SEC12 — contributions: only the organizer may record one.
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select lives_ok(
+  $$insert into public.contributions
+    (stokvel_id, member_id, amount, period_label, recorded_by)
+    select 'aaaaaaaa-0000-0000-0000-000000000002', m.id, 250, '2026-W50',
+           '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000002'
+      and m.user_id = 'd0000000-0000-4000-8000-000000000002'$$,
+  'T-SEC-12a organizer can record a contribution');
+
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000002","role":"authenticated"}';
+select throws_like(
+  $$insert into public.contributions
+    (stokvel_id, member_id, amount, period_label, recorded_by)
+    select 'aaaaaaaa-0000-0000-0000-000000000002', m.id, 100, '2026-W51',
+           'd0000000-0000-4000-8000-000000000002'
+    from public.stokvel_members m
+    where m.stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000002'
+      and m.user_id = 'd0000000-0000-4000-8000-000000000002'$$,
+  '%row-level security%',
+  'T-SEC-12b member cannot record a contribution');
 
 -- SEC21 — Platform Admin: aggregate stats only.
 set local request.jwt.claims = '{"sub":"e0000000-0000-4000-8000-000000000001","role":"authenticated"}';

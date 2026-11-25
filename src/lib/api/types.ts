@@ -16,6 +16,9 @@ type ErrorLike = { message?: string } | null | undefined;
  */
 export function mapError(error: ErrorLike, fallback: string): string {
   const message = error?.message ?? "";
+  // BR4's conflict copy must win over the generic "already exists" account
+  // mapping (duplicate-contribution errors include that phrase too).
+  if (/already exists\. Edit instead/i.test(message)) return message;
   if (/already registered|already exists|duplicate key|unique constraint/i.test(message))
     return "This email already has an account.";
   if (/invalid login credentials/i.test(message)) return "Invalid credentials.";
