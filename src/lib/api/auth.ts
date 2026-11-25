@@ -98,3 +98,13 @@ export async function updateProfile(
   if (error) return fail(mapError(error, MESSAGES.couldNotSave));
   return ok(undefined);
 }
+
+/** OP5 — the RPC takes no id: the database uses auth.uid() of the caller. */
+export async function deleteAccount(client: SupabaseClient): Promise<Result<void>> {
+  const { data: userData } = await client.auth.getUser();
+  if (!userData.user?.id) return fail(MESSAGES.pleaseLoginAgain);
+
+  const { error } = await client.rpc("delete_account");
+  if (error) return fail(mapError(error, MESSAGES.couldNotSave));
+  return ok(undefined);
+}
