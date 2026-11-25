@@ -23,7 +23,7 @@ describe("Phase 2 stokvel integration", () => {
   });
 
   it("T-STOKVEL-1 creates a stokvel and makes the creator organizer (OP7)", async () => {
-    const nomsa = await signInAs("nomsa@example.test");
+    const nomsa = await signInAs("nomsa@stokvelos.app");
     const result = await createStokvel(nomsa, {
       name: "Integration Stokvel",
       contributionAmount: 250,
@@ -43,7 +43,7 @@ describe("Phase 2 stokvel integration", () => {
   });
 
   it("T-STOKVEL-2 listMyStokvels returns only the signed-in user's groups (SEC3)", async () => {
-    const nomsa = await signInAs("nomsa@example.test");
+    const nomsa = await signInAs("nomsa@stokvelos.app");
     const mine = await listMyStokvels(nomsa);
     expect(mine.ok).toBe(true);
     if (mine.ok) {
@@ -52,8 +52,8 @@ describe("Phase 2 stokvel integration", () => {
   });
 
   it("T-STOKVEL-3 organizer can update settings; member cannot (SEC5)", async () => {
-    const nomsa = await signInAs("nomsa@example.test");
-    const sipho = await signInAs("sipho@example.test");
+    const nomsa = await signInAs("nomsa@stokvelos.app");
+    const sipho = await signInAs("sipho@stokvelos.app");
 
     const denied = await updateStokvel(sipho, IDS.sowetoSavers, { name: "Nope" });
     expect(denied).toEqual({ ok: false, message: MESSAGES.onlyOrganizer });
@@ -63,8 +63,8 @@ describe("Phase 2 stokvel integration", () => {
   });
 
   it("T-STOKVEL-4 setRotationOrder is organizer-only and persists (OP15)", async () => {
-    const nomsa = await signInAs("nomsa@example.test");
-    const sipho = await signInAs("sipho@example.test");
+    const nomsa = await signInAs("nomsa@stokvelos.app");
+    const sipho = await signInAs("sipho@stokvelos.app");
 
     const denied = await setRotationOrder(sipho, IDS.sowetoSavers, [IDS.nomsaSaversMember]);
     expect(denied).toEqual({ ok: false, message: MESSAGES.onlyOrganizer });
@@ -85,8 +85,8 @@ describe("Phase 2 stokvel integration", () => {
   });
 
   it("T-STOKVEL-5 deleteStokvel is organizer-only (OP9)", async () => {
-    const nomsa = await signInAs("nomsa@example.test");
-    const sipho = await signInAs("sipho@example.test");
+    const nomsa = await signInAs("nomsa@stokvelos.app");
+    const sipho = await signInAs("sipho@stokvelos.app");
     const created = await createStokvel(nomsa, {
       name: "Delete Me",
       contributionAmount: 100,

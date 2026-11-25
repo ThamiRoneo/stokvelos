@@ -4,12 +4,13 @@ select plan(13);
 
 -- Isolated users for rule tests. Password hash is a literal: Auth is never used here.
 insert into auth.users
-  (id, aud, role, email, encrypted_password, email_confirmed_at,
+  (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at,
    raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
    is_sso_user, is_anonymous)
 select
-  extensions.gen_random_uuid(), 'authenticated', 'authenticated',
-  'rule_' || i || '@example.test', 'test-hash', now(),
+  extensions.gen_random_uuid(), '00000000-0000-0000-0000-000000000000'::uuid,
+  'authenticated', 'authenticated',
+  'rule_' || i || '@stokvelos.app', 'test-hash', now(),
   '{}'::jsonb, jsonb_build_object('full_name', 'Rule User ' || i),
   now(), now(), false, false
 from generate_series(1, 201) i;
@@ -36,7 +37,7 @@ insert into public.stokvel_members (stokvel_id, user_id)
 select 'bbbbbbbb-0000-0000-0000-000000000001', p.id
 from public.profiles p
 join auth.users u on u.id = p.id
-where u.email like 'rule_%@example.test'
+where u.email like 'rule_%@stokvelos.app'
 limit 199;
 
 select lives_ok(
@@ -49,7 +50,7 @@ select throws_like(
   $$insert into public.stokvel_members (stokvel_id, user_id)
     select 'bbbbbbbb-0000-0000-0000-000000000001', p.id
     from public.profiles p join auth.users u on u.id = p.id
-    where u.email like 'rule_%@example.test'
+    where u.email like 'rule_%@stokvelos.app'
       and not exists (
         select 1 from public.stokvel_members m
         where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000001'

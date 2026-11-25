@@ -23,7 +23,7 @@ StokvelOS gives stokvels a shared, tamper-evident ledger and payout scheduler, s
 
 There are no shared demo logins in production. Sign up at https://stokvelos-mu.vercel.app/sign-up with your email, confirm via the link in the confirmation email, then log in at https://stokvelos-mu.vercel.app/log-in. A new account starts with no groups, so create your first stokvel to try the organizer flows. Confirmation and password-reset links currently fall back to localhost ([#39](https://github.com/ThamiSithole/stokvelos/issues/39)); until that is fixed, the email link may not return you to the live app.
 
-For local development only, `supabase/migrations/0005_seed.sql` creates example personas with a fixed test password. Set `SEED_TEST_PASSWORD` in `.env.local` to that same value to run the integration tests. Never use those credentials against production.
+For local development only, `supabase/migrations/0005_seed.sql` creates five `@stokvelos.app` personas (1 platform admin + 4 members) with a fixed test password. Set `SEED_TEST_PASSWORD` in `.env.local` to that same value to run the integration tests. Never use those credentials against production.
 
 ## Tech stack
 
@@ -31,7 +31,7 @@ For local development only, `supabase/migrations/0005_seed.sql` creates example 
 - Supabase (Postgres, Auth, RLS)
 - Vitest + Playwright, with the Supabase CLI for DB tests
 - Vercel (production hosting) and GitHub Actions (CI and deploys)
-- Node.js 22+ recommended (CI currently uses Node 20; see [#41](https://github.com/ThamiSithole/stokvelos/issues/41))
+- Node.js 22+ required (CI and local verification use Node 26; see [#41](https://github.com/ThamiSithole/stokvelos/issues/41))
 
 ## Architecture
 
@@ -45,7 +45,7 @@ See [`docs/PRD.md`](docs/PRD.md) and [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_P
 npm ci
 cp .env.example .env.local
 npx supabase start
-npx supabase db reset   # applies 0001–0006; 0005 adds local-only demo personas
+npx supabase db reset   # applies 0001–0006; re-run after any seed change
 # copy the local URL and anon key from `npx supabase status` into .env.local
 # SUPABASE_SERVICE_ROLE_KEY is server-side only; SEED_TEST_PASSWORD is local-seed only
 npm run dev

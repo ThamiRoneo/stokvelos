@@ -1,81 +1,72 @@
--- 0005_seed.sql — generated test data only (IMPLEMENTATION_PLAN §8.7, C3/C14/C16).
--- No real names, emails or personal data. Password matches SEED_TEST_PASSWORD in local .env.local.
+-- 0005_seed.sql — local-only generated test data (IMPLEMENTATION_PLAN §8.7, C3/C14/C16).
+-- Five local accounts: one platform admin and four members. No real names,
+-- emails or personal data. All emails are @stokvelos.app test identities.
+-- This migration is NEVER applied in production. Password matches
+-- SEED_TEST_PASSWORD in local .env.local.
 
 do $$
 declare
-  i integer;
-  v_email text;
-  v_name text;
+  v_instance uuid := '00000000-0000-0000-0000-000000000000'::uuid;
 begin
-  -- Named personas.
+  -- GoTrue v2.198.0 finds users with instance_id = uuid.Nil. Without an
+  -- explicit value these rows are invisible to password login and admin lookups.
+  -- The four token columns also need empty strings, not NULL: GoTrue scans them
+  -- into Go strings and fails with "converting NULL to string is unsupported".
   insert into auth.users
-    (id, aud, role, email, encrypted_password, email_confirmed_at,
+    (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at,
+     confirmation_token, recovery_token, email_change_token_new, email_change,
      raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
      is_sso_user, is_anonymous)
   values
-    ('11111111-1111-1111-1111-111111111111', 'authenticated', 'authenticated',
-     'nomsa@example.test', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+    ('11111111-1111-1111-1111-111111111111', v_instance, 'authenticated', 'authenticated',
+     'nomsa@stokvelos.app', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+     '', '', '', '',
      '{"provider":"email","providers":["email"]}'::jsonb,
      '{"full_name":"Nomsa Dlamini"}'::jsonb, now(), now(), false, false),
-    ('22222222-2222-2222-2222-222222222222', 'authenticated', 'authenticated',
-     'sipho@example.test', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+    ('22222222-2222-2222-2222-222222222222', v_instance, 'authenticated', 'authenticated',
+     'sipho@stokvelos.app', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+     '', '', '', '',
      '{"provider":"email","providers":["email"]}'::jsonb,
-     '{"full_name":"Sipho Nkosi"}'::jsonb, now(), now(), false, false)
+     '{"full_name":"Sipho Nkosi"}'::jsonb, now(), now(), false, false),
+    ('d0000000-0000-4000-8000-000000000001', v_instance, 'authenticated', 'authenticated',
+     'thandi@stokvelos.app', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+     '', '', '', '',
+     '{"provider":"email","providers":["email"]}'::jsonb,
+     '{"full_name":"Thandi Molefe"}'::jsonb, now(), now(), false, false),
+    ('d0000000-0000-4000-8000-000000000002', v_instance, 'authenticated', 'authenticated',
+     'kabelo@stokvelos.app', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+     '', '', '', '',
+     '{"provider":"email","providers":["email"]}'::jsonb,
+     '{"full_name":"Kabelo Dube"}'::jsonb, now(), now(), false, false),
+    ('e0000000-0000-4000-8000-000000000001', v_instance, 'authenticated', 'authenticated',
+     'admin@stokvelos.app', extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
+     '', '', '', '',
+     '{"provider":"email","providers":["email"]}'::jsonb,
+     '{"full_name":"Platform Admin"}'::jsonb, now(), now(), false, false)
   on conflict (id) do nothing;
 
-  -- Soweto Savers generated roster (13 + 2 named = 15 total).
-  for i in 1..13 loop
-    v_email := 'savers' || lpad(i::text, 2, '0') || '@example.test';
-    v_name := 'Savers Member ' || lpad(i::text, 2, '0');
-    insert into auth.users
-      (id, aud, role, email, encrypted_password, email_confirmed_at,
-       raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
-       is_sso_user, is_anonymous)
-    values
-      (('d0000000-0000-4000-8000-' || lpad(i::text, 12, '0'))::uuid,
-       'authenticated', 'authenticated',
-       v_email, extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
-       '{"provider":"email","providers":["email"]}'::jsonb,
-       jsonb_build_object('full_name', v_name), now(), now(), false, false)
-    on conflict (email) where is_sso_user = false do nothing;
-  end loop;
-
-  -- Soweto Uplift generated roster (27 + organizer = 28 total).
-  for i in 1..27 loop
-    v_email := 'uplift' || lpad(i::text, 2, '0') || '@example.test';
-    v_name := 'Uplift Member ' || lpad(i::text, 2, '0');
-    insert into auth.users
-      (id, aud, role, email, encrypted_password, email_confirmed_at,
-       raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
-       is_sso_user, is_anonymous)
-    values
-      (('d0000001-0000-4000-8000-' || lpad(i::text, 12, '0'))::uuid,
-       'authenticated', 'authenticated',
-       v_email, extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
-       '{"provider":"email","providers":["email"]}'::jsonb,
-       jsonb_build_object('full_name', v_name), now(), now(), false, false)
-    on conflict (email) where is_sso_user = false do nothing;
-  end loop;
-
-  -- Tembisa Together generated roster (19 + organizer = 20 total).
-  for i in 1..19 loop
-    v_email := 'tembisa' || lpad(i::text, 2, '0') || '@example.test';
-    v_name := 'Tembisa Member ' || lpad(i::text, 2, '0');
-    insert into auth.users
-      (id, aud, role, email, encrypted_password, email_confirmed_at,
-       raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
-       is_sso_user, is_anonymous)
-    values
-      (('d0000002-0000-4000-8000-' || lpad(i::text, 12, '0'))::uuid,
-       'authenticated', 'authenticated',
-       v_email, extensions.crypt('TestPass1', extensions.gen_salt('bf')), now(),
-       '{"provider":"email","providers":["email"]}'::jsonb,
-       jsonb_build_object('full_name', v_name), now(), now(), false, false)
-    on conflict (email) where is_sso_user = false do nothing;
-  end loop;
+  -- Email identities mirror what GoTrue creates on a real sign-up, so
+  -- duplicate detection and admin lookups behave the same for seeded users.
+  insert into auth.identities
+    (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at)
+  select
+    extensions.gen_random_uuid(), u.id,
+    jsonb_build_object(
+      'sub', u.id::text,
+      'email', u.email,
+      'email_verified', true,
+      'full_name', u.raw_user_meta_data ->> 'full_name'
+    ),
+    'email', u.email, now(), now(), now()
+  from auth.users u
+  where u.email like '%@stokvelos.app'
+  on conflict (provider, provider_id) do nothing;
 end $$;
 
--- Audit rows for seed writes are attributed to Nomsa.
+update public.profiles
+set is_admin = true
+where id = 'e0000000-0000-4000-8000-000000000001';
+
 set local app.audit_actor = '11111111-1111-1111-1111-111111111111';
 
 insert into public.stokvels
@@ -92,34 +83,18 @@ values
    '22222222-2222-2222-2222-222222222222')
 on conflict (id) do nothing;
 
--- Organizers first, then the rest. Membership is unique per (stokvel, user).
+-- Three groups, each with at least two members (BR1). Thandi (d000...0001)
+-- is deliberately not in Soweto Uplift so the RLS isolation tests hold.
 insert into public.stokvel_members (stokvel_id, user_id, role)
 values
   ('aaaaaaaa-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', 'organizer'),
   ('aaaaaaaa-0000-0000-0000-000000000001', '22222222-2222-2222-2222-222222222222', 'member'),
+  ('aaaaaaaa-0000-0000-0000-000000000001', 'd0000000-0000-4000-8000-000000000001', 'member'),
+  ('aaaaaaaa-0000-0000-0000-000000000001', 'd0000000-0000-4000-8000-000000000002', 'member'),
   ('aaaaaaaa-0000-0000-0000-000000000002', '11111111-1111-1111-1111-111111111111', 'organizer'),
-  ('aaaaaaaa-0000-0000-0000-000000000003', '22222222-2222-2222-2222-222222222222', 'organizer')
-on conflict (stokvel_id, user_id) do nothing;
-
-insert into public.stokvel_members (stokvel_id, user_id)
-select 'aaaaaaaa-0000-0000-0000-000000000001', p.id
-from public.profiles p
-join auth.users u on u.id = p.id
-where u.email like 'savers%@example.test'
-on conflict (stokvel_id, user_id) do nothing;
-
-insert into public.stokvel_members (stokvel_id, user_id)
-select 'aaaaaaaa-0000-0000-0000-000000000002', p.id
-from public.profiles p
-join auth.users u on u.id = p.id
-where u.email like 'uplift%@example.test'
-on conflict (stokvel_id, user_id) do nothing;
-
-insert into public.stokvel_members (stokvel_id, user_id)
-select 'aaaaaaaa-0000-0000-0000-000000000003', p.id
-from public.profiles p
-join auth.users u on u.id = p.id
-where u.email like 'tembisa%@example.test'
+  ('aaaaaaaa-0000-0000-0000-000000000002', 'd0000000-0000-4000-8000-000000000002', 'member'),
+  ('aaaaaaaa-0000-0000-0000-000000000003', '22222222-2222-2222-2222-222222222222', 'organizer'),
+  ('aaaaaaaa-0000-0000-0000-000000000003', 'd0000000-0000-4000-8000-000000000001', 'member')
 on conflict (stokvel_id, user_id) do nothing;
 
 -- BR11: rotation defaults to join order.

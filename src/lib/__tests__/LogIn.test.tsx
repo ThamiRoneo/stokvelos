@@ -9,7 +9,7 @@ function renderLogIn(props: Partial<Parameters<typeof LogIn>[0]> = {}) {
 }
 
 function fillForm() {
-  fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nomsa@example.test" } });
+  fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nomsa@stokvelos.app" } });
   fireEvent.change(screen.getByLabelText("Password"), { target: { value: "abcdefg1" } });
 }
 
@@ -20,7 +20,7 @@ describe("T-US2-1 / T-S3-1 Log In (S3)", () => {
     fillForm();
     fireEvent.click(screen.getByRole("button", { name: "Log in" }));
     expect(onSubmit).toHaveBeenCalledWith({
-      email: "nomsa@example.test",
+      email: "nomsa@stokvelos.app",
       password: "abcdefg1",
     });
   });
@@ -43,9 +43,9 @@ describe("T-US2-1 / T-S3-1 Log In (S3)", () => {
     renderLogIn({ onReset });
     fireEvent.click(screen.getByRole("button", { name: "Forgot password?" }));
     const emailInputs = screen.getAllByLabelText("Email");
-    fireEvent.change(emailInputs[1], { target: { value: "nomsa@example.test" } });
+    fireEvent.change(emailInputs[1], { target: { value: "nomsa@stokvelos.app" } });
     fireEvent.click(screen.getByRole("button", { name: "Send reset link" }));
-    expect(onReset).toHaveBeenCalledWith("nomsa@example.test");
+    expect(onReset).toHaveBeenCalledWith("nomsa@stokvelos.app");
     expect(
       screen.getByText("If an account exists, a reset link has been sent."),
     ).toBeInTheDocument();

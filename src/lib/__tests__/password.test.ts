@@ -21,7 +21,7 @@ describe("T-AUTH-1 password rules (PRD §5)", () => {
 
 describe("email validation", () => {
   it("accepts a simple address and trims whitespace", () => {
-    expect(isValidEmail(" nomsa@example.test ")).toBe(true);
+    expect(isValidEmail(" nomsa@stokvelos.app ")).toBe(true);
   });
 
   it("rejects malformed addresses", () => {

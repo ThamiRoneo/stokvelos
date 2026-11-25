@@ -28,3 +28,13 @@ for (const key of [
     );
   }
 }
+
+// These tests create and delete auth users. Refuse any non-local URL so a
+// misconfigured .env.local cannot write test accounts to production (§18 C15).
+const supabaseHost = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
+if (!["127.0.0.1", "localhost", "[::1]"].includes(supabaseHost)) {
+  throw new Error(
+    `Integration tests must target local Supabase, got ${supabaseHost}. ` +
+      "No test users are written to remote projects.",
+  );
+}
