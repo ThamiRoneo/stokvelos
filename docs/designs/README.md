@@ -6,27 +6,27 @@ Source project: https://stitch.google.com/projects/9928979343368528728
 
 ## Current export
 
-Re-exported 2026-11-25 from the 20 final Stitch screens at full desktop canvas width (2560 px, height varies by content). All use the identical R2-B “Refined ledger” mark and wordmark.
+Re-exported 2026-11-25 from the 20 final Stitch screens at full desktop canvas width (2560 px, height varies by content). All are clean single-state renders with no preview harness or debug annotations, and all use the identical R2-B “Refined ledger” mark and wordmark.
 
 | File | Stitch screen | Canvas |
 | --- | --- | --- |
 | `S1.png` | Welcome | 2560 × 2048 |
-| `S2.png` | Sign Up | 2560 × 2114 |
+| `S2.png` | Sign Up | 2560 × 2048 |
 | `S3.png` | Log In | 2560 × 2048 |
-| `S4.png` | My Stokvels | 2560 × 2048 |
+| `S4.png` | My Stokvels | 2560 × 2768 |
 | `S5.png` | Create Stokvel | 2560 × 2782 |
 | `S6.png` | Join via Invite | 2560 × 2048 |
-| `S7.png` | Stokvel Home | 2560 × 2422 |
-| `S8.png` | Contributions Ledger | 2560 × 2578 |
-| `S9.png` | Payouts | 2560 × 2048 |
-| `S10.png` | Members | 2560 × 2904 |
+| `S7.png` | Stokvel Home | 2560 × 2668 |
+| `S8.png` | Contributions Ledger | 2560 × 2754 |
+| `S9.png` | Payouts | 2560 × 2762 |
+| `S10.png` | Members | 2560 × 2902 |
 | `S11.png` | Audit Log | 2560 × 2928 |
-| `S12.png` | Stokvel Settings | 2560 × 2880 |
-| `S13.png` | Profile/Settings | 2560 × 2584 |
+| `S12.png` | Stokvel Settings | 2560 × 3072 |
+| `S13.png` | Profile/Settings | 2560 × 2816 |
 | `M1.png` | Record Contribution Modal | 2560 × 2048 |
 | `M2.png` | Schedule Payout Modal | 2560 × 2048 |
 | `M3.png` | Mark Payout Paid Modal | 2560 × 2048 |
-| `M4.png` | Delete Account Modal | 2560 × 2048 |
+| `M4.png` | Delete Account Modal | 2560 × 2372 |
 | `M5.png` | Invite Member Modal | 2560 × 2048 |
 | `M6.png` | Remove Member Modal | 2560 × 2048 |
 | `M7.png` | Raise Dispute Modal | 2560 × 2048 |
