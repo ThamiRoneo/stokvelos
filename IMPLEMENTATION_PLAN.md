@@ -7,12 +7,12 @@
 | Field | Value |
 | --- | --- |
 | App name | StokvelOS |
-| Built from PRD version | v0.6 |
-| Screen designs | `docs/designs/` (S1–S13, M1–M7). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
-| Plan version | v1.7 |
+| Built from PRD version | v0.7 |
+| Screen designs | `docs/designs/` (S1–S13, M1–M7; desktop-width responsive exports). Stitch project URL: https://stitch.google.com/projects/9928979343368528728 |
+| Plan version | v1.8 |
 | Repository | https://github.com/ThamiSithole/stokvelos |
-| Status | Phase 2 unblocked — all §18 clarifications closed; awaiting hosted Supabase credentials and the human's "Start Phase 2" |
-| Last updated | 23 Nov 2026 |
+| Status | Phases 1–2 complete; v1 is a responsive, desktop-first web application (ADR-0001). Awaiting the human's "Start Phase 3". |
+| Last updated | 25 Nov 2026 |
 
 ---
 
@@ -25,7 +25,7 @@ Before writing any code:
 3. Look at the screen designs listed in Section 7.3 (`docs/designs/`).
 4. Check Section 18. If any clarification marked **Blocking** for the phase you are about to start is still **Open**, stop and ask the human. Do not start that phase.
 5. Check that the prerequisites in Section 4.2 are installed.
-6. Start **Phase 2 only**. Phase 1 (M1 scaffolding) is already complete. Follow Section 2 at all times.
+6. Start **Phase 3 only** when the human says "Start Phase 3". Phases 1–2 are complete. Follow Section 2 at all times.
 
 ---
 
@@ -43,7 +43,7 @@ Before writing any code:
 5. **Build only what is planned.** Build only what is in this file and `docs/PRD.md`. Never build anything in Section 3.3 (Deferred).
 6. **Ask, don't guess.** If anything is missing, unclear or contradictory, stop, add it to Section 18, and ask the human.
 7. **Match the designs.** Every screen must match its design in Section 7.3: layout, order, labels, text, colours and spacing. Use the design tokens in Section 7.1. Never hard-code colours, font sizes or spacing.
-8. **Every state, every screen.** Each screen must handle every state listed for it in Section 7.3 (chosen from normal, empty, loading, error, offline, success, plus any screen-specific states).
+8. **Every state, every screen.** Each screen must handle every state listed for it in Section 7.3 (chosen from normal, empty, loading, error, success, plus any screen-specific states). There is no offline state in v1; network failures use the exact strings in PRD 6.2/8.2.
 9. **Exact wording.** Use the exact labels and messages from the PRD. Never invent wording.
 10. **Security first.**
     - Never put secret keys in app code, logs, test files or Git.
@@ -67,9 +67,9 @@ Before writing any code:
 
 ### 3.1 Summary
 
-StokvelOS is a mobile-first, low-data web app (PWA) for South African stokvels. It gives a group a shared, tamper-evident ledger: create a stokvel, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail. No money is held or moved by the app in v1 — it is a record-keeping and trust tool, not a bank.
+StokvelOS is a responsive, desktop-first web application for South African stokvels. It gives a group a shared, tamper-evident ledger: create a stokvel, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail. It stays light on data. No money is held or moved by the app in v1 — it is a record-keeping and trust tool, not a bank.
 
-**Platform:** Responsive web app (PWA), mobile-first. Android Chrome first; desktop supported. No native app in v1.
+**Platform:** Responsive web application in the browser, desktop-first at 320 / 768 / 1024 / 1440 breakpoints: left sidebar ≥1024px, compact icon rail 768–1023px, bottom nav <768px. No native iOS/Android app, no installable PWA, no service worker and no offline cache in v1 — deferred to a later mobile rollout (ADR-0001).
 
 ### 3.2 Features in scope
 
@@ -82,9 +82,8 @@ StokvelOS is a mobile-first, low-data web app (PWA) for South African stokvels. 
 | F5 | Audit & dispute log | Must | G1, G3 | 5 |
 | F6 | Reminders & notifications | Should | G2, G4 | 6 |
 | F7 | Export & reports | Should | G4 | 6 |
-| F8 | Offline & low-data | Should | G5 | 6 |
 
-MVP = F1–F5. F6–F8 are polish.
+MVP = F1–F5. F6–F7 are polish. Offline caching, installable PWA support and native apps are deferred to a later mobile rollout (ADR-0001); they are not in v1.
 
 ### 3.3 Deferred: do NOT build
 
@@ -92,7 +91,7 @@ MVP = F1–F5. F6–F8 are polish.
 - Banking, interest, lending or multi-currency/cross-border features (PRD 3.2).
 - Automated bank reconciliation and payment-gateway payouts (v2 — PayFast vs Yoco; see PRD §14 open questions).
 - Push notifications at scale (in-app notifications + WhatsApp share links only in v1).
-- Native mobile apps / iOS app (PRD 3.2, 4.3).
+- Native mobile apps, installable PWA, service worker and offline caching — later mobile rollout (PRD 3.2, 4.3; ADR-0001).
 - Full payment gateway, stokvel association white-label, multi-group dashboards (PRD 4.3).
 - Vernacular UI languages in v1 — English only with an i18n-ready string structure; all 12 South African official languages are a future feature (§18 C12 closed).
 - Platform Admin moderation UI — no admin screen in v1; the role is an `is_admin` boolean on `profiles` (§18 C2 closed).
@@ -128,14 +127,13 @@ MVP = F1–F5. F6–F8 are polish.
 | Database migrations | Supabase CLI + SQL migrations | Latest CLI | Tables, RLS, triggers, seed |
 | Database tests | pgTAP via `supabase test db` | Supabase CLI | Constraints, triggers, RLS (§9) |
 | Integration tests | Vitest + supabase-js against local Supabase | ^2.1.8 | Operations (§10) |
-| Offline cache | Workbox service worker | latest stable (confirm version at install) | Read-only cache + staleness banner (§18 C13) |
 | Unit and component tests | Vitest + Testing Library + jsdom | ^2.1.8 / ^16.1.0 / ^25 | Rules, components, screen states |
 | End-to-end tests | Playwright | ^1.49.1 | User flows (§12.2) |
 | Lint and type check | ESLint 8 + `tsc --noEmit` | ^8.57.0 / ^5 | Code quality |
-| Hosting | Vercel | — | Production PWA |
+| Hosting | Vercel | — | Production responsive web application |
 | Runtime | Node.js | 20 LTS (as in CI) | Running tools |
 
-Install new Supabase packages via npm. Workbox is explicitly approved by the human for the read-only offline cache (§18 C13 closed); no other library may be added without asking (§2 rule 13).
+Install new Supabase packages via npm. No library may be added, removed or upgraded without asking the human first (§2 rule 13). Offline/PWA libraries are deferred with the mobile rollout (ADR-0001).
 
 ### 4.2 Prerequisites on the computer
 
@@ -195,7 +193,7 @@ stokvelos/
       ui/                               shadcn/ui primitives
       Button.tsx, TextInput.tsx, Card.tsx, Table.tsx, Badge.tsx,
       Banner.tsx, Modal.tsx, EmptyState.tsx, Spinner.tsx,
-      TopAppBar.tsx, BottomNav.tsx      Shared components (§7.2)
+      TopAppBar.tsx, AppNav.tsx        Shared components (§7.2)
       modals/                           M1–M7
     lib/
       supabase/client.ts                Browser client (exists)
@@ -211,7 +209,7 @@ stokvelos/
   e2e/                                   Playwright flows (§12.2)
   docs/
     PRD.md
-    designs/STITCH_PROMPTS.md            Screen prompts for Stitch
+    designs/README.md                    Stitch exports and breakpoints
     brand/kit/                           R2-B Refined ledger logo kit
     CHECKIN_SUBMISSION.md
   IMPLEMENTATION_PLAN.md
@@ -294,40 +292,41 @@ Accessibility tokens (PRD 8.4): WCAG AA contrast, ≥44×44px targets, labels on
 | Card | `src/components/Card.tsx` | Stokvel card, stat card, member row | S4, S7, S10 | T-C-3 |
 | Table | `src/components/Table.tsx` | Contributions (member × period), totals | S8 | T-C-4 |
 | Badge | `src/components/Badge.tsx` | Role (organizer/member), status (paid/scheduled/overdue) | S9, S10 | T-C-5 |
-| Banner | `src/components/Banner.tsx` | Alert, info, error, success, staleness | All | T-C-6 |
+| Banner | `src/components/Banner.tsx` | Alert, info, error, success | All | T-C-6 |
 | Modal/Dialog | `src/components/Modal.tsx` | Form modal, confirm modal | M1–M7 | T-C-7 |
 | EmptyState | `src/components/EmptyState.tsx` | Icon + message + CTA | S4, S8, S9, S10, S11 | T-C-8 |
 | Spinner | `src/components/Spinner.tsx` | Small (inline), large (full-screen) | All | T-C-9 |
 | TopAppBar | `src/components/TopAppBar.tsx` | Title, back, optional action | Detail screens | T-C-10 |
-| BottomNav | `src/components/BottomNav.tsx` | 5 tabs: Home, Ledger, Payouts, Audit, Profile | S4, S7, S8, S9, S10, S11, S13 | T-C-11 |
+| AppNav | `src/components/AppNav.tsx` | Sidebar ≥1024px, compact icon rail 768–1023px, bottom nav <768px; 5 destinations: Home, Ledger, Payouts, Audit, Profile | S4, S7, S8, S9, S10, S11, S13 | T-C-11 |
 
 ### 7.3 Screens
 
 | ID | Screen | Route / file | Design | Who can open it (else redirect to) | Tab bar | Required states | Phase |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | S1 | Welcome | `src/app/page.tsx` | Stitch S1 | Logged out (else S4) | No | Normal | 1 |
-| S2 | Sign Up | `src/app/(auth)/sign-up/page.tsx` | Stitch S2 | Logged out (else S4) | No | Normal, Loading, Error, Offline, Success | 2 |
-| S3 | Log In | `src/app/(auth)/log-in/page.tsx` | Stitch S3 | Logged out (else S4) | No | Normal, Loading, Error, Offline, Success | 2 |
-| S4 | My Stokvels | `src/app/(app)/stokvels/page.tsx` | Stitch S4 | Logged in | Yes | Normal, Empty, Loading, Error, Offline | 2 |
-| S5 | Create Stokvel | `src/app/(app)/stokvels/new/page.tsx` | Stitch S5 | Logged in | Yes | Normal, Loading, Error, Offline, Success | 2 |
-| S6 | Join via Invite | `src/app/(app)/join/[token]/page.tsx` | Stitch S6 | Logged in | Yes | Normal, Empty, Loading, Error, Offline, Success | 2 |
-| S7 | Stokvel Home | `src/app/(app)/stokvels/[id]/page.tsx` | Stitch S7 | Member of that stokvel | Yes | Normal, Loading, Error, Offline | 3 |
-| S8 | Contributions Ledger | `src/app/(app)/stokvels/[id]/ledger/page.tsx` | Stitch S8 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Offline, Success | 3 |
-| S9 | Payouts | `src/app/(app)/stokvels/[id]/payouts/page.tsx` | Stitch S9 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Offline, Success | 4 |
-| S10 | Members | `src/app/(app)/stokvels/[id]/members/page.tsx` | Stitch S10 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Offline, Success | 2 |
-| S11 | Audit Log | `src/app/(app)/stokvels/[id]/audit/page.tsx` | Stitch S11 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Offline | 5 |
-| S12 | Stokvel Settings | `src/app/(app)/stokvels/[id]/settings/page.tsx` | Stitch S12 | Organizer of that stokvel | Yes | Normal, Loading, Error, Offline, Success | 2 |
-| S13 | Profile/Settings | `src/app/(app)/profile/page.tsx` | Stitch S13 | Logged in | Yes | Normal, Loading, Error, Offline, Success | 6 |
-| M1 | Record Contribution | `src/components/modals/RecordContribution.tsx` | Stitch M1 | Organizer (from S8) | — | Normal, Loading, Error, Offline, Success | 3 |
-| M2 | Schedule Payout | `src/components/modals/SchedulePayout.tsx` | Stitch M2 | Organizer (from S9) | — | Normal, Loading, Error, Offline, Success | 4 |
-| M3 | Raise Dispute | `src/components/modals/RaiseDispute.tsx` | Stitch M3 | Member (from S11) | — | Normal, Loading, Error, Offline, Success | 5 |
-| M4 | Delete Account | `src/components/modals/DeleteAccount.tsx` | Stitch M4 | Logged in (from S13) | — | Normal, Loading, Error, Offline, Success | 6 |
-| M5 | Invite Member | `src/components/modals/InviteMember.tsx` | Stitch M5 | Organizer (from S10) | — | Normal, Loading, Error, Offline, Success | 2 |
-| M6 | Mark Payout Paid | `src/components/modals/MarkPayoutPaid.tsx` | Stitch M6 | Organizer (from S9) | — | Normal, Loading, Error, Offline, Success | 4 |
-| M7 | Remove Member | `src/components/modals/RemoveMember.tsx` | Stitch M7 | Organizer (from S10) | — | Normal, Loading, Error, Offline, Success | 2 |
+| S2 | Sign Up | `src/app/(auth)/sign-up/page.tsx` | Stitch S2 | Logged out (else S4) | No | Normal, Loading, Error, Success | 2 |
+| S3 | Log In | `src/app/(auth)/log-in/page.tsx` | Stitch S3 | Logged out (else S4) | No | Normal, Loading, Error, Success | 2 |
+| S4 | My Stokvels | `src/app/(app)/stokvels/page.tsx` | Stitch S4 | Logged in | Yes | Normal, Empty, Loading, Error | 2 |
+| S5 | Create Stokvel | `src/app/(app)/stokvels/new/page.tsx` | Stitch S5 | Logged in | Yes | Normal, Loading, Error, Success | 2 |
+| S6 | Join via Invite | `src/app/(app)/join/[token]/page.tsx` | Stitch S6 | Logged in | Yes | Normal, Empty, Loading, Error, Success | 2 |
+| S7 | Stokvel Home | `src/app/(app)/stokvels/[id]/page.tsx` | Stitch S7 | Member of that stokvel | Yes | Normal, Loading, Error | 3 |
+| S8 | Contributions Ledger | `src/app/(app)/stokvels/[id]/ledger/page.tsx` | Stitch S8 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Success | 3 |
+| S9 | Payouts | `src/app/(app)/stokvels/[id]/payouts/page.tsx` | Stitch S9 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Success | 4 |
+| S10 | Members | `src/app/(app)/stokvels/[id]/members/page.tsx` | Stitch S10 | Member of that stokvel | Yes | Normal, Empty, Loading, Error, Success | 2 |
+| S11 | Audit Log | `src/app/(app)/stokvels/[id]/audit/page.tsx` | Stitch S11 | Member of that stokvel | Yes | Normal, Empty, Loading, Error | 5 |
+| S12 | Stokvel Settings | `src/app/(app)/stokvels/[id]/settings/page.tsx` | Stitch S12 | Organizer of that stokvel | Yes | Normal, Loading, Error, Success | 2 |
+| S13 | Profile/Settings | `src/app/(app)/profile/page.tsx` | Stitch S13 | Logged in | Yes | Normal, Loading, Error, Success | 6 |
+| M1 | Record Contribution | `src/components/modals/RecordContribution.tsx` | Stitch M1 | Organizer (from S8) | — | Normal, Loading, Error, Success | 3 |
+| M2 | Schedule Payout | `src/components/modals/SchedulePayout.tsx` | Stitch M2 | Organizer (from S9) | — | Normal, Loading, Error, Success | 4 |
+| M3 | Raise Dispute | `src/components/modals/RaiseDispute.tsx` | Stitch M3 | Member (from S11) | — | Normal, Loading, Error, Success | 5 |
+| M4 | Delete Account | `src/components/modals/DeleteAccount.tsx` | Stitch M4 | Logged in (from S13) | — | Normal, Loading, Error, Success | 6 |
+| M5 | Invite Member | `src/components/modals/InviteMember.tsx` | Stitch M5 | Organizer (from S10) | — | Normal, Loading, Error, Success | 2 |
+| M6 | Mark Payout Paid | `src/components/modals/MarkPayoutPaid.tsx` | Stitch M6 | Organizer (from S9) | — | Normal, Loading, Error, Success | 4 |
+| M7 | Remove Member | `src/components/modals/RemoveMember.tsx` | Stitch M7 | Organizer (from S10) | — | Normal, Loading, Error, Success | 2 |
 
-Design source for every row: `docs/designs/STITCH_PROMPTS.md`. Exact layout, labels, messages and sample content are in those prompts (generated from PRD §8.1/§8.2/§9). Do not invent wording.
-S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17; apply the updated Stitch S2/S3 prompts. S13 export is client-side — no Storage bucket.
+Design source for every row: the external Stitch project (https://stitch.google.com/projects/9928979343368528728) and the desktop-width PNG exports in `docs/designs/`. The former `STITCH_PROMPTS.md` was removed; the web-first prompt spec is supplied in chat before the screens are re-exported (Phase B). Exact layout, labels, messages and sample content come from PRD §8.1/§8.2/§9. Do not invent wording.
+
+S2 and S3 include a "Continue with Google" button per PRD §5 and §18 C17. S13 export is client-side — no Storage bucket. There is no offline/staleness state in v1.
 
 ---
 
@@ -578,7 +577,8 @@ All operations live in `src/lib/api/`. Each returns either data or one of the ex
 | OP22 | View audit log | Member of stokvel | stokvel_id | Chronological feed (actor, action, before/after, timestamp) | BR8, BR9, SEC18 | "Couldn't load. Try again." | Select | T-US11-1 |
 | OP23 | Export ledger | Organizer | stokvel_id, format (PDF/CSV) | File download | G4 | "Couldn't export. Try again." | Client-side generation | T-US14-1 |
 | OP24 | Get in-app notifications | Recipient per PRD 4.5 | — | Notification list with exact text | PRD §4.5 | "Couldn't load. Try again." | Select from notifications | T-NOTIF-1 |
-| OP25 | Cache group data / staleness | Logged in | group id | Cached data + staleness banner | BR12; >24h stale | "No cached data. Connect to the internet to load." / "Showing cached data from [time]. May be out of date." | Workbox service worker, read-only cache (§18 C13 closed) | T-US15-1 |
+
+Offline caching and staleness (formerly OP25) are deferred with the mobile rollout (ADR-0001); there is no backend operation for them in v1.
 
 ---
 
@@ -589,10 +589,10 @@ All operations live in `src/lib/api/`. Each returns either data or one of the ex
 - **Logged in, no stokvels:** S4 shows empty state with Create + Join CTAs.
 - **Stokvel detail screens (S7–S12):** only members of that stokvel; otherwise S4 with "Only the organizer can do this." for organizer-only actions (BR2).
 - **S12 Stokvel Settings and organizer actions:** organizer only (BR2).
-- **Tabs:** S4 Home, S8 Ledger, S9 Payouts, S11 Audit, S13 Profile. Tapping the active tab scrolls to the top.
-- **Back button:** closes modals; goes back one screen; on a tab root it leaves the group.
+- **App navigation:** S4 Home, S8 Ledger, S9 Payouts, S11 Audit, S13 Profile. Left sidebar ≥1024px, compact icon rail 768–1023px, bottom nav <768px. Selecting the active destination scrolls to the top.
+- **Back button:** closes modals; goes back one screen; on a section root it leaves the group.
 - **Login expired:** "Please log in again." → S3.
-- **Bottom nav:** not shown on S1, S2, S3.
+- **Navigation shell:** not shown on S1, S2, S3.
 
 Navigation map (copied from PRD 7):
 
@@ -691,7 +691,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 3 | M3 | Contributions | F3 | S7, S8, M1 | T-US7, US8, T-BR4, BR9, T-SEC-11–12 |
 | 4 | M4 | Payouts | F4 | S9, M2, M6 | T-US9, US10, T-BR5, BR7, BR11, T-SEC-13–14 |
 | 5 | M5 | Audit & disputes | F5 | S11, M3 | T-US11–13, T-BR3, BR8, BR10, T-SEC-15–18 |
-| 6 | M6 | Polish | F6, F7, F8 | S13, M4 | T-US14, US15, T-NOTIF-1, T-BR12, T-NFR-1–7 |
+| 6 | M6 | Polish | F6, F7 | S13, M4 | T-US14, T-NOTIF-1, T-NFR-1–7 |
 | 7 | M7 | Test & deploy | All | All | Full suite on clean install, T-E2E, T-REL |
 
 ---
@@ -752,9 +752,9 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-BR1-1 | Database | `supabase/tests/020_rules.test.sql` | Stokvel size 2–200 enforced |
 | T-BR6-1 | Integration | `invite.int.test.ts` | Expired / used / non-reusable invites rejected with exact messages |
 | T-BR13-1 | Integration | `stokvel.int.test.ts` | A user can belong to multiple stokvels |
-| T-S2-1 | Component | `SignUp.test.tsx` | Error "This email already has an account."; offline "No connection." |
+| T-S2-1 | Component | `SignUp.test.tsx` | Error "This email already has an account."; network error "No connection." |
 | T-S3-1 | Component | `LogIn.test.tsx` | "Invalid credentials." / "Please verify email." |
-| T-S4-1 | Component | `MyStokvels.test.tsx` | Empty: "You're not in any stokvel yet. Create one or join with a link." + 2 CTAs; offline cached + staleness |
+| T-S4-1 | Component | `MyStokvels.test.tsx` | Empty: "You're not in any stokvel yet. Create one or join with a link." + 2 CTAs; error "Couldn't load. Try again." |
 | T-S5-1 | Component | `CreateStokvel.test.tsx` | Inline validation; "No connection." |
 | T-S6-1 | Component | `JoinViaInvite.test.tsx` | Expired/used messages; "Couldn't join. Try again." |
 | T-S10-1 | Component | `Members.test.tsx` | Member rows + role badges + join dates; "No members yet. Invite someone." |
@@ -783,7 +783,7 @@ The same ID may be used at two levels when both prove the same criterion.
 - [x] Build S2, S3, S4, S5, S6, S10, S12 and modals M5, M7 to match Stitch designs (§7.3).
 - [x] S2/S3 "Continue with Google" buttons match the updated Stitch prompts (§18 C17).
 - [x] Auth guard in `src/app/(app)/layout.tsx` (§11).
-- [x] Bottom nav shown/hidden per §11; all states per §7.3.
+- [x] Navigation shown/hidden per §11 (bottom nav at <768); desktop shell alignment deferred to Phase 6; all states per §7.3.
 - [x] Design tokens wired into Tailwind/CSS variables (§7.1).
 
 **Step 4: Refactor and full check**
@@ -827,7 +827,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-BR8-1 | Database | `040_rls.test.sql` | audit_log update/delete blocked |
 | T-BR9-1–5 | Database | `020_triggers.test.sql` | Each audited table writes exactly one audit row |
 | T-EDGE-1 | Integration | `contribution.int.test.ts` | Duplicate period → "A contribution for [Member] for [Period] already exists. Edit instead?" |
-| T-S7-1 | Component | `StokvelHome.test.tsx` | Balance, next payout, recent activity, quick actions; loading/error/offline |
+| T-S7-1 | Component | `StokvelHome.test.tsx` | Balance, next payout, recent activity, quick actions; loading/error |
 | T-S8-1 | Component | `Ledger.test.tsx` | Table member × period + totals; empty: "No contributions yet. Record the first one."; success: "Contribution recorded." |
 | T-M1-1 | Component | `RecordContribution.test.tsx` | Form member/amount/period/note; spinner; success toast |
 | T-SEC-11a / 11b | Database + Integration | `040_rls.test.sql`, `contribution.int.test.ts` | Read allow member, deny non-member |
@@ -914,7 +914,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-BR3-1 | Database + Integration | `040_rls.test.sql`, `dispute.int.test.ts` | Non-member cannot raise a dispute |
 | T-BR10-1 | Database + Integration | same | Only organizer can resolve |
 | T-EDGE-2 | Database | `040_rls.test.sql` | Audit tamper attempt blocked (no UI) |
-| T-S11-1 | Component | `AuditLog.test.tsx` | Feed + "No activity yet." + loading/error/offline |
+| T-S11-1 | Component | `AuditLog.test.tsx` | Feed + "No activity yet." + loading/error |
 | T-M3-1 | Component | `RaiseDispute.test.tsx` | subject + description; success toast |
 | T-SEC-15–18a/b | Database + Integration | `040_rls.test.sql`, `audit.int.test.ts` | Allow/deny per Section 9 (SEC18 deny only) |
 
@@ -936,11 +936,11 @@ The same ID may be used at two levels when both prove the same criterion.
 
 ### Phase 6: Polish (M6)
 
-**Goal:** In-app reminders, PDF/CSV export, offline cache with staleness, accessibility and low-data behaviour are complete.
+**Goal:** In-app reminders, PDF/CSV export, desktop-first responsive layout and accessibility are complete.
 
-**Covers:** F6, F7, F8 · Stories US14, US15 + PRD §4.5 notifications · Screen S13 · Modal M4 · Operations OP5, OP23–OP25 · Rule BR12 · PRD 4.5, 8.4, 12, 14.
+**Covers:** F6, F7 · Stories US14 + PRD §4.5 notifications · Screen S13 · Modal M4 · Operations OP5, OP23–OP24 · PRD 4.5, 8.4, 12, 14.
 
-**Starts when:** Phase 5 is complete and the human says "Start Phase 6". All §18 items gating Phase 6 are closed (C6, C11, C12, C13, C17); proceed.
+**Starts when:** Phase 5 is complete and the human says "Start Phase 6". All §18 items gating Phase 6 are closed (C6, C11, C12, C17); proceed.
 
 **Step 1: Write the failing tests first (Red)**
 
@@ -948,21 +948,19 @@ The same ID may be used at two levels when both prove the same criterion.
 | --- | --- | --- | --- |
 | T-NOTIF-1 | Component | `Notifications.test.tsx` | All five PRD 4.5 messages render exactly |
 | T-US14-1 | Component + Integration | `Export.test.tsx`, `export.int.test.ts` | PDF and CSV download of contributions + payouts |
-| T-US15-1 | Component + Integration | `Offline.test.tsx`, `cache.int.test.ts` | First load caches group data; offline shows cached; staleness banner |
-| T-BR12-1 | Unit + Component | `staleness.test.ts`, `Offline.test.tsx` | Cache >24h marked stale with "Showing cached data from [time]. May be out of date." |
 | T-S13-1 | Component | `ProfileSettings.test.tsx` | Name, phone, export, log out, delete account; "Couldn't save." / "No connection." / "Saved." |
 | T-M4-1 | Component | `DeleteAccount.test.tsx` | Confirm modal; success toast |
 | T-NFR-1 | Unit | `a11y.test.tsx` | WCAG AA contrast, ≥44px targets, labels, body ≥14px |
 | T-NFR-2 | Unit | `motion.test.ts` | `prefers-reduced-motion` respected |
-| T-NFR-3 | E2E | `e2e/responsive.spec.ts` | Mobile and desktop layouts match designs |
+| T-NFR-3 | E2E | `e2e/responsive.spec.ts` | Layouts at 320/768/1024/1440 match the responsive exports: sidebar ≥1024, rail 768–1023, bottom nav <768 |
 
-**Step 2: Backend (Green)** — OP23–OP25 implemented; notification rows for all five triggers; no new server library without asking.
+**Step 2: Backend (Green)** — OP23–OP24 implemented; notification rows for all five triggers; no new server library without asking.
 
-**Step 3: Frontend (Green)** — Build S13 and M4 to match Stitch designs; Workbox read-only offline cache from §18 C13 decision; export UI from §18 C6 decision. Export stays client-side — no Supabase Storage bucket (§18 C17 closed).
+**Step 3: Frontend (Green)** — Build S13 and M4 to match Stitch designs; export UI from §18 C6 decision. Export stays client-side — no Supabase Storage bucket (§18 C17 closed). No Workbox, service worker or offline states.
 
 **Step 4: Refactor and full check** — `npm run check` passes with Phases 1–5.
 
-**Step 5: Manual checks (human)** — Offline with and without cache; stale banner after 24h; export opens as PDF/CSV; keyboard and screen-reader pass on S1–S13.
+**Step 5: Manual checks (human)** — Export opens as PDF/CSV; keyboard and screen-reader pass on S1–S13; layout verified at 320/768/1024/1440 in desktop and phone browsers.
 
 **Definition of Done** — every Step 1 test passes; earlier tests pass; manual checks ticked; Progress log updated.
 
@@ -992,9 +990,9 @@ The same ID may be used at two levels when both prove the same criterion.
 | T-DB-6 | Database | `supabase/tests/040_rls.test.sql` | Every `public` table has RLS enabled |
 | T-NFR-4 | Unit | `src/lib/__tests__/secrets.test.ts` | Secret scan finds no keys |
 | T-REL-1 | Manual | — | Clean install: `npm ci` + full check passes |
-| T-REL-2 | Manual | — | Hosted live URL works on Android Chrome and desktop |
+| T-REL-2 | Manual | — | Hosted live URL works in current desktop browsers and at the 320/768/1024/1440 phone/tablet viewports |
 
-**Step 2: Backend (Green)** — Hosted Supabase project created; migrations applied; seed loaded; RLS verified.
+**Step 2: Backend (Green)** — Hosted Supabase project created; migrations 0001–0004 and 0006 applied; the local-only demo seed (0005) is never applied to production; RLS verified.
 
 **Step 3: Frontend (Green)** — Deploy to Vercel; verify live URL; update README live link and test logins.
 
@@ -1030,7 +1028,6 @@ The same ID may be used at two levels when both prove the same criterion.
 | F5 / US11–13 | Audit & disputes | 8.5, 10 OP20–22, 13 Phase 5 | 5 | T-US11–13 |
 | F6 / PRD 4.5 | Reminders | 4.5, 10 OP24, 13 Phase 6 | 6 | T-NOTIF-1 |
 | F7 / US14 | Export | 10 OP23, 13 Phase 6 | 6 | T-US14-1 |
-| F8 / US15 | Offline | 10 OP25, 13 Phase 6 | 6 | T-US15-1 |
 | BR1 | 2–200 members | 8.5, 9 SEC7 | 2 | T-BR1-1 |
 | BR2 | Organizer-only writes | 9 SEC5, 7, 8, 10, 12, 14, 17 | 2–5 | T-SEC-5b, 7b, 8b, 10b, 12b, 14b, 17b |
 | BR3 | Dispute in own group | 9 SEC16 | 5 | T-BR3-1 |
@@ -1042,12 +1039,11 @@ The same ID may be used at two levels when both prove the same criterion.
 | BR9 | Audit by triggers only | 8.5, 10 OP16–21 | 3–5 | T-BR9-1–5 |
 | BR10 | Organizer resolves disputes | 9 SEC17 | 5 | T-BR10-1 |
 | BR11 | Rotation order | 8.1, 10 OP15 | 2, 4 | T-US9-1, T-BR11-1 |
-| BR12 | 24h staleness | 10 OP25 | 6 | T-BR12-1 |
 | BR13 | Multiple stokvels | 8.1, 9 SEC3 | 2 | T-BR13-1 |
 | PRD 2.4 | Roles & Platform Admin | 3.4, 8.1, 9 SEC2/SEC21 | 2, 7 | T-SEC-2b, T-SEC-21a/b |
 | PRD 4.5 | Notifications | 10 OP24 | 4–6 | T-NOTIF-1 |
 | PRD 5 | Accounts & sign-in | 6, 10 OP1–6, 13 Phase 2 | 2 | T-AUTH-1, T-AUTH-2, T-US1–3 |
-| PRD 6.2 | Edge cases | 10 OP11, 16, 18, 25; 13 phases | 2–6 | T-EDGE-1–2 |
+| PRD 6.2 | Edge cases | 10 OP11, 16, 18; 13 phases | 2–6 | T-EDGE-1–2 |
 | PRD 7 | Flows & nav | 11 | 2–7 | T-NAV-1–5 |
 | PRD 8.1–8.3 | Screens, states, components | 7.1–7.3 | All | T-C-1–11, T-S…, T-M… |
 | PRD 8.4 | Accessibility | 7.1, Phase 6 | 6 | T-NFR-1–3 |
@@ -1082,10 +1078,9 @@ The same ID may be used at two levels when both prove the same criterion.
 - [ ] Resolve dispute works; only organizer can resolve (T-US13-1, T-BR10-1).
 - [ ] All five in-app notifications show exact PRD 4.5 text (T-NOTIF-1).
 - [ ] PDF/CSV export of contributions + payouts works (T-US14-1).
-- [ ] Workbox read-only cache shows cached data offline; >24h cache shows staleness banner; no offline writes (T-US15-1, T-BR12-1).
 - [ ] All screens S1–S13 and modals M1–M7 implement every state in §7.3.
 - [ ] Design tokens match PRD §9; screens match Stitch designs.
-- [ ] Responsive: Android Chrome first, desktop supported (T-NFR-3).
+- [ ] Responsive desktop-first web app at 320/768/1024/1440: sidebar ≥1024, rail 768–1023, bottom nav <768 (T-NFR-3).
 - [ ] WCAG AA contrast, ≥44px targets, labels, body ≥14px, reduced motion (T-NFR-1–2).
 - [ ] Every table has RLS enabled (T-DB-6).
 - [ ] CI runs lint, typecheck, tests and build on every PR.
@@ -1099,7 +1094,7 @@ The same ID may be used at two levels when both prove the same criterion.
 - [ ] `.env.local` values set locally; `.env*` ignored; no secrets in Git (T-NFR-4).
 - [ ] Vercel deployed; live URL in README and `docs/CHECKIN_SUBMISSION.md`.
 - [ ] Test logins documented in README (from `SEED_TEST_PASSWORD`).
-- [ ] Stitch design exports (or links) present in `docs/designs/`.
+- [ ] Desktop-width responsive Stitch exports (or the project link) present in `docs/designs/`; no PWA/offline assets.
 - [ ] Logo kit present at `docs/brand/kit/`; wordmark outlined to paths before final delivery (PRD 9.5).
 - [ ] Full check passes on clean install (T-REL-1).
 - [ ] All sections of `docs/CHECKIN_SUBMISSION.md` completed for final submission.
@@ -1123,6 +1118,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-23 | — | Human closed the five remaining plan clarifications: C2 `is_admin` flag; C12 English-only i18n-ready; C13 Workbox read-only cache; C15 service-role local-only; C17 OAuth added to Phase 2 with client-side export. PRD v0.6 / plan v1.6; S2/S3 Stitch prompts updated | Cross-doc ID and ref checks pass | — |
 | 2026-11-23 | — | Human chose generated `example.test` rosters for C3; C16 group names/counts and C14 labels/dates recorded in §8.7; stale "Open" references and all phase-gate wording cleared; plan v1.7 | No §18 clarification remains Open | — |
 | 2026-11-24 | 2 | Implemented Phase 2: accounts, auth, group creation, member management, invite links, RLS policies, migrations 0001–0006, component & integration suites | lint, typecheck, 59 unit/component tests, build pass | Phase 2: Groups, RLS and auth |
+| 2026-11-25 | — | Web-first refactor (Phase A): PRD v0.7 / plan v1.8, ADR-0001, responsive nav shell, PWA/offline deferred, stale `STITCH_PROMPTS.md` reference replaced | Cross-document ID/string audit; docs-only | `docs/web-first-v1` (issue #48) |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
 | — | 5 | Not started | — | — |
@@ -1147,7 +1143,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | C10 | Where exactly the PRD §4.5 banners should appear. Their current "Opens" targets are S9, S7, S5, S13, S13 — confirm or correct S5 before building. | 7.3, 13 Phases 4–5 | Phase 4 | Closed — payout due S9, overdue S7, new member joined S4 (corrected from S5), disputes S13/S13; PRD §4.5 updated (Stitch Q12) |
 | C11 | Which Lucide glyphs to use for bottom nav tabs and empty-state icons (style/size specified, glyphs not). | 7.1, 7.2 | Phase 2 | Closed — Lucide outlines: Home, ReceiptText, CalendarDays, ScrollText, User; empty states Inbox, Users, CalendarPlus, Receipt, ShieldCheck (Stitch Q13) |
 | C12 | Vernacular languages in v1? | 3.3, 4.1 | None (closed) | Closed — English only in v1 with an i18n-ready string structure; all 12 South African official languages are a future feature with a separate i18n budget. No new dependency; no Stitch regeneration |
-| C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 4.1, 10 OP25, 13 Phase 6 | None (closed) | Closed — Workbox service worker, read-only cache with staleness banner, no offline writes. Human approval for the library is recorded in §4.1; wrong C11 refs fixed in OP25 and Phase 6 |
+| C13 | Offline cache strategy: Workbox service worker vs manual IndexedDB. | 4.1, 10 OP25, 13 Phase 6 | None (superseded) | Superseded by ADR-0001 — offline caching, installable PWA and native apps are deferred to a later mobile rollout; no offline cache in v1. |
 | C14 | Exact sample contribution amounts, period labels and payout dates for S8/S9 tables, M1/M2 and seed data. | 8.1, 8.7 | Phase 3 | Closed — R250 weekly / R500 monthly; 2026-W47, 2026-W48, Nov 2026; payout dates 2026-12-05, 2026-12-12 (Stitch Q2) |
 | C15 | May the service-role key be used in integration/seed scripts, or should those use an admin RPC? | 6, 9 SEC20, 13 Phase 2 | None (closed) | Closed — local server-side seed/integration scripts only via `.env.local`; never client, CI or committed test files. CI stays secret-free; `SEED_TEST_PASSWORD` added to `.env.example` |
 | C16 | Exact stokvel names for the sample cards in S4/S6 (PRD gives member counts and locations only). | 8.7 | Phase 2 | Closed — "Soweto Savers" (15), "Soweto Uplift" (28), "Tembisa Together" (20) (Stitch Q3) |
@@ -1161,6 +1157,7 @@ If a clarification marked **Blocking** is still Open when you reach that phase, 
 
 | Version | Date | Section(s) changed | What changed |
 | --- | --- | --- | --- |
+| v1.8 | 2026-11-25 | 0, 1, 2 rule 8, 3.1–3.3, 4.1, 7.2–7.3, 10, 11, 13 Phase 6/7, 14, 15, 16, 17, 18 C13, 19 | Web-first refactor: v1 is a responsive, desktop-first web application (sidebar ≥1024, rail 768–1023, bottom nav <768); removed Workbox/offline (F8, US15, BR12, OP25, T-US15-1, T-BR12-1), replaced the deleted `STITCH_PROMPTS.md` reference, corrected stale phase status and production-seed wording, and deferred native mobile/PWA to ADR-0001. PRD bumped to v0.7. |
 | v1.7 | 2026-11-23 | 0, 8.1, 8.7, 13 Phases 2–5, 17, 18 C3, 19 | Closed C3 with generated `example.test` rosters, C16 group names/counts and C14 period labels/payout dates; replaced stale "Open" references for C8/C14/C16 and cleared all phase-gate wording; no §18 item remains Open. | 0, 3.3, 3.4, 4.1, 6, 7.3, 8.1, 8.2, 9 SEC2/SEC20/SEC21, 10 OP1–2/OP4/OP9/OP25, 13 Phases 2/6, 14, 15, 17, 18 C2/C12/C13/C15/C17, 19 | Closed the final five clarifications: `is_admin` flag with no admin screen; English-only i18n-ready with all SA official languages as a future feature; Workbox read-only cache; service-role local-only; Google OAuth added to Phase 2 while Storage stays client-side. Added T-AUTH-2 and T-SEC-21a/b, expanded Phase 2 scope/gates, fixed wrong C11 refs and stale OP4/OP9 error copy, and corrected C17 section refs. PRD bumped to v0.6. |
 | v1.5 | 2026-11-23 | 0, 13 Phase 2, 17, 19 | Added the standalone in-app `/privacy` POPIA policy page and its test to close Stitch decision 4; Phase 2 now notes the S2 link wiring still to do; PRD bumped to v0.5. |
 | v1.4 | 2026-11-23 | 0, 17, 18 C4–C11/C14/C16, 19 | Recorded all 14 human-confirmed Stitch design answers and closed the 10 matching §18 clarifications (C4, C5, C6, C7, C8, C9, C10, C11, C14, C16) with pointers to `docs/designs/STITCH_PROMPTS.md`; PRD §4.5 notification target corrected to S4; PRD bumped to v0.4. |

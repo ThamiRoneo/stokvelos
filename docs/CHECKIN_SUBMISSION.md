@@ -105,11 +105,11 @@ See `BUSINESS.md` and `docs/PRD.md`. Summary:
 
 - **Problem:** Stokvels move ~R50bn+/yr but run on WhatsApp/notebooks; disputes over contributions/payouts collapse groups.
 - **Customer:** Treasurer/organizer (payer) + members (free); future B2B to stokvel associations/burial societies.
-- **Solution:** Shared, tamper-evident ledger + payout scheduler (web PWA, low data); no custody of funds in v1.
+- **Solution:** Shared, tamper-evident ledger + payout scheduler (responsive, desktop-first web application, low data); no custody of funds in v1. Native mobile/PWA/offline support is a later rollout.
 - **Impact:** On-time payouts ≥ 90%; disputes down ≥ 50%; retention ≥ 85%; treasurer admin time down ≥ 60%.
 - **Money:** Freemium (≤10 members free) → Premium R59–R149/mo per stokvel + optional 1% transaction fee (v2) + B2B licensing.
 - **GTM first 100:** WhatsApp groups, NASASA/association partnerships, church groups, community radio, spaza boards, referral loop.
-- **Competition:** WhatsApp+Excel, Stokfella (weak UX), bank stokvel products. Win on transparency/audit trail, low-data PWA, WhatsApp invites, vernacular UI.
+- **Competition:** WhatsApp+Excel, Stokfella (weak UX), bank stokvel products. Win on transparency/audit trail, a responsive web app with no install, WhatsApp invites, vernacular UI.
 - **Must features:** F1 Accounts & roles; F2 Stokvel groups; F3 Contributions ledger; F4 Payout schedule & tracking; F5 Audit & dispute log.
 - **Roles:** Organizer (Treasurer), Member, Platform Admin.
 - **Stack:** Next.js + Supabase (Postgres + RLS) + Tailwind/shadcn + Vercel; TDD + CI.
