@@ -18,7 +18,7 @@ Stokvels (rotating savings & credit associations) are a cornerstone of South Afr
 
 ## 3. The solution
 
-StokvelOS is a mobile-friendly web app (PWA) that gives a stokvel a shared, tamper-evident ledger: create a group, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail — so every member can see where their money is, anytime, on low data.
+StokvelOS is a responsive, desktop-first web application that gives a stokvel a shared, tamper-evident ledger: create a group, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail — so every member can see where their money is, anytime, on desktop or phone, without a heavy install. Native mobile apps and offline/PWA support are a later rollout (ADR-0001).
 
 **One sentence:** StokvelOS is the transparent ledger and payout scheduler for stokvels, so members always know where their money is.
 
@@ -56,7 +56,7 @@ StokvelOS is a mobile-friendly web app (PWA) that gives a stokvel a shared, tamp
 | Stokfella and similar apps | First-mover, SA-focused | Weak UX, low trust, low adoption, heavy install friction |
 | Bank stokvel products | Trust, regulation | Rigid, fees, not group-controlled, poor UX |
 
-**Why we win:** transparency/audit trail visible to all members, low-data PWA (no install), WhatsApp share links for invites, vernacular-friendly UI, treasurer-first onboarding, and a free tier that converts via trust.
+**Why we win:** transparency/audit trail visible to all members, a responsive web app that needs no install, WhatsApp share links for invites, vernacular-friendly UI, treasurer-first onboarding, and a free tier that converts via trust.
 
 ## 8. Why us (Thami Sithole / ThamiSithole)
 
@@ -69,7 +69,7 @@ StokvelOS is a mobile-friendly web app (PWA) that gives a stokvel a shared, tamp
 | Risk | Mitigation |
 |---|---|
 | Treasurers won't pay / prefer free WhatsApp | Free tier + visible trust/audit value; charge only for reminders/reports |
-| Low smartphone/data penetration in some groups | PWA, low-data design, offline cache, WhatsApp share (no install) |
+| Low smartphone/data penetration in some groups | Light responsive web app, low-data design, WhatsApp share (no install); offline support deferred to the later mobile rollout |
 | Trust/safety (fraud via app) | Immutable audit log, role-based permissions, organizer approval for payouts |
 | Regulatory (financial services) | Position as record-keeping tool, not a bank; no custody of funds in v1 |
 | Adoption/network effects | Start with 1–2 friendly stokvels; iterate on real feedback |

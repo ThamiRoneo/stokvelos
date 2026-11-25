@@ -35,7 +35,7 @@ For local development only, `supabase/migrations/0005_seed.sql` creates example 
 
 ## Architecture
 
-Mobile-first PWA. Next.js App Router with server components; Supabase via `@supabase/ssr` helpers (`src/lib/supabase`). Data access protected by Row Level Security. Audit log written only by DB triggers.
+Responsive, desktop-first web application (no installable PWA or native app in v1). Next.js App Router with server components; Supabase via `@supabase/ssr` helpers (`src/lib/supabase`). Data access protected by Row Level Security. Audit log written only by DB triggers. See [ADR-0001](docs/decisions/ADR-0001-web-first-v1.md) for the platform decision.
 
 See [`docs/PRD.md`](docs/PRD.md) and [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md).
 

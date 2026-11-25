@@ -12,13 +12,14 @@ Oct 27, 2026 · @Melsoft
 | Facilitator / reviewer | Mnelisi Maswanganyi |
 | Link to your original app idea | BUSINESS.md in the repository |
 | GitHub repository | https://github.com/ThamiSithole/stokvelos |
-| Version | v0.6 |
+| Version | v0.7 |
 | Status | Draft |
 
 ### Change log
 
 | Version | Date | Section(s) changed | What changed | Regenerated? (screens / MASTER.md / none) |
 |---|---|---|---|---|
+| v0.7 | 2026-11-25 | 1.4, 1.5, 3.2, 4.1–4.4, 5, 6.2, 8.1–8.4, 12–15, Document details | Made v1 explicitly a responsive, desktop-first web application; dropped F8/PWA/offline and their stories, rules, states and glossary term; added a deferred native-mobile/PWA rollout; updated navigation shell and exact acceptance wording | Screens to be re-exported from the external Stitch project (Phase B) |
 | v0.6 | 2026-11-23 | 2.4, 2.5, 5, 8.1, 11, 14, Document details | Closed all five plan-only clarifications: Platform Admin is an `is_admin` boolean with no v1 screen (C2); English-only i18n-ready with all 12 SA official languages as a future feature (C12); Workbox read-only offline cache (C13); service-role key local-scripts-only (C15); Google OAuth included in v1 Phase 2 while Storage stays client-side (C17) | S2, S3 (Google button) |
 | v0.5 | 2026-11-23 | 8.1, 12, Document details | Added the resolved S2 privacy-link target: in-app `/privacy` POPIA policy page; §12 now records the policy location and indefinite anonymised audit retention | None |
 | v0.4 | 2026-11-23 | 4.5, Document details | Human-confirmed Stitch design answers: notification "New member joined" target corrected from S5 to S4 (C10); all answers recorded in `docs/designs/STITCH_PROMPTS.md` "Resolved design decisions" | None |
@@ -34,9 +35,9 @@ Oct 27, 2026 · @Melsoft
 
 **1.3 Problem statement:** Stokvels move an estimated R50bn+ per year for millions of low- and middle-income South African households, but they run on WhatsApp groups and memory. Treasurers track contributions in notebooks or Excel, payouts are scheduled by hand, and there is no shared record. Disputes over who paid, how much, and who is next in the rotation are frequent and erode trust; a single missed or late payout can collapse a group and cost members savings earmarked for school fees, groceries or funeral costs.
 
-**1.4 Solution:** StokvelOS is a mobile-first, low-data web app (PWA) that gives a stokvel a shared ledger: create a group, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail. No money is held by the app in v1 — it is a record-keeping and trust tool, not a bank.
+**1.4 Solution:** StokvelOS is a responsive, desktop-first web application that gives a stokvel a shared ledger: create a group, invite members, record contributions, schedule and track payouts, and keep an immutable audit trail. It stays light on data; no money is held by the app in v1 — it is a record-keeping and trust tool, not a bank.
 
-**1.5 Platform:** Responsive web app (PWA), mobile-first. Android Chrome first; desktop supported. No native app in v1.
+**1.5 Platform:** Responsive web application in the browser, desktop-first at 320 / 768 / 1024 / 1440 breakpoints: left sidebar at ≥1024px, compact icon rail at 768–1023px, bottom nav below 768px. No native iOS/Android app, no installable PWA, no service worker and no offline cache in v1 — these are deferred to a later mobile rollout (§3.2, §4.3; ADR-0001).
 
 **1.6 Vision:** To make transparent, tamper-evident record-keeping the default for stokvels across South Africa's most trust-constrained communities.
 
@@ -55,7 +56,7 @@ Oct 27, 2026 · @Melsoft
 
 ## 2. Users, personas and roles
 
-**2.1 Primary user:** Stokvel treasurer/organizer, aged 25–55, managing 1–5 groups of 10–50 members. Tech comfort: Medium. Android phone on prepaid data; uses WhatsApp daily. Often female; community leader.
+**2.1 Primary user:** Stokvel treasurer/organizer, aged 25–55, managing 1–5 groups of 10–50 members. Tech comfort: Medium. Uses a desktop browser to administer groups and an Android phone on prepaid data; uses WhatsApp daily. Often female; community leader.
 
 **2.2 Secondary user:** Stokvel members wanting transparency on their own contributions and next payout. Tech comfort: Low–Medium.
 
@@ -66,7 +67,7 @@ Oct 27, 2026 · @Melsoft
 | Name and age | Nomsa Dlamini, 42 | Sipho Nkosi, 30 |
 | Role | Organizer/Treasurer | Member |
 | Situation | Runs 2 stokvels (15 + 28 members) in Soweto; teacher by day | Member of a 20-person burial stokvel in Tembisa; works in retail |
-| Device/connectivity | Android, prepaid data, WhatsApp | Android, prepaid data, WhatsApp |
+| Device/connectivity | Desktop + Android, prepaid data, WhatsApp | Desktop or Android, prepaid data, WhatsApp |
 | Tech comfort | Medium | Low–Medium |
 | Language(s) | English, isiZulu, Setswana, Sesotho | English, isiZulu, Setswana, Sesotho |
 | Goal | Stop disputes, save admin time, keep members | Know what he has paid and when his payout is due |
@@ -100,7 +101,7 @@ Oct 27, 2026 · @Melsoft
 
 - Holding or moving money: no custody of funds in v1 (record-keeping only; payouts recorded, not executed).
 - Full banking/interest/lending products.
-- Native mobile apps (PWA first).
+- Native mobile apps (iOS/Android), installable PWA, service worker and offline caching — deferred to a later mobile rollout (ADR-0001).
 - Multi-currency or cross-border stokvels.
 - Automated bank reconciliation / payment gateway payouts (v2).
 - Push notifications at scale (in-app + WhatsApp share links in v1).
@@ -118,11 +119,12 @@ Oct 27, 2026 · @Melsoft
 | F5 | Audit & dispute log | View immutable change log, raise dispute, resolve dispute (organizer) | Must | G1,G3 | US11,US12,US13 | S11,M3 |
 | F6 | Reminders & notifications | In-app reminders for upcoming payouts/late contributions | Should | G2,G4 | §4.5 (Notifications) | S7,S9,S13 |
 | F7 | Export & reports | Export group ledger to PDF/CSV | Should | G4 | US14 | S7,S13 |
-| F8 | Offline & low-data | Cache group data offline, show cached when offline, staleness indicator | Should | G5 | US15 | All |
 
-**4.2 MVP definition:** The smallest version is StokvelOS with F1–F5 (accounts, groups, contributions, payouts, audit/disputes). F6–F8 are polish.
+Offline caching, installable PWA support and native mobile apps are deferred to a later mobile rollout (ADR-0001); they are not in v1.
 
-**4.3 Future features:** Payment gateway payouts, bank reconciliation, multi-group dashboards, stokvel association white-label, push notifications, iOS app.
+**4.2 MVP definition:** The smallest version is StokvelOS with F1–F5 (accounts, groups, contributions, payouts, audit/disputes). F6–F7 are polish.
+
+**4.3 Future features:** Payment gateway payouts, bank reconciliation, multi-group dashboards, stokvel association white-label, push notifications, and a later mobile rollout (native iOS/Android apps and PWA/offline support — ADR-0001).
 
 **4.4 Business rules**
 
@@ -139,7 +141,6 @@ Oct 27, 2026 · @Melsoft
 | BR9 | Audit log entries are written only by database triggers, never by app code. | F5 |
 | BR10 | A dispute can only be resolved by the organizer of that stokvel. | F5 |
 | BR11 | Payout schedule order is set by organizer; defaults to join order. | F4 |
-| BR12 | Cached data older than 24 hours is marked stale. | F8 |
 | BR13 | A user may belong to multiple stokvels. | F1,F2 |
 
 **4.5 Notifications**
@@ -212,9 +213,6 @@ T-US13-1: Given resolution note, dispute marked resolved with resolver + timesta
 **US14:** As an organizer, I want to export the ledger.  
 T-US14-1: PDF/CSV download of contributions + payouts for the stokvel.
 
-**US15:** As a user, I want to use the app on low data/offline.  
-T-US15-1: After first load, group data cached; offline shows cached data with staleness indicator.
-
 **6.2 Edge cases**
 
 | Situation | What the user sees | What the app does |
@@ -224,8 +222,8 @@ T-US15-1: After first load, group data cached; offline shows cached data with st
 | Duplicate contribution for same period | "A contribution for [Member] for [Period] already exists. Edit instead?" | Prevent duplicate; offer edit |
 | Member with scheduled unpaid payout removed | "Cannot remove: [Member] has an unpaid payout. Reassign first." | Block removal (BR7) |
 | Contribution amount invalid | "Amount must be between R0.01 and R1,000,000." | Block save (BR4) |
-| Offline, no cache | "No cached data. Connect to the internet to load." | Show empty state |
-| Stale cache (>24h) | "Showing cached data from [time]. May be out of date." | Show staleness banner (BR12) |
+| Network request fails | "No connection." | Show error state; no cached-data fallback in v1 |
+| Slow response / timeout | "Couldn't load. Try again." | Show retry action |
 | Non-organizer tries organizer action | "Only the organizer can do this." | 403 / RLS blocks |
 | Audit log tamper attempt | N/A (no UI) | DB blocks update/delete (BR8) |
 
@@ -294,22 +292,22 @@ flowchart TD
 
 **8.2 Key UI states per important screen**
 
-| Screen | Normal | Empty | Loading | Error | Offline | Success |
-|---|---|---|---|---|---|---|
-| S1 Welcome | Logo, pitch, Sign up + Log in | N/A | N/A | N/A | N/A | N/A |
-| S2 Sign Up | Form valid → button enabled | N/A | Spinner on button | "This email already has an account." red border on password rules | "No connection." | Created → S3 banner |
-| S3 Log In | Form | N/A | Spinner | "Invalid credentials." / "Please verify email." | "No connection." | Verified → S4 |
-| S4 My Stokvels | List of stokvel cards | "You're not in any stokvel yet. Create one or join with a link." + 2 CTAs | Spinner | "Couldn't load. Try again." | Cached list + staleness banner | N/A |
-| S5 Create Stokvel | Form | N/A | Spinner on Create | Validation errors inline | "No connection." | Created → S7 |
-| S6 Join via Invite | Preview card + Join | "Invite expired/used" | Spinner | "Couldn't join. Try again." | "No connection." | Joined → S7 |
-| S7 Stokvel Home | Summary cards | N/A (group exists) | Spinner | "Couldn't load. Try again." | Cached summary + staleness | N/A |
-| S8 Contributions | Table + totals | "No contributions yet. Record the first one." | Spinner | "Couldn't load. Try again." | Cached ledger + staleness | "Contribution recorded." |
-| S9 Payouts | Rotation + upcoming + history | "No payouts scheduled yet." | Spinner | "Couldn't load. Try again." | Cached + staleness | "Payout scheduled/marked paid." |
-| S10 Members | Member list | "No members yet. Invite someone." | Spinner | "Couldn't load. Try again." | Cached + staleness | "Member joined/removed." |
-| S11 Audit Log | Chronological feed | "No activity yet." | Spinner | "Couldn't load. Try again." | Cached + staleness | N/A |
-| S12 Settings | Form | N/A | Spinner on Save | Validation errors | "No connection." | "Saved." |
-| S13 Profile | Settings | N/A | Spinner on Save | "Couldn't save." | "No connection." | "Saved." |
-| M1–M7 | Forms | N/A | Spinner on submit | Inline errors | "No connection." | Success toast → close |
+| Screen | Normal | Empty | Loading | Error | Success |
+|---|---|---|---|---|---|
+| S1 Welcome | Logo, pitch, Sign up + Log in | N/A | N/A | N/A | N/A |
+| S2 Sign Up | Form valid → button enabled | N/A | Spinner on button | "This email already has an account." / "No connection."; red border on password rules | Created → S3 banner |
+| S3 Log In | Form | N/A | Spinner | "Invalid credentials." / "Please verify email." / "No connection." | Verified → S4 |
+| S4 My Stokvels | List of stokvel cards | "You're not in any stokvel yet. Create one or join with a link." + 2 CTAs | Spinner | "Couldn't load. Try again." | N/A |
+| S5 Create Stokvel | Form | N/A | Spinner on Create | Validation errors inline / "No connection." | Created → S7 |
+| S6 Join via Invite | Preview card + Join | "Invite expired/used" | Spinner | "Couldn't join. Try again." / "No connection." | Joined → S7 |
+| S7 Stokvel Home | Summary cards | N/A (group exists) | Spinner | "Couldn't load. Try again." | N/A |
+| S8 Contributions | Table + totals | "No contributions yet. Record the first one." | Spinner | "Couldn't load. Try again." | "Contribution recorded." |
+| S9 Payouts | Rotation + upcoming + history | "No payouts scheduled yet." | Spinner | "Couldn't load. Try again." | "Payout scheduled/marked paid." |
+| S10 Members | Member list | "No members yet. Invite someone." | Spinner | "Couldn't load. Try again." | "Member joined/removed." |
+| S11 Audit Log | Chronological feed | "No activity yet." | Spinner | "Couldn't load. Try again." | N/A |
+| S12 Settings | Form | N/A | Spinner on Save | Validation errors / "No connection." | "Saved." |
+| S13 Profile | Settings | N/A | Spinner on Save | "Couldn't save." / "No connection." | "Saved." |
+| M1–M7 | Forms | N/A | Spinner on submit | Inline errors / "No connection." | Success toast → close |
 
 **8.3 Shared components**
 
@@ -320,12 +318,12 @@ flowchart TD
 | Card | Stokvel card, stat card, member row | S4,S7,S10 |
 | Table | Contributions (member × period) | S8 |
 | Badge | Role (organizer/member), status (paid/scheduled/overdue) | S9,S10 |
-| Banner | Alert, info, error, success, staleness | All |
+| Banner | Alert, info, error, success | All |
 | Modal/Dialog | Form modal, confirm modal | M1–M7 |
 | Empty state | Icon + message + CTA | S4,S8,S9,S10,S11 |
 | Spinner | Small inline, large full-screen | All |
 | Top app bar | Title, back, optional action | All detail screens |
-| Bottom nav | 5 tabs: Home, Ledger, Payouts, Audit, Profile | S4,S7,S8,S9,S10,S11,S13 |
+| App nav | Sidebar ≥1024px, compact icon rail 768–1023px, bottom nav <768px; 5 destinations: Home, Ledger, Payouts, Audit, Profile | S4,S7,S8,S9,S10,S11,S13 |
 
 **8.4 Accessibility**
 
@@ -333,7 +331,7 @@ flowchart TD
 - Tappable targets ≥ 44×44px.
 - Labels on all inputs; error messages associated.
 - Body text minimum 14px.
-- Low-data: minimal images, cached data, offline support, no heavy animations.
+- Low-data: minimal images and no heavy animations; no cached/offline fallback in v1.
 - Respect `prefers-reduced-motion`.
 
 ## 9. Design values
@@ -426,7 +424,7 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 | Item | Answer |
 |---|---|
 | Data collected | Name, phone, email, stokvel membership, contributions, payouts, disputes |
-| Permissions | None required in v1 (web/PWA) |
+| Permissions | None required in v1 (browser web app; no install or device permissions) |
 | Security | Supabase RLS on every table, password hashing, data minimisation, audit log immutable |
 | Privacy | POPIA policy published in-app at `/privacy`; age gate 18+, delete account supported (profile removed; audit log retained anonymised indefinitely), no custody of funds |
 | Financial regulation | Positioned as record-keeping tool, not a bank; no money held or moved in v1 |
@@ -439,10 +437,10 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 - M3 Contributions ledger + member statements
 - M4 Payouts (rotation, schedule, mark paid)
 - M5 Audit log + disputes
-- M6 Polish (offline, export, reminders, a11y, responsive)
+- M6 Polish (reminders, export, responsive web layout, a11y)
 - M7 Test, deploy, README, Loom
 
-**MVP cut:** Must have F1–F5. F6–F8 are polish (do if time).
+**MVP cut:** Must have F1–F5. F6–F7 are polish (do if time).
 
 ## 14. Testing, acceptance and open questions
 
@@ -452,13 +450,13 @@ The chosen logo concept is **R2-B "Refined ledger"** — three bold ruled ledger
 - Record contributions; ledger + member statement correct.
 - Schedule rotation, schedule payout, mark paid; audit log entry created.
 - Raise + resolve dispute; audit log immutable.
-- Responsive (mobile + desktop); low-data; no placeholder screens.
+- Responsive desktop-first web app at 320/768/1024/1440 (sidebar ≥1024, rail 768–1023, bottom nav <768); low-data; no placeholder screens.
 - CI runs lint, typecheck, tests, build on every PR.
 
 **Open questions:** (tracked in Section 18 of the implementation plan)
 
 - Payment gateway for transaction fees (v2) — PayFast vs Yoco. Deferred with payment-gateway payouts (implementation plan §3.3); no v1 decision needed.
-- Offline cache strategy — Closed (C13): Workbox service worker with a read-only cache and staleness banner; no offline writes.
+- Mobile rollout (native apps / PWA / offline cache) — Deferred (ADR-0001): not in v1; the former C13 Workbox decision is superseded. No open question for v1.
 - Vernacular languages — Closed (C12): English only in v1 with an i18n-ready string structure. All 12 South African official languages are a future feature, subject to a separate i18n budget.
 - Where the five §4.5 notification banners appear — Closed (C10): S9, S7, S4, S13, S13.
 - How the Platform Admin role is stored — Closed (C2): an `is_admin` boolean on `profiles`; no moderation screen in v1.
@@ -479,7 +477,7 @@ Full clarification register: implementation plan §18 (C1–C17). Do not guess a
 | Audit log | Immutable record of changes |
 | Dispute | Member-raised question about a contribution/payout |
 | RLS | Row-Level Security (Supabase/Postgres permission rules) |
-| PWA | Progressive Web App |
+| Mobile rollout | Deferred phase for native iOS/Android apps, installable PWA and offline support (ADR-0001) |
 
 ## 16. Appendix
 
