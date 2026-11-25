@@ -1,6 +1,6 @@
 -- T-BR1-1, T-BR4-1, T-BR5-1, T-BR6-1, T-BR7-1, T-BR8-1, T-BR9-1..3.
 begin;
-select plan(13);
+select plan(14);
 
 -- Isolated users for rule tests. Password hash is a literal: Auth is never used here.
 insert into auth.users
@@ -81,6 +81,18 @@ select throws_like(
       and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
   '%between R0.01 and R1,000,000%',
   'T-BR4-1 contribution amount must be positive'
+);
+
+select throws_like(
+  $$insert into public.contributions
+    (stokvel_id, member_id, amount, period_label, recorded_by)
+    select 'bbbbbbbb-0000-0000-0000-000000000002', m.id, 1000000.01, '2026-W49',
+           '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000002'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  '%between R0.01 and R1,000,000%',
+  'T-BR4-1 contribution amount above R1,000,000 rejected'
 );
 
 select throws_like(

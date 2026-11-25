@@ -43,6 +43,12 @@ export const MESSAGES = {
   amountRange: "Amount must be between R0.01 and R1,000,000.",
   frequencyRequired: "Choose weekly or monthly.",
 
+  // Contributions (BR4, OP16, OP17, S7/S8)
+  noContributions: "No contributions yet. Record the first one.",
+  contributionRecorded: "Contribution recorded.",
+  duplicateContribution: (name: string, period: string) =>
+    `A contribution for ${name} for ${period} already exists. Edit instead?`,
+
   // S12 destructive action (Stitch decision 7)
   deleteGroupButton: "Delete stokvel",
   cancelButton: "Cancel",
