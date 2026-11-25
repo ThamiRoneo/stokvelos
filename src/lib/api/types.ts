@@ -26,7 +26,7 @@ export function mapError(error: ErrorLike, fallback: string): string {
   if (/failed to fetch|network|fetch failed|ECONNRESET|ENOTFOUND/i.test(message))
     return "No connection.";
   if (
-    /Cannot remove:|invite has expired|invite has already been used|Couldn't join|Only the organizer|Only members can raise|already exists\. Edit instead/i.test(
+    /Cannot remove:|Payout amount must be between|invite has expired|invite has already been used|Couldn't join|Only the organizer|Only members can raise|already exists\. Edit instead/i.test(
       message,
     )
   )

@@ -1,6 +1,6 @@
 -- T-BR1-1, T-BR4-1, T-BR5-1, T-BR6-1, T-BR7-1, T-BR8-1, T-BR9-1..3.
 begin;
-select plan(14);
+select plan(18);
 
 -- Isolated users for rule tests. Password hash is a literal: Auth is never used here.
 insert into auth.users
@@ -105,6 +105,52 @@ select throws_like(
       and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
   '%between R0.01 and R10,000,000%',
   'T-BR5-1 payout amount ceiling enforced'
+);
+
+select throws_like(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'bbbbbbbb-0000-0000-0000-000000000002', m.id, 0,
+           date '2026-12-06', '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000002'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  'Payout amount must be between R0.01 and R10,000,000.',
+  'T-BR5-1 payout amount floor rejected with exact DB copy'
+);
+
+select throws_like(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'bbbbbbbb-0000-0000-0000-000000000002', m.id, 10000000.01,
+           date '2026-12-07', '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000002'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  'Payout amount must be between R0.01 and R10,000,000.',
+  'T-BR5-1 payout amount above R10,000,000 rejected with exact DB copy'
+);
+
+select lives_ok(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'bbbbbbbb-0000-0000-0000-000000000002', m.id, 0.01,
+           date '2026-12-08', '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000002'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  'T-BR5-1 R0.01 is the smallest accepted payout amount'
+);
+
+select lives_ok(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'bbbbbbbb-0000-0000-0000-000000000002', m.id, 10000000,
+           date '2026-12-09', '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'bbbbbbbb-0000-0000-0000-000000000002'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  'T-BR5-1 R10,000,000 is the largest accepted payout amount'
 );
 
 -- BR6: invite expiry, single use and valid join.
