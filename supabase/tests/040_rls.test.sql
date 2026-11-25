@@ -2,7 +2,7 @@
 -- `authenticated` role with a JWT subject, so RLS is genuinely enforced
 -- (the postgres role would bypass it).
 begin;
-select plan(29);
+select plan(33);
 
 -- NOMSA organizer of Savers + Uplift; SIPHO member of Savers and organizer
 -- of Tembisa; THANDI a plain member of Savers only; ADMIN a Platform Admin.
@@ -205,6 +205,48 @@ select throws_like(
       and m.user_id = 'd0000000-0000-4000-8000-000000000002'$$,
   '%row-level security%',
   'T-SEC-12b member cannot record a contribution');
+
+-- SEC13 — payouts: readable by members of the stokvel only.
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select ok(
+  (select count(*) > 0 from public.payouts
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  'T-SEC-13a stokvel member can read payouts'
+);
+
+-- Thandi was removed from Savers by SEC8a above, so she is now an outsider.
+set local request.jwt.claims = '{"sub":"d0000000-0000-4000-8000-000000000001","role":"authenticated"}';
+select is(
+  (select count(*) from public.payouts
+   where stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'),
+  0::bigint, 'T-SEC-13b outsider cannot read payouts'
+);
+
+-- SEC14 — payouts: organizer writes, plain member cannot.
+set local request.jwt.claims = '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}';
+select lives_ok(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'aaaaaaaa-0000-0000-0000-000000000001', m.id, 250,
+           (current_date + 5)::date, '11111111-1111-1111-1111-111111111111'
+    from public.stokvel_members m
+    where m.stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  'T-SEC-14a organizer can schedule a payout'
+);
+
+set local request.jwt.claims = '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}';
+select throws_like(
+  $$insert into public.payouts
+    (stokvel_id, member_id, amount, scheduled_date, recorded_by)
+    select 'aaaaaaaa-0000-0000-0000-000000000001', m.id, 250,
+           (current_date + 6)::date, '22222222-2222-2222-2222-222222222222'
+    from public.stokvel_members m
+    where m.stokvel_id = 'aaaaaaaa-0000-0000-0000-000000000001'
+      and m.user_id = '22222222-2222-2222-2222-222222222222'$$,
+  '%row-level security%',
+  'T-SEC-14b plain member cannot write a payout'
+);
 
 -- SEC21 — Platform Admin: aggregate stats only.
 set local request.jwt.claims = '{"sub":"e0000000-0000-4000-8000-000000000001","role":"authenticated"}';
