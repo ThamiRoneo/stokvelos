@@ -1122,6 +1122,7 @@ The same ID may be used at two levels when both prove the same criterion.
 | 2026-11-24 | 2 | Implemented Phase 2: accounts, auth, group creation, member management, invite links, RLS policies, migrations 0001–0006, component & integration suites | lint, typecheck, 59 unit/component tests, build pass | Phase 2: Groups, RLS and auth |
 | 2026-11-25 | — | Web-first refactor (Phase A): PRD v0.7 / plan v1.8, ADR-0001, responsive nav shell, PWA/offline deferred, stale `STITCH_PROMPTS.md` reference replaced | Cross-document ID/string audit; docs-only | `docs/web-first-v1` (issue #48) |
 | 2026-11-25 | 2 | Fixed local seed login: GoTrue-compatible `instance_id` + empty token columns + email identities, five `@stokvelos.app` accounts (1 admin + 4 members), pgTAP admin fixture deduplicated, CI moved to Node 26. Also fixed OP7 create (no `INSERT … RETURNING` before the organizer trigger), OP9 delete (cascade guards), BR8 audit retention on delete, and corrected the BR6 single-use invite test to PRD copy | `supabase db reset` + all 16 integration tests pass under Node 26 | `fix/integration-seed-users` (issues #50, #41) |
+| 2026-11-26 | 2 (fix) | Remove duplicate AppNav from CreateStokvel.tsx, Members.tsx, StokvelSettings.tsx, JoinViaInvite.tsx; layout already provides nav for all (app) routes. | lint OK, typecheck OK, tests 75/75, supabase test db 119/119, test:integration 48/48, build OK | PR #65, `05ab597` |
 | — | 3 | Not started | — | — |
 | — | 4 | Not started | — | — |
 | — | 5 | Not started | — | — |
