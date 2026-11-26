@@ -42,9 +42,11 @@ describe("T-S6-1 / T-US6-1 Join via Invite (S6)", () => {
     expect(screen.getByRole("status", { name: "Loading" })).toBeInTheDocument();
   });
 
-  it("shows BottomNav with Home active in the stokvels flow", () => {
+  it("renders the join form without an inline AppNav (nav is provided by the layout)", () => {
     render(<JoinViaInvite preview={preview} onJoin={vi.fn()} />);
-    expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+    // AppNav is provided by (app)/layout.tsx; the screen component must not render a second one
+    expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
+    // The join action must still be present
+    expect(screen.getByRole("button", { name: "Join" })).toBeInTheDocument();
   });
 });

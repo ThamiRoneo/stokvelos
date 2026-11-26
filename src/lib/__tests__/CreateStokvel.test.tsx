@@ -39,9 +39,11 @@ describe("T-S5-1 / T-US4-1 Create Stokvel (S5)", () => {
     expect(screen.getByRole("button", { name: "Create" })).toBeDisabled();
   });
 
-  it("shows BottomNav with Home active in the stokvels flow", () => {
+  it("renders the create form without an inline AppNav (nav is provided by the layout)", () => {
     renderCreate();
-    expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("aria-current", "page");
+    // AppNav is provided by (app)/layout.tsx; the screen component must not render a second one
+    expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
+    // The form itself must still be present
+    expect(screen.getByRole("button", { name: "Create" })).toBeInTheDocument();
   });
 });
