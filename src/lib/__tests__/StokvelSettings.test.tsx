@@ -106,9 +106,11 @@ describe("T-S12-1 Stokvel Settings (S12)", () => {
     expect(screen.getByRole("button", { name: "Save" })).toBeDisabled();
   });
 
-  it("shows BottomNav with Profile active for stokvel settings", () => {
+  it("renders without an inline AppNav (nav is provided by the layout)", () => {
     render(<StokvelSettings stokvel={stokvel} members={members} {...base} />);
-    expect(screen.getByRole("navigation", { name: "Primary" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Profile" })).toHaveAttribute("aria-current", "page");
+    // AppNav is provided by (app)/layout.tsx; the screen component must not render a second one
+    expect(screen.queryByRole("navigation", { name: "Primary" })).not.toBeInTheDocument();
+    // The save action must still be present
+    expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument();
   });
 });

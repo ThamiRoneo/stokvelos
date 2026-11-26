@@ -11,7 +11,6 @@ import {
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { TextInput } from "@/components/TextInput";
-import { AppNav } from "@/components/AppNav";
 import { MESSAGES } from "@/lib/messages";
 import type { Frequency } from "@/lib/api/types";
 
@@ -104,8 +103,6 @@ export function CreateStokvel({
 
   return (
     <div className="flex flex-1 flex-col">
-      <AppNav active="Home" />
-
       {/* Top bar */}
       <header className="flex items-center justify-between border-b border-border bg-surface px-6 py-4">
         <div className="flex items-center gap-3">
