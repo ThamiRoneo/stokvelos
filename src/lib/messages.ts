@@ -49,9 +49,6 @@ export const MESSAGES = {
   duplicateContribution: (name: string, period: string) =>
     `A contribution for ${name} for ${period} already exists. Edit instead?`,
 
-  // Payouts (BR5, OP18, OP19, S9) — same literal as check_payout_amount().
-  payoutAmountRange: "Payout amount must be between R0.01 and R10,000,000.",
-
   // S12 destructive action (Stitch decision 7)
   deleteGroupButton: "Delete stokvel",
   cancelButton: "Cancel",
