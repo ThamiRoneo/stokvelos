@@ -34,7 +34,7 @@ export function mapError(error: ErrorLike, fallback: string): string {
   return fallback;
 }
 
-export type Frequency = "weekly" | "monthly";
+export type Frequency = "weekly" | "bi-weekly" | "monthly";
 export type Role = "organizer" | "member";
 
 export type Stokvel = {
