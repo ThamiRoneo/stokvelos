@@ -12,6 +12,7 @@ const periods = ["2026-01", "2026-02"];
 
 const baseProps = {
   open: true,
+  stokvelId: "aaaaaaaa-0000-0000-0000-000000000001",
   members,
   periods,
   currentPeriod: "2026-01",

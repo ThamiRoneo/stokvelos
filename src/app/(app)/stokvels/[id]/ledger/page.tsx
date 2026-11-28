@@ -54,10 +54,26 @@ export default async function LedgerPage({
     members: [],
   };
 
+  const ledgerForPage = ledgerResult.ok ? ledgerResult.data : emptyLedger;
+  // cycleNumber = position of currentPeriod in the sorted period list (1-based)
+  const cycleNumber = Math.max(
+    1,
+    ledgerForPage.periods.indexOf(currentPeriod) + 1,
+  );
+  // totalCycles = rotation order length from the stokvel (number of members in
+  // the rotation); fall back to current member count so the chip still renders.
+  const totalCycles =
+    stokvelResult.data.rotationOrder.length > 0
+      ? stokvelResult.data.rotationOrder.length
+      : ledgerForPage.members.length || 1;
+
   return (
     <ContributionsLedger
       stokvelId={id}
-      ledger={ledgerResult.ok ? ledgerResult.data : emptyLedger}
+      stokvelName={stokvelResult.data.name}
+      cycleNumber={cycleNumber}
+      totalCycles={totalCycles}
+      ledger={ledgerForPage}
       isOrganizer={isOrganizer}
       error={ledgerResult.ok ? undefined : MESSAGES.couldNotLoad}
     />

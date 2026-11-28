@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Banner } from "@/components/Banner";
 import { Spinner } from "@/components/Spinner";
+import { MESSAGES } from "@/lib/messages";
 
 /** S7 — Stokvel Home. Matches visual design in docs/designs/S7.png exactly. */
 export function StokvelHome({
@@ -26,6 +27,7 @@ export function StokvelHome({
   frequency = "weekly",
   cycleNumber = 3,
   totalCycles = 12,
+  isOrganizer = false,
   loading = false,
   error,
 }: {
@@ -36,6 +38,7 @@ export function StokvelHome({
   frequency?: "weekly" | "bi-weekly" | "monthly";
   cycleNumber?: number;
   totalCycles?: number;
+  isOrganizer?: boolean;
   loading?: boolean;
   error?: string;
 }) {
@@ -54,7 +57,7 @@ export function StokvelHome({
   if (error) {
     return (
       <div className="flex flex-1 flex-col p-6">
-        <Banner variant="error">{error}</Banner>
+        <Banner variant="error">{error ?? MESSAGES.couldNotLoad}</Banner>
       </div>
     );
   }
@@ -114,17 +117,19 @@ export function StokvelHome({
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2 text-sm font-semibold text-text shadow-sm hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2 text-sm font-semibold text-text shadow-sm hover:bg-surface/80 transition-colors"
             >
               <Share2 size={14} aria-hidden="true" />
               Share Link
             </button>
-            <button
-              type="button"
-              className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
-            >
-              Record Deposit
-            </button>
+            {isOrganizer && (
+              <button
+                type="button"
+                className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition-colors"
+              >
+                Record Deposit
+              </button>
+            )}
           </div>
         </div>
 
@@ -169,7 +174,7 @@ export function StokvelHome({
               Round {cycleNumber} of {totalCycles} Progress
             </p>
             <p className="mt-1 text-2xl font-bold text-text">93%</p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-gray-100">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border">
               <div
                 className="h-full rounded-full bg-primary"
                 style={{ width: "93%" }}
@@ -204,11 +209,11 @@ export function StokvelHome({
         </div>
 
         {/* Rotational Disbursement milestone card */}
-        <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5 shadow-sm">
+        <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-700">
+                <span className="rounded-full bg-warning/20 px-2.5 py-0.5 text-xs font-bold text-warning">
                   ROTATIONAL DISBURSEMENT
                 </span>
                 <span className="text-xs text-text-secondary">
@@ -395,7 +400,7 @@ export function StokvelHome({
                 </div>
                 <button
                   type="button"
-                  className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-text hover:bg-gray-50"
+                  className="rounded-xl border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-text hover:bg-background/60"
                 >
                   Filter Entries
                 </button>
@@ -491,7 +496,7 @@ export function StokvelHome({
                     <a
                       href="#"
                       aria-label={s.name}
-                      className="flex items-center justify-between gap-2 rounded-xl border border-border p-3 hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between gap-2 rounded-xl border border-border p-3 hover:bg-background/60 transition-colors"
                     >
                       <div className="flex items-center gap-2" aria-hidden="true">
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-[10px] font-bold text-primary">

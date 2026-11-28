@@ -22,6 +22,9 @@ export default async function StokvelHomePage({
 
   const membersResult = await listMembers(supabase, id);
   const memberCount = membersResult.ok ? membersResult.data.length : 0;
+  const isOrganizer = membersResult.ok
+    ? membersResult.data.some((m) => m.userId === user.id && m.role === "organizer")
+    : false;
 
   return (
     <StokvelHome
@@ -30,6 +33,7 @@ export default async function StokvelHomePage({
       memberCount={memberCount}
       contributionAmount={stokvelResult.data.contributionAmount}
       frequency={stokvelResult.data.contributionFrequency}
+      isOrganizer={isOrganizer}
       error={membersResult.ok ? undefined : MESSAGES.couldNotLoad}
     />
   );

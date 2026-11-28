@@ -9,6 +9,7 @@ import { validateContributionAmount, type RecordContributionInput } from "@/lib/
 
 export function RecordContribution({
   open,
+  stokvelId,
   stokvelName,
   members,
   periods,
@@ -22,6 +23,7 @@ export function RecordContribution({
   errorBanner,
 }: {
   open: boolean;
+  stokvelId: string;
   stokvelName?: string;
   members: { id: string; name: string; slot?: number }[];
   periods: string[];
@@ -59,7 +61,6 @@ export function RecordContribution({
       return;
     }
     setLocalAmountError(undefined);
-    const stokvelId = "";
     await onSubmit({
       stokvelId,
       memberId: selectedMemberId,
@@ -101,7 +102,7 @@ export function RecordContribution({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="rounded-lg p-1.5 text-text-secondary hover:bg-gray-100 hover:text-text"
+            className="rounded-lg p-1.5 text-text-secondary hover:bg-border/40 hover:text-text"
           >
             <X size={18} aria-hidden="true" />
           </button>

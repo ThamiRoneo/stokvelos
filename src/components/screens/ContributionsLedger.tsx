@@ -20,6 +20,9 @@ const PAGE_SIZE = 7;
 /** S8 — Contributions Ledger. Matches visual design in docs/designs/S8.png exactly. */
 export function ContributionsLedger({
   stokvelId,
+  stokvelName = "",
+  cycleNumber,
+  totalCycles,
   ledger,
   isOrganizer = false,
   loading = false,
@@ -28,6 +31,9 @@ export function ContributionsLedger({
   onRecorded,
 }: {
   stokvelId: string;
+  stokvelName?: string;
+  cycleNumber?: number;
+  totalCycles?: number;
   ledger: LedgerData;
   isOrganizer?: boolean;
   loading?: boolean;
@@ -36,11 +42,6 @@ export function ContributionsLedger({
   onRecorded?: () => void;
 }) {
   const { rows, periods, members, totals } = ledger;
-
-  const stokvelName =
-    rows.length > 0
-      ? undefined
-      : undefined;
 
   const currentPeriod = periods.length > 0 ? periods[periods.length - 1] : "";
   const defaultAmount =
@@ -105,7 +106,7 @@ export function ContributionsLedger({
   async function handleSubmit(input: RecordContributionInput) {
     setModalLoading(true);
     const client = createClient();
-    const result = await recordContribution(client, { ...input, stokvelId });
+    const result = await recordContribution(client, input);
     setModalLoading(false);
     if (!result.ok) {
       setModalError(result.message);
@@ -133,18 +134,22 @@ export function ContributionsLedger({
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
               S
             </span>
-            <span className="text-sm font-semibold text-text">
-              Soweto Sisanda Women&apos;s Club
-            </span>
-            <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-primary">
-              Active Cycle 3 of 12
-            </span>
+            {stokvelName && (
+              <span className="text-sm font-semibold text-text">
+                {stokvelName}
+              </span>
+            )}
+            {cycleNumber != null && totalCycles != null && (
+              <span className="rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                Active Cycle {cycleNumber} of {totalCycles}
+              </span>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold text-text shadow-sm hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 text-sm font-semibold text-text shadow-sm hover:bg-surface/80 transition-colors"
           >
             <Download size={14} aria-hidden="true" />
             Export CSV
@@ -178,7 +183,10 @@ export function ContributionsLedger({
             </span>
           </div>
           <p className="mt-1 text-sm text-text-secondary">
-            Cycle 3 &bull; {members.length} members &bull; R{defaultAmount}{" "}
+            {cycleNumber != null && totalCycles != null
+              ? `Cycle ${cycleNumber}`
+              : "Current Cycle"}{" "}
+            &bull; {members.length} members &bull; R{defaultAmount}{" "}
             weekly contribution rule (Period {currentPeriod})
           </p>
         </div>
@@ -258,7 +266,7 @@ export function ContributionsLedger({
                     className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
                       selectedPeriod === p
                         ? "border-primary bg-primary text-white"
-                        : "border-border bg-surface text-text hover:bg-gray-50"
+                        : "border-border bg-surface text-text hover:bg-surface/80"
                     }`}
                   >
                     {p === "all" ? "All Cycles" : p}
@@ -274,8 +282,8 @@ export function ContributionsLedger({
             <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-gray-50">
-                    <th className="sticky left-0 bg-gray-50 px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+                  <tr className="border-b border-border bg-background">
+                    <th className="sticky left-0 bg-background px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-text-secondary">
                       Member &amp; Rotation Slot
                     </th>
                     {displayedPeriods.map((p) => (
@@ -283,7 +291,7 @@ export function ContributionsLedger({
                         key={p}
                         className={`px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider ${
                           p === currentPeriod
-                            ? "bg-green-50 text-primary"
+                            ? "bg-success/10 text-primary"
                             : "text-text-secondary"
                         }`}
                       >
@@ -327,13 +335,13 @@ export function ContributionsLedger({
                       <tr
                         key={member.id}
                         className={
-                          isDeficit ? "bg-red-50" : "hover:bg-gray-50/50"
+                          isDeficit ? "bg-error/10" : "hover:bg-background/60"
                         }
                       >
                         {/* Member cell */}
                         <td className="sticky left-0 px-4 py-3">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-text">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-border text-xs font-bold text-text">
                               {getInitials(member.name)}
                             </div>
                             <div>
@@ -354,7 +362,7 @@ export function ContributionsLedger({
                             <td
                               key={p}
                               className={`px-4 py-3 ${
-                                p === currentPeriod ? "bg-green-50/40" : ""
+                                p === currentPeriod ? "bg-success/10" : ""
                               }`}
                             >
                               {contrib ? (
@@ -408,7 +416,7 @@ export function ContributionsLedger({
                 </tbody>
                 {/* Totals row */}
                 <tfoot>
-                  <tr className="border-t-2 border-border bg-gray-50 font-bold">
+                  <tr className="border-t-2 border-border bg-background font-bold">
                     <td className="px-4 py-3 text-sm text-text">
                       Period Ledger Totals
                       <span className="ml-2 text-xs font-normal text-text-secondary">
@@ -458,14 +466,14 @@ export function ContributionsLedger({
             <div className="flex items-center justify-between">
               <p className="text-sm text-text-secondary">
                 Showing {pagedMembers.length} of {members.length} active
-                registered members in Soweto Sisanda Women&apos;s Club
+                registered members{stokvelName ? ` in ${stokvelName}` : ""}
               </p>
               <div className="flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text disabled:opacity-40 hover:bg-gray-50"
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text disabled:opacity-40 hover:bg-background/60"
                 >
                   Previous
                 </button>
@@ -476,7 +484,7 @@ export function ContributionsLedger({
                   type="button"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text disabled:opacity-40 hover:bg-gray-50"
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-text disabled:opacity-40 hover:bg-background/60"
                 >
                   Next
                 </button>
@@ -494,7 +502,8 @@ export function ContributionsLedger({
       {/* Record Contribution modal */}
       <RecordContribution
         open={showModal}
-        stokvelName="Soweto Sisanda Women's Club"
+        stokvelId={stokvelId}
+        stokvelName={stokvelName}
         members={members.map((m, i) => ({ ...m, slot: i + 1 }))}
         periods={periods}
         currentPeriod={currentPeriod}
