@@ -44,6 +44,8 @@ export function AppNav({
   userRole?: string;
 }) {
   const pathname = usePathname();
+  const stokvelIdFromPath = pathname.match(/\/stokvels\/([^/]+)/)?.[1];
+  const effectiveStokvelId = stokvelId ?? stokvelIdFromPath;
 
   function isActive(label: TabName): boolean {
     if (active) return label === active;
@@ -81,8 +83,8 @@ export function AppNav({
         {/* Nav items */}
         <nav className="flex-1 px-3 py-4 space-y-1" aria-label="Sidebar navigation">
           {tabs.map(({ label, icon: Icon, stokvelPath }) => {
-            const href = getHref(label, stokvelPath, stokvelId);
-            const enabled = label === "Home" || label === "Profile" || Boolean(stokvelId);
+            const href = getHref(label, stokvelPath, effectiveStokvelId);
+            const enabled = label === "Home" || label === "Profile" || Boolean(effectiveStokvelId);
             const active = isActive(label);
 
             if (!enabled) {
@@ -151,8 +153,8 @@ export function AppNav({
         {/* Icons */}
         <nav className="flex flex-col gap-2" aria-label="Icon navigation">
           {tabs.map(({ label, icon: Icon, stokvelPath }) => {
-            const href = getHref(label, stokvelPath, stokvelId);
-            const enabled = label === "Home" || label === "Profile" || Boolean(stokvelId);
+            const href = getHref(label, stokvelPath, effectiveStokvelId);
+            const enabled = label === "Home" || label === "Profile" || Boolean(effectiveStokvelId);
             const active = isActive(label);
 
             if (!enabled) {
@@ -196,8 +198,8 @@ export function AppNav({
         className="fixed bottom-0 left-0 right-0 z-10 grid grid-cols-5 border-t border-border bg-surface md:hidden"
       >
         {tabs.map(({ label, icon: Icon, stokvelPath }) => {
-          const href = getHref(label, stokvelPath, stokvelId);
-          const enabled = label === "Home" || label === "Profile" || Boolean(stokvelId);
+          const href = getHref(label, stokvelPath, effectiveStokvelId);
+          const enabled = label === "Home" || label === "Profile" || Boolean(effectiveStokvelId);
           const active = isActive(label);
 
           if (!enabled) {
